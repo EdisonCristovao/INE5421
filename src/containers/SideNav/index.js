@@ -39,7 +39,7 @@ class SideNav extends React.PureComponent {
 
         return (
             <Drawer docked={type} className={`app-sidebar ${drawerStyle}`}
-                    style={{overflow: 'auto'}}
+                    style={{overflow: 'auto', height: '100%'}}
                     touch={true}
                     position={isDirectionRTL ? 'right' : 'left'}
                     transitions={true}
@@ -47,7 +47,7 @@ class SideNav extends React.PureComponent {
                     open={navCollapsed}
                     onOpenChange={this.onToggleCollapsedNav}
                     sidebar={<div className="side-nav">
-                        <SidenavLogo drawerType={drawerType}/>
+                        {/* <SidenavLogo drawerType={drawerType}/> */}
                         <SidenavContent/>
                     </div>}>
                 <div/>
