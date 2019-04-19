@@ -1,48 +1,14 @@
 import {
-    MAKE_NEW_LANGUAGE
+    MAKE_NEW_LANGUAGE,
+    CHANGE_SELECTED_LANGUAGE
 } from 'constants/ActionTypes';
-
-const initialSettings = {
-    listLanguages: [
-        {
-            name: 'binários sem 000',
-            empty: true,
-            valid: true,
-            grammar: undefined,
-            expression: undefined,
-            fsm: undefined,
-            userSentences: [],
-            enumerationLength: 5
-        },
-        {
-            name: 'iniciam com a mesma letra',
-            empty: true,
-            valid: true,
-            grammar: undefined,
-            expression: undefined,
-            fsm: undefined,
-            userSentences: [],
-            enumerationLength: 5
-        },
-        {
-            name: 'Numero par de 1',
-            empty: true,
-            valid: true,
-            grammar: undefined,
-            expression: undefined,
-            fsm: undefined,
-            userSentences: [],
-            enumerationLength: 5
-        },
-    ],
-    selectedLanguage: 0,
-
-};
+import uuidv4 from 'uuid/v4';
+import InitialState from './states/language.state'
 
 
 function _makeNewLanguage(name) {
     return {
-        // id: uuidv4(),
+        id: uuidv4(),
         name: name,
         empty: true,
         valid: true,
@@ -54,12 +20,20 @@ function _makeNewLanguage(name) {
     };
 }
 
-const languages = (state = initialSettings, action) => {
+const languages = (state = InitialState, action) => {
     switch (action.type) {
         case MAKE_NEW_LANGUAGE:
+            const newLanguage = _makeNewLanguage(action.payload)
+            const newList = [...state.listLanguages, newLanguage]
             return {
                 ...state,
-                listLanguages: [...state.listLanguages, _makeNewLanguage(action.payload)]
+                listLanguages: newList,
+                selectedLanguage: newList.length - 1
+            }
+        case CHANGE_SELECTED_LANGUAGE:
+            return {
+                ...state,
+                selectedLanguage: action.payload
             }
         default:
             return state;

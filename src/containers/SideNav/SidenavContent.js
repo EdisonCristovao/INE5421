@@ -85,6 +85,7 @@ class SidenavContent extends Component {
     render() {
         const { listLanguages, selectedLanguage, makeNewLanguage } = this.props;
         const { newLanguageName } = this.state
+
         return (
             <CustomScrollbars className="scrollbar" style={{ height: 'calc(100vh)' }}>
                 {/* <CustomScrollbars className="scrollbar" style={{height: 'calc(100vh - 70px)'}}> */}

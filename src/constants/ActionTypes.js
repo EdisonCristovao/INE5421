@@ -1,4 +1,5 @@
 export const MAKE_NEW_LANGUAGE = 'MAKE_NEW_LANGUAGE';
+export const CHANGE_SELECTED_LANGUAGE = 'CHANGE_SELECTED_LANGUAGE';
 
 // Customizer const
 export const TOGGLE_COLLAPSED_NAV = 'toggle_collapse_menu';
