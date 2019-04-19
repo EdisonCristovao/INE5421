@@ -1,12 +1,12 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/ine5421-f/node_modules
-/ine5421-f/.pnp
-/ine5421-f/.pnp.js
+/node_modules
+/.pnp
+/.pnp.js
 
 # testing
-/ine5421-f/coverage
+/coverage
 
 # production
 /build
