@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { CardText, Card, CardBody, CardTitle, Input, Alert, Button } from 'reactstrap';
+import { Input, Button } from 'reactstrap';
+
 import IntlMessages from 'util/IntlMessages';
 import CustomScrollbars from "util/CustomScrollbars";
-
-
+import { makeNewLanguage } from "../../actions/index"
 
 class SidenavContent extends Component {
+    state = {
+        newLanguageName: ''
+    }
 
     componentDidMount() {
         const { history } = this.props;
@@ -79,6 +83,8 @@ class SidenavContent extends Component {
     }
 
     render() {
+        const { listLanguages, selectedLanguage, makeNewLanguage } = this.props;
+        const { newLanguageName } = this.state
         return (
             <CustomScrollbars className="scrollbar" style={{ height: 'calc(100vh)' }}>
                 {/* <CustomScrollbars className="scrollbar" style={{height: 'calc(100vh - 70px)'}}> */}
@@ -91,31 +97,20 @@ class SidenavContent extends Component {
                             <span className="nav-text"><IntlMessages id="pages.samplePage"/> </span>
                         </NavLink>
                     </li> */}
-                    <li className="nav-header">
-                        <Button className="w-100 text-left">
-                            <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
-                            <span className="nav-text"><IntlMessages id="pages.samplePage" /> </span>
-                        </Button>
-                    </li>
 
-                    <li className="nav-header">
-                        <Button className="w-100 text-left">
-                            <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
-                            <span className="nav-text"><IntlMessages id="pages.samplePage" /> </span>
-                        </Button>
-                    </li>
-
-                    <li className="nav-header">
-                        <Button className="w-100 text-left">
-                            <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
-                            <span className="nav-text"><IntlMessages id="pages.samplePage" /> </span>
-                        </Button>
-                    </li>
+                    {listLanguages.map(language => (
+                        <li className="nav-header">
+                            <Button className="w-100 text-left">
+                                    <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
+                                <span className="nav-text">{language.name} </span>
+                            </Button>
+                        </li>
+                    ))}
 
                     <li className="nav-header">
                         <form>
-                            <Input type="text" placeholder="Nova linguagem"></Input>
-                            <Button className="w-100 mt-1" color="primary">
+                            <Input type="text" placeholder="Nova linguagem" value={newLanguageName} onChange={(e) => this.setState({ newLanguageName: e.target.value })}></Input>
+                            <Button type="submit" className="w-100 mt-1" color="primary" onClick={() => { makeNewLanguage(newLanguageName); this.setState({ newLanguageName: '' }) }}>
                                 <span className="nav-text"> Adicionar </span>
                             </Button>
                         </form>
@@ -128,4 +123,9 @@ class SidenavContent extends Component {
     }
 }
 
-export default withRouter(SidenavContent);
+const mapState = ({ languages }) => {
+    const { listLanguages, selectedLanguage } = languages;
+    return { listLanguages, selectedLanguage };
+}
+
+export default connect(mapState, { makeNewLanguage })(withRouter(SidenavContent));

@@ -1,3 +1,5 @@
+export const MAKE_NEW_LANGUAGE = 'MAKE_NEW_LANGUAGE';
+
 // Customizer const
 export const TOGGLE_COLLAPSED_NAV = 'toggle_collapse_menu';
 export const DRAWER_TYPE = 'drawer_type';
