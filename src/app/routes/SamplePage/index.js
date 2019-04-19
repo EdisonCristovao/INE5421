@@ -17,17 +17,23 @@ class SamplePage extends React.Component {
                 <div className="row">
                     <div className="col">
                         <Card>
-                            <h1>Edison</h1>
+                            <CardBody>
+                                <h1>Edison</h1>
+                            </CardBody>
                         </Card>
                     </div>
                     <div className="col">
                         <Card>
-                            <h1>Edison</h1>
+                            <CardBody>
+                                <h1>Edison</h1>
+                            </CardBody>
                         </Card>
                     </div>
                     <div className="col">
                         <Card>
-                            <h1>Edison</h1>
+                            <CardBody>
+                                <h1>Edison</h1>
+                            </CardBody>
                         </Card>
                     </div>
                 </div>
