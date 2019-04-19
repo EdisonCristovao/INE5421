@@ -1,14 +1,16 @@
-import React, {Component} from 'react';
-import {NavLink, withRouter} from 'react-router-dom';
+import React, { Component } from 'react';
+import { NavLink, withRouter } from 'react-router-dom';
 
+import { CardText, Card, CardBody, CardTitle, Input, Alert, Button } from 'reactstrap';
 import IntlMessages from 'util/IntlMessages';
 import CustomScrollbars from "util/CustomScrollbars";
+
 
 
 class SidenavContent extends Component {
 
     componentDidMount() {
-        const {history} = this.props;
+        const { history } = this.props;
         const that = this;
         const pathname = `#${history.location.pathname}`;// get current path
 
@@ -78,17 +80,47 @@ class SidenavContent extends Component {
 
     render() {
         return (
-            <CustomScrollbars className="scrollbar" style={{height: 'calc(100vh)'}}>
-            {/* <CustomScrollbars className="scrollbar" style={{height: 'calc(100vh - 70px)'}}> */}
+            <CustomScrollbars className="scrollbar" style={{ height: 'calc(100vh)' }}>
+                {/* <CustomScrollbars className="scrollbar" style={{height: 'calc(100vh - 70px)'}}> */}
                 <ul className="nav-menu">
 
-                    <li className="nav-header"><IntlMessages id="sidebar.main"/></li>
-                    <li className="menu no-arrow">
+                    <li className="nav-header">Lista de linguagens</li>
+                    {/* <li className="menu no-arrow">
                         <NavLink to="/app/sample-page">
                             <i className="zmdi zmdi-view-dashboard zmdi-hc-fw"/>
                             <span className="nav-text"><IntlMessages id="pages.samplePage"/> </span>
                         </NavLink>
+                    </li> */}
+                    <li className="nav-header">
+                        <Button className="w-100 text-left">
+                            <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
+                            <span className="nav-text"><IntlMessages id="pages.samplePage" /> </span>
+                        </Button>
                     </li>
+
+                    <li className="nav-header">
+                        <Button className="w-100 text-left">
+                            <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
+                            <span className="nav-text"><IntlMessages id="pages.samplePage" /> </span>
+                        </Button>
+                    </li>
+
+                    <li className="nav-header">
+                        <Button className="w-100 text-left">
+                            <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
+                            <span className="nav-text"><IntlMessages id="pages.samplePage" /> </span>
+                        </Button>
+                    </li>
+
+                    <li className="nav-header">
+                        <form>
+                            <Input type="text" placeholder="Nova linguagem"></Input>
+                            <Button className="w-100 mt-1" color="primary">
+                                <span className="nav-text"> Adicionar </span>
+                            </Button>
+                        </form>
+                    </li>
+
 
                 </ul>
             </CustomScrollbars>
