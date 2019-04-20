@@ -124,7 +124,8 @@ class SidenavContent extends Component {
     }
 }
 
-const mapState = ({ languages }) => {
+const mapState = ({ languages, language }) => {
+    console.log(languages, '<----')
     const { listLanguages, selectedLanguage } = languages;
     return { listLanguages, selectedLanguage };
 }

@@ -8,7 +8,7 @@ const reducers = combineReducers ({
     routing: routerReducer,
     settings: Settings,
 
-    languages: Languages
+    languages: Languages,
 });
 
 export default reducers;

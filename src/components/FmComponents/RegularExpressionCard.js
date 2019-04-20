@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
-import { CardText, Card, CardBody, CardTitle, Input, Alert, Button } from 'reactstrap';
+import { connect } from  'react-redux';
 
-export default class RegularExpression extends Component {
+import { CardText, Card, CardBody, CardTitle, Input, Alert, Button } from 'reactstrap';
+import { changeRegExpression } from "../../actions/Language"
+
+class RegularExpression extends Component {
     render() {
+        const { changeRegExpression } = this.props;
         return (
             <div>
                 <Card>
                     <CardBody>
                         <CardTitle><h1>Expressão Regular</h1></CardTitle>
                         <CardText>
-                            <Input type="text" name="er" placeholder="Defina uma ER" />
+                            <Input type="text" name="er" placeholder="Defina uma ER" onChange={(e)=> changeRegExpression(e.target.value)} />
                         </CardText>
                     </CardBody>
                 </Card>
@@ -17,3 +21,11 @@ export default class RegularExpression extends Component {
         )
     }
 }
+
+const mapState = ({ languages }) => {
+    console.log(languages, '<----')
+    const { listLanguages, selectedLanguage } = languages;
+    return { listLanguages, selectedLanguage };
+}
+
+export default connect(mapState, {changeRegExpression})(RegularExpression)
