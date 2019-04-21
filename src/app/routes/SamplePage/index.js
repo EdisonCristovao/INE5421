@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import ContainerHeader from 'components/ContainerHeader/index';
 import IntlMessages from 'util/IntlMessages';
 
@@ -11,32 +12,41 @@ import RegularGrammarCard from '../../../components/FmComponents/RegularGrammarC
 class SamplePage extends React.Component {
 
     render() {
+        const { languages, selectedLanguage } = this.props
         return (
-            <div className="app-wrapper">
-                <div className="row">
-                    <div className="col-8">
-                        <TransitionTableCard></TransitionTableCard>
-                    </div>
-                    <div className="col">
-                        <RecognizeSentenceCard></RecognizeSentenceCard>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="row col-8">
-                        <div className="col-6">
-                            <RegularExpressionCard></RegularExpressionCard>
+            <div>
+                {selectedLanguage !== null &&
+                    <div className="app-wrapper">
+                        <div className="row">
+                            <div className="col-8">
+                                <TransitionTableCard></TransitionTableCard>
+                            </div>
+                            <div className="col">
+                                <RecognizeSentenceCard></RecognizeSentenceCard>
+                            </div>
                         </div>
-                        <div className="col-6">
-                            <RegularGrammarCard></RegularGrammarCard>
+                        <div className="row">
+                            <div className="row col-8">
+                                <div className="col-6">
+                                    <RegularExpressionCard></RegularExpressionCard>
+                                </div>
+                                <div className="col-6">
+                                    <RegularGrammarCard></RegularGrammarCard>
+                                </div>
+                            </div>
+                            <div className="col-4">
+                            </div>
                         </div>
                     </div>
-                    <div className="col-4">
-                    </div>
-                </div>
+                }
             </div>
         );
     }
 }
+const mapState = ({ languages }) => {
+    const { listLanguages, selectedLanguage } = languages;
+    return { listLanguages, selectedLanguage };
+}
 
 
-export default SamplePage;
+export default connect(mapState)(SamplePage);

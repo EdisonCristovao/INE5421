@@ -14,8 +14,8 @@ function _makeNewLanguage(name) {
         name: name,
         empty: true,
         valid: true,
-        grammar: undefined,
-        expression: undefined,
+        grammar: '',
+        expression: '',
         fsm: undefined,
         userSentences: [],
         enumerationLength: 5,
@@ -23,7 +23,6 @@ function _makeNewLanguage(name) {
 }
 
 const languages = (state = InitialState, action) => {
-    console.log(action.payload)
     switch (action.type) {
         case MAKE_NEW_LANGUAGE:
             const newLanguage = _makeNewLanguage(action.payload)

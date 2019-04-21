@@ -111,7 +111,7 @@ class SidenavContent extends Component {
                     <li className="nav-header">
                         <form>
                             <Input type="text" placeholder="Nova linguagem" value={newLanguageName} onChange={(e) => this.setState({ newLanguageName: e.target.value })}></Input>
-                            <Button type="submit" className="w-100 mt-1" color="primary" onClick={() => { makeNewLanguage(newLanguageName); this.setState({ newLanguageName: '' }) }}>
+                            <Button type="submit" className="w-100 mt-1" color="primary" onClick={(e) => { e.preventDefault(); makeNewLanguage(newLanguageName); this.setState({ newLanguageName: '' }) }}>
                                 <span className="nav-text"> Adicionar </span>
                             </Button>
                         </form>
@@ -125,7 +125,6 @@ class SidenavContent extends Component {
 }
 
 const mapState = ({ languages, language }) => {
-    console.log(languages, '<----')
     const { listLanguages, selectedLanguage } = languages;
     return { listLanguages, selectedLanguage };
 }

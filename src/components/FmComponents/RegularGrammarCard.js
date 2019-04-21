@@ -5,14 +5,15 @@ import { changeRegGramma } from "../../actions/Language"
 
 class RegularGrammarCard extends Component {
     render() {
-        const { changeRegGramma } = this.props
+        const { listLanguages, selectedLanguage, changeRegGramma } = this.props;
+        const language = listLanguages[selectedLanguage]
         return (
             <div>
                 <Card>
                     <CardBody>
                         <CardTitle><h1>Gramatica Regular</h1></CardTitle>
                         <CardText>
-                            <Input type="textarea" row="5" name="gr" placeholder="Defina uma ER" onChange={(e)=> changeRegGramma(e.target.value)} />
+                            <Input type="textarea" row="5" name="gr" placeholder="Defina uma ER" value={language === undefined ? '' : language.grammar } onChange={(e)=> changeRegGramma(e.target.value)} />
                         </CardText>
                     </CardBody>
                 </Card>
@@ -21,4 +22,9 @@ class RegularGrammarCard extends Component {
     }
 }
 
-export default connect(null, {changeRegGramma})(RegularGrammarCard);
+const mapState = ({ languages }) => {
+    const { listLanguages, selectedLanguage } = languages;
+    return { listLanguages, selectedLanguage };
+}
+
+export default connect(mapState, {changeRegGramma})(RegularGrammarCard);
