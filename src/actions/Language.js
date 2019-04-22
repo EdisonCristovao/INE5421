@@ -1,10 +1,7 @@
-import {
-    MAKE_NEW_LANGUAGE,
-    CHANGE_SELECTED_LANGUAGE,
-    CHANGE_REG_EXPRESSION,
-    CHANGE_REG_GRAMMA
-} from 'constants/ActionTypes';
-
+export const MAKE_NEW_LANGUAGE = 'MAKE_NEW_LANGUAGE';
+export const CHANGE_SELECTED_LANGUAGE = 'CHANGE_SELECTED_LANGUAGE';
+export const CHANGE_REG_EXPRESSION = 'CHANGE_REG_EXPRESSION';
+export const CHANGE_REG_GRAMMA = 'CHANGE_REG_GRAMMA';
 
 //LANGUAGES
 export function makeNewLanguage(name) {
