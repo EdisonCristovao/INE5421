@@ -1,6 +1,6 @@
 export const FSM_EDIT = 'FSM_EDIT';
 
-//LANGUAGES
+//FSM
 export function fsmEdit(fsm) {
     return { type: FSM_EDIT, payload: fsm };
 }

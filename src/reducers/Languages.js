@@ -4,6 +4,9 @@ import {
   CHANGE_REG_EXPRESSION,
   CHANGE_REG_GRAMMA
 } from "./../actions/Language";
+import {
+  FSM_EDIT
+} from "./../actions/Fsm";
 import uuidv4 from "uuid/v4";
 import InitialState from "./states/language.state";
 import Fsm from "./../model/Fsm";
@@ -16,7 +19,8 @@ function _makeNewLanguage(name) {
     valid: true,
     grammar: "",
     expression: "",
-    fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
+    // fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
+    fsm: new Fsm([], [], [], '', []),
     userSentences: [],
     enumerationLength: 5
   };
@@ -47,6 +51,11 @@ const languages = (state = InitialState, action) => {
       return {
         ...state
       };
+    case FSM_EDIT:
+      state.listLanguages[state.selectedLanguage].fsm = action.payload
+      return {
+        ...state
+      }
     default:
       return state;
   }

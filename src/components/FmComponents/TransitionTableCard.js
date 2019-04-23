@@ -8,6 +8,7 @@ import {
   Button
 } from "reactstrap";
 import { connect } from "react-redux";
+import { fsmEdit } from "../../actions/Fsm";
 
 class TransitionTable extends Component {
   state = {
@@ -16,6 +17,9 @@ class TransitionTable extends Component {
       name: '',
       states: [],
       transitions: []
+    },
+    newAlphabet: {
+      name: ''
     }
   };
 
@@ -59,8 +63,17 @@ class TransitionTable extends Component {
 
   }
 
+  addAlphabet = (e) => {
+    let newState = { ...this.state };
+    newState.fsm.alphabet = [...newState.fsm.alphabet, newState.newAlphabet.name];
+    newState.newAlphabet.name = '';
+    this.setState(newState);
+  }
+
   render() {
-    const { fsm, newState } = this.state;
+    // const { fsmEdit } = this.prop;
+    console.log(this.props)
+    const { fsm, newState, newAlphabet } = this.state;
     console.log(fsm);
     return (
       <div>
@@ -81,7 +94,9 @@ class TransitionTable extends Component {
                     {fsm.alphabet.map((letter, index) => (
                       <th>{letter}</th>
                     ))}
-                    <th />
+                    <th className="d-flex justify-content-center align-items-center" >
+                      <Input className=" w-25 mr-2" type="text" value={newAlphabet.name} onChange={e => this.setState({ ...this.state, newAlphabet: { ...newAlphabet, name: e.target.value } })} />
+                      <Button color="primary" onClick={e => this.addAlphabet(e)}>add</Button> </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -113,6 +128,7 @@ class TransitionTable extends Component {
               <Button color="primary" onClick={e => this.addTransitionsToAutomata(e)}>add</Button>
               <Button color="secondary">Limpar</Button>
             </CardText>
+            <Button color="primary" onClick={(e) => this.props.fsmEdit(fsm)}>Salvar Altomato</Button>
           </CardBody>
         </Card>
       </div>
@@ -122,7 +138,8 @@ class TransitionTable extends Component {
 
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
+  console.log(listLanguages[selectedLanguage].fsm, '<--------');
   return { language: listLanguages[selectedLanguage] };
 };
 
-export default connect(mapState)(TransitionTable);
+export default connect(mapState, { fsmEdit })(TransitionTable);
