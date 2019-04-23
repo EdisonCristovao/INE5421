@@ -16,7 +16,7 @@ function _makeNewLanguage(name) {
     valid: true,
     grammar: "",
     expression: "",
-    fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], null, []),
+    fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
     userSentences: [],
     enumerationLength: 5
   };
