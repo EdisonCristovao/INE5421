@@ -23,6 +23,10 @@ class TransitionTable extends Component {
     }
   };
 
+  componentWillReceiveProps = (nextPorps) => {
+    this.setState({...this.state, fsm: nextPorps.language.fsm})
+  }
+
   getNextState = (state, letter, transitions) => {
     const transition = transitions.find(
       tran => tran.from === state && tran.when == letter
@@ -60,7 +64,6 @@ class TransitionTable extends Component {
     // newState.newState.states = [];
     newState.newState.transitions = [];
     this.setState(newState);
-
   }
 
   addAlphabet = (e) => {
@@ -71,10 +74,7 @@ class TransitionTable extends Component {
   }
 
   render() {
-    // const { fsmEdit } = this.prop;
-    console.log(this.props)
     const { fsm, newState, newAlphabet } = this.state;
-    console.log(fsm);
     return (
       <div>
         <Card>
@@ -138,7 +138,6 @@ class TransitionTable extends Component {
 
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
-  console.log(listLanguages[selectedLanguage].fsm, '<--------');
   return { language: listLanguages[selectedLanguage] };
 };
 

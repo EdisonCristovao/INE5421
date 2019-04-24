@@ -6,7 +6,7 @@ import { Input, Button } from 'reactstrap';
 
 import IntlMessages from 'util/IntlMessages';
 import CustomScrollbars from "util/CustomScrollbars";
-import { makeNewLanguage } from "../../actions/index"
+import { makeNewLanguage, changeSelectedLanguage } from "../../actions/index"
 
 class SidenavContent extends Component {
     state = {
@@ -83,7 +83,7 @@ class SidenavContent extends Component {
     }
 
     render() {
-        const { listLanguages, selectedLanguage, makeNewLanguage } = this.props;
+        const { listLanguages, selectedLanguage, makeNewLanguage, changeSelectedLanguage } = this.props;
         const { newLanguageName } = this.state
 
         return (
@@ -99,9 +99,9 @@ class SidenavContent extends Component {
                         </NavLink>
                     </li> */}
 
-                    {listLanguages.map(language => (
+                    {listLanguages.map((language, index) => (
                         <li className="nav-header">
-                            <Button className="w-100 text-left">
+                            <Button className="w-100 text-left" onClick={() => {changeSelectedLanguage(index); this.forceUpdate()}}>
                                     <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
                                 <span className="nav-text">{language.name} </span>
                             </Button>
@@ -129,4 +129,4 @@ const mapState = ({ languages, language }) => {
     return { listLanguages, selectedLanguage };
 }
 
-export default connect(mapState, { makeNewLanguage })(withRouter(SidenavContent));
+export default connect(mapState, { makeNewLanguage, changeSelectedLanguage })(withRouter(SidenavContent));
