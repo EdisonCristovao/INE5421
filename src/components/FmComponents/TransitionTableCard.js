@@ -88,7 +88,7 @@ class TransitionTable extends Component {
         <Card>
           <CardBody>
             <CardTitle>
-            <h1>Altomato Finito</h1>
+            <h1>Automato Finito</h1>
             <h1>{fsm.isDeterministic()}</h1>
             </CardTitle>
             <CardText>
@@ -197,7 +197,7 @@ class TransitionTable extends Component {
               <Button color="secondary">Limpar</Button>
             </CardText>
             <Button color="primary" onClick={e => this.props.fsmEdit(fsm)}>
-              Salvar Altomato
+              Salvar Automato
             </Button>
           </CardBody>
         </Card>
