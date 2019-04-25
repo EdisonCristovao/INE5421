@@ -1,5 +1,5 @@
 
-import { isDeterministic } from "./fsm/Determinator";
+import { isDeterministic, determine } from "./fsm/Determinator";
 import * as R from 'ramda';
 
 export default class FSM {
@@ -14,6 +14,10 @@ export default class FSM {
 
   isDeterministic() {
     return isDeterministic(this);
+  }
+
+  determine() {
+    return determine(this);
   }
 
   clone() {

@@ -15,5 +15,15 @@ export function isDeterministic(fsm) {
   );
 
   return !(hasMuitTransition || hasEpsilon);
+}
 
+export function determine(fsm) {
+  let isDet = isDeterministic(fsm);
+  if (isDet == "NotStance") return "NotStance";
+  else if(isDet ) return "AlreadyDeterministic";
+
+  let detFSM = fsm.clone();
+  
+
+  return detFSM;
 }
