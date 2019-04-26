@@ -41,7 +41,6 @@ class TransitionTable extends Component {
   };
 
   addTransition = (e, index) => {
-    console.log(this.state.newState.states);
     let newState = { ...this.state };
     newState.newState.states[index] = e.target.value;
     this.setState(newState);
@@ -82,7 +81,6 @@ class TransitionTable extends Component {
 
   render() {
     const { fsm, newState, newAlphabet } = this.state;
-    console.log(fsm);
     return (
       <div>
         <Card>

@@ -84,7 +84,8 @@ class Header extends React.Component {
       locale,
       navigationStyle,
       horizontalNavPosition,
-      language
+      language,
+      selectedLanguage
     } = this.props;
     const drawerStyle = drawerType.includes(FIXED_DRAWER)
       ? "d-flex d-xl-none"
@@ -135,29 +136,32 @@ class Header extends React.Component {
             </h1>
           </div>
 
-          <ul className="header-notifications list-inline ml-auto">
-            <li className="list-inline-item">
-              <Dropdown
-                className="quick-menu"
-                isOpen={this.state.langSwitcher}
-                toggle={this.onLangSwitcherSelect.bind(this)}
-              >
-                <DropdownToggle
-                  className="d-inline-block"
-                  tag="span"
-                  data-toggle="dropdown"
+          {selectedLanguage !== null && (
+            <ul className="header-notifications list-inline ml-auto">
+              <li className="list-inline-item">
+                <Dropdown
+                  className="quick-menu"
+                  isOpen={this.state.langSwitcher}
+                  toggle={this.onLangSwitcherSelect.bind(this)}
                 >
-                  <div className="d-flex align-items-center pointer">
-                    <i class="zmdi zmdi-more-vert zmdi-hc-2x" />
-                  </div>
-                </DropdownToggle>
+                  <DropdownToggle
+                    className="d-inline-block"
+                    tag="span"
+                    data-toggle="dropdown"
+                  >
+                    <div className="d-flex align-items-center pointer">
+                      <i class="zmdi zmdi-more-vert zmdi-hc-2x" />
+                    </div>
+                  </DropdownToggle>
 
-                <DropdownMenu right className="w-50">
-                  <FunctionSwitcher />
-                </DropdownMenu>
-              </Dropdown>
-            </li>
-            {/* <li className="d-inline-block d-lg-none list-inline-item">
+                  <DropdownMenu right className="w-50">
+                    <FunctionSwitcher />
+                  </DropdownMenu>
+                </Dropdown>
+              </li>
+            </ul>
+          )}
+          {/* <li className="d-inline-block d-lg-none list-inline-item">
                             <Dropdown
                                 className="quick-menu nav-searchbox"
                                 isOpen={this.state.searchBox}
@@ -179,7 +183,7 @@ class Header extends React.Component {
                                 </DropdownMenu>
                             </Dropdown>
                         </li> */}
-            {/* <li className="list-inline-item app-tour">
+          {/* <li className="list-inline-item app-tour">
                             <Dropdown
                                 className="quick-menu"
                                 isOpen={this.state.appNotification}
@@ -201,7 +205,7 @@ class Header extends React.Component {
                                 </DropdownMenu>
                             </Dropdown>
                         </li> */}
-            {/* <li className="list-inline-item mail-tour">
+          {/* <li className="list-inline-item mail-tour">
                             <Dropdown
                                 className="quick-menu"
                                 isOpen={this.state.mailNotification}
@@ -225,7 +229,7 @@ class Header extends React.Component {
                                 </DropdownMenu>
                             </Dropdown>
                         </li> */}
-            {/* <li className="list-inline-item user-nav">
+          {/* <li className="list-inline-item user-nav">
                             <Dropdown
                                 className="quick-menu"
                                 isOpen={this.state.userInfo}
@@ -248,7 +252,6 @@ class Header extends React.Component {
                             </Dropdown>
 
                         </li> */}
-          </ul>
         </div>
       </div>
     );
@@ -269,7 +272,8 @@ const mapStateToProps = ({ settings, languages }) => {
     locale,
     navigationStyle,
     horizontalNavPosition,
-    language: listLanguages[selectedLanguage]
+    listLanguages,
+    selectedLanguage
   };
 };
 

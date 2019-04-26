@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from "reactstrap";
 
 class modalAutoDeterministifc extends React.Component {
   state = {
@@ -13,10 +13,16 @@ class modalAutoDeterministifc extends React.Component {
     }));
   };
 
-  
+  getNextState = (state, letter, transitions) => {
+    const transition = transitions.find(
+      tran => tran.from === state && tran.when == letter
+    );
+    if (transition === undefined) return <td>{"-"}</td>;
+    else return <td>{transition.to}</td>;
+  };
+
   render() {
-    const { fsm } = this.props;
-    
+    const { fsm } = this.props.language;
     return (
       <div>
         <li className="pointer" onClick={this.toggle}>
@@ -26,9 +32,8 @@ class modalAutoDeterministifc extends React.Component {
           </div>
         </li>
 
-        {fsm !== undefined &&
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Modal title</ModalHeader>
+          <ModalHeader toggle={this.toggle}>Automato Determinizado</ModalHeader>
           <ModalBody>
             <table className="default-table table table-sm table-responsive-sm table-hover mb-1">
               <thead className="th-border-b">
@@ -60,7 +65,7 @@ class modalAutoDeterministifc extends React.Component {
                         className="position-relative m-0"
                         type="checkbox"
                         checked={fsm.finals[index]}
-                        onChange={e => this.setFinalState(e, index)}
+                        // onChange={e => this.setFinalState(e, index)}
                       />
                     </td>
                     <td>{state}</td>
@@ -69,38 +74,6 @@ class modalAutoDeterministifc extends React.Component {
                     )}
                   </tr>
                 ))}
-
-                <tr>
-                  <td> - </td>
-                  <td> - </td>
-                  <td>
-                    <Input
-                      type="text"
-                      value={newState.name}
-                      onChange={e =>
-                        this.setState({
-                          ...this.state,
-                          newState: { ...newState, name: e.target.value }
-                        })
-                      }
-                    />
-                  </td>
-                  {fsm.alphabet.map((letter, index) => (
-                    <td>
-                      <Input
-                        type="text"
-                        disabled={newState.name == ""}
-                        value={
-                          newState.states.length === 0
-                            ? ""
-                            : newState.states[index]
-                        }
-                        onChange={e => this.addTransition(e, index)}
-                      />
-                    </td>
-                  ))}
-                  <td />
-                </tr>
               </tbody>
             </table>
           </ModalBody>
@@ -109,7 +82,6 @@ class modalAutoDeterministifc extends React.Component {
             <Button color="secondary">Cancel</Button>
           </ModalFooter>
         </Modal>
-        }
       </div>
     );
   }
