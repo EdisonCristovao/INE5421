@@ -84,7 +84,7 @@
   "scripts": {
     "clean": "rimraf dist/*",
     "build": "webpack --progress --bail --env dist -p",
-    "start": "webpack-dev-server --hot --open"
+    "start": "webpack-dev-server --hot"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
