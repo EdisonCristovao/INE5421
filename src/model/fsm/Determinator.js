@@ -1,5 +1,5 @@
 import Fsm from "../Fsm";
-import { EPSILON } from "../SymbolValidator";
+import { EPSILON, DEAD_STATE } from "../SymbolValidator";
 import FSM from "../Fsm";
 import { FSM_EDIT } from "../../actions/Fsm";
 
@@ -37,43 +37,76 @@ export function determine(fsm) {
 
 function determineWithoutEpsilon(fsm) {
   let fsmDet = new FSM();
-  let nStates0 = 0;
-  let nStates1 = 1;
+  let actualState = 0;
   let possibleStates = [];
-  let realStates = new Set();
 
+  // First state will be the first of the original FA
   fsmDet.initial = fsm.initial;
   fsmDet.states.push(fsm.initial);
   fsmDet.alphabet = fsm.alphabet;
 
-  fsm.alphabet.forEach(
-    symbol => possibleStates.push(new Set())
-  );
+  // Auxiliar array to collect all states that a symbol leads
+  for(let i = 0; i < fsm.alphabet.length; i++)
+    possibleStates.push(new Set());
 
-  while(nStates0 != nStates1) {
-    fsmDet.states[nStates0].split(",").forEach(
+  /* 
+   * Colect all states that, throught a state (new state
+   * in the new automata), with a symbol, whe can go to
+   */
+  while(actualState != fsmDet.states.length) {
+    
+    fsmDet.states[actualState].split(",").forEach(
       singleState => {
         fsm.transitions.forEach(
           transition => {
-            if (transition.from === singleState)
+            if (transition.from === singleState
+              && transition.to !== undefined) {
               transition.to.split(",").forEach(
                 state => possibleStates[
-                  fsm.alphabet.indexOf(transition.when)].
-                  add(state)
+                  fsm.alphabet.indexOf(transition.when)]
+                  .add(state)
               ); 
+            }
           }
         );
       }
     );
     
+    /*
+     * Sorts all states collected in the previous loop
+     * to make sure that there's no equivalent states
+     * before adding new states and transitions. 
+     * (for example, (A,B) or (B,A) are the same thing).
+     */
+    possibleStates.forEach(
+      (state, index) => {
+        let fromStateStr = fsmDet.states[actualState];
+        let toStateStr = Array.from(state).sort().join(",");
 
-    possibleStates.forEach(posState => {
-      // Coisas
-      posState.clear();
-    });
-    realStates.clear();
-    break;
+        if (toStateStr === "") toStateStr = DEAD_STATE;
+        if (fromStateStr === "") fromStateStr = DEAD_STATE;
+
+        fsmDet.transitions.push(
+          {
+            "from": fromStateStr ,
+            "to": toStateStr,
+            "when": fsmDet.alphabet[index]
+          }
+        );
+        
+        /* 
+         * Makes sure that the new state
+         * isn't on states list before adding it.
+         */
+        if (!fsmDet.states.includes(toStateStr))
+          fsmDet.states.push(toStateStr);
+        
+        // Set context variables for next iteration
+        state.clear();
+      }
+    );
+
+    actualState++;
   }
-
   return fsmDet;
 }
