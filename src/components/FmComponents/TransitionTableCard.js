@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { CardText, Card, CardBody, CardTitle, Input, Button } from "reactstrap";
 import { connect } from "react-redux";
-import { fsmEdit } from "../../actions/Fsm";
+import { fsmEdit } from "../../actions";
 
 class TransitionTable extends Component {
   state = {

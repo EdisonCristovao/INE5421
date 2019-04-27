@@ -2,11 +2,11 @@ import {
   MAKE_NEW_LANGUAGE,
   CHANGE_SELECTED_LANGUAGE,
   CHANGE_REG_EXPRESSION,
-  CHANGE_REG_GRAMMA
+  CHANGE_REG_GRAMMA,
+  FSM_EDIT,
+  ADD_SENTENCE,
+  REMOVE_SENTENCE
 } from "./../actions/Language";
-import {
-  FSM_EDIT
-} from "./../actions/Fsm";
 import uuidv4 from "uuid/v4";
 import InitialState from "./states/language.state";
 import Fsm from "./../model/Fsm";
@@ -20,8 +20,8 @@ function _makeNewLanguage(name) {
     grammar: "",
     expression: "",
     // fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
-    fsm: new Fsm([], [], [], '', []),
-    userSentences: [],
+    fsm: new Fsm([], [], [], "", []),
+    userSentences: [{sentence: 'aaabba', valid: false}, {sentence: 'ababbaa', valid: true}],
     enumerationLength: 5
   };
 }
@@ -52,10 +52,29 @@ const languages = (state = InitialState, action) => {
         ...state
       };
     case FSM_EDIT:
-      state.listLanguages[state.selectedLanguage].fsm = action.payload
+      state.listLanguages[state.selectedLanguage].fsm = action.payload;
       return {
         ...state
-      }
+      };
+    case ADD_SENTENCE:
+      const sentences =
+        state.listLanguages[state.selectedLanguage].userSentences;
+      state.listLanguages[state.selectedLanguage].userSentences = [
+        ...sentences,
+        { sentence: action.payload, valid: false }
+      ];
+      return {
+        ...state
+      };
+    case REMOVE_SENTENCE:
+      state.listLanguages[
+        state.selectedLanguage
+      ].userSentences = state.listLanguages[
+        state.selectedLanguage
+      ].userSentences.filter((sent, index) => index !== action.payload);
+      return {
+        ...state
+      };
     default:
       return state;
   }
