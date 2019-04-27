@@ -21,7 +21,7 @@ class App extends Component {
         const {match, location, locale,  isDirectionRTL} = this.props;
         if (location.pathname === '/') {
             // return ( <Redirect to={'/app/sample-page'}/> );
-            return ( <Redirect to={'/app/sample-page'}/> );
+            return ( <Redirect to={'/app'}/> );
         }
 
         // for RTL Support

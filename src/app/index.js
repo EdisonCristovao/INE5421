@@ -36,11 +36,11 @@ class App extends React.Component {
                 <Sidebar />
                 <div className="app-main-container">
                     <div className="app-header">
-                        {(navigationStyle === HORIZONTAL_NAVIGATION && horizontalNavPosition === ABOVE_THE_HEADER) &&
-                            <TopNav styleName="app-top-header" />}
+                        {/* {(navigationStyle === HORIZONTAL_NAVIGATION && horizontalNavPosition === ABOVE_THE_HEADER) &&
+                            <TopNav styleName="app-top-header" />} */}
                         <Header />
-                        {(navigationStyle === HORIZONTAL_NAVIGATION && horizontalNavPosition === BELOW_THE_HEADER) &&
-                            <TopNav />}
+                        {/* {(navigationStyle === HORIZONTAL_NAVIGATION && horizontalNavPosition === BELOW_THE_HEADER) &&
+                            <TopNav />} */}
 
                     </div>
 

@@ -11,7 +11,7 @@ const Error404 = () => (
             <h2 className="text-center fw-regular title bounceIn animation-delay-10 animated">
                 <IntlMessages id="extraPages.404Msg"/>
             </h2>
-            <form className="mb-4" role="search">
+            {/* <form className="mb-4" role="search">
                 <div className="search-bar flipInX animation-delay-16 animated">
                     <div className="form-group">
                         <input type="search" className="form-control form-control-lg border-0"
@@ -21,9 +21,9 @@ const Error404 = () => (
                         </button>
                     </div>
                 </div>
-            </form>
+            </form> */}
             <p className="text-center zoomIn animation-delay-20 animated">
-                <Link className="btn btn-primary" to="/"><IntlMessages id="extraPages.goHome"/></Link>
+                <Link className="btn btn-primary" to="/app/sample-page"><IntlMessages id="extraPages.goHome"/></Link>
             </p>
         </div>
     </div>
