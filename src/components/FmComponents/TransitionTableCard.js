@@ -87,7 +87,7 @@ class TransitionTable extends Component {
           <CardBody>
             <CardTitle>
             <h1>Automato Finito</h1>
-            <h1>{fsm.isDeterministic()}</h1>
+            {/* <h1>{fsm.isDeterministic()}</h1> */}
             </CardTitle>
             <CardText>
               <table className="default-table table table-sm table-responsive-sm table-hover mb-1">

@@ -21,7 +21,10 @@ function _makeNewLanguage(name) {
     expression: "",
     // fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
     fsm: new Fsm([], [], [], "", []),
-    userSentences: [{sentence: 'aaabba', valid: false}, {sentence: 'ababbaa', valid: true}],
+    userSentences: [
+      { sentence: "aaabba", valid: false },
+      { sentence: "ababbaa", valid: true }
+    ],
     enumerationLength: 5
   };
 }
@@ -72,6 +75,12 @@ const languages = (state = InitialState, action) => {
       ].userSentences = state.listLanguages[
         state.selectedLanguage
       ].userSentences.filter((sent, index) => index !== action.payload);
+      return {
+        ...state
+      };
+
+    case "LOAD_STORAGE":
+      state = action.payload;
       return {
         ...state
       };
