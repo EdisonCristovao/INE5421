@@ -9,7 +9,7 @@ import TransitionTableCard from '../../../components/FmComponents/TransitionTabl
 import RecognizeSentenceCard from '../../../components/FmComponents/RecognizeSentenceCard'
 import RegularGrammarCard from '../../../components/FmComponents/RegularGrammarCard'
 
-class SamplePage extends React.Component {
+class Dashboard extends React.Component {
 
     render() {
         const { languages, selectedLanguage } = this.props
@@ -49,4 +49,4 @@ const mapState = ({ languages }) => {
 }
 
 
-export default connect(mapState)(SamplePage);
+export default connect(mapState)(Dashboard);

@@ -16,7 +16,8 @@ import {
 import { isIOS, isMobile } from 'react-device-detect';
 import asyncComponent from '../util/asyncComponent';
 import TopNav from 'components/TopNav';
-import SamplePage from './routes/SamplePage';
+import Dashboard from './routes/Dashboard';
+import Welcome from './routes/Welcome';
 
 
 class App extends React.Component {
@@ -51,7 +52,8 @@ class App extends React.Component {
                                        component={asyncComponent(() => import('./routes/SamplePage'))}/> <Route
                                 component={asyncComponent(() => import('components/Error404'))}/> */}
 
-                                <Route path={`${match.url}/sample-page`} component={SamplePage} />
+                                <Route path={`${match.url}/dashboard`} component={Dashboard} />
+                                <Route path={`${match.url}`} component={Welcome} />
                                 <Route component={asyncComponent(() => import('components/Error404'))} />
                             </Switch>
                         </div>

@@ -23,7 +23,7 @@ const Error404 = () => (
                 </div>
             </form> */}
             <p className="text-center zoomIn animation-delay-20 animated">
-                <Link className="btn btn-primary" to="/app/sample-page"><IntlMessages id="extraPages.goHome"/></Link>
+                <Link className="btn btn-primary" to="/app/dashboard"><IntlMessages id="extraPages.goHome"/></Link>
             </p>
         </div>
     </div>
