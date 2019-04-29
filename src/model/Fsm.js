@@ -1,4 +1,3 @@
-
 import { isDeterministic, determine } from "./fsm/Determinator";
 import * as R from 'ramda';
 

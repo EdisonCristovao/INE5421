@@ -1,8 +1,8 @@
-import Fsm from "../Fsm";
 import { EPSILON, DEAD_STATE } from "../SymbolValidator";
+import FSM from "../Fsm";
 
 export function isDeterministic(fsm) {
-  if (!fsm instanceof Fsm) return "NotStance";
+  if (!fsm instanceof FSM) return "NotStance";
 
   return !(
     hasMultTransitions(fsm.transitions) || 
@@ -177,7 +177,7 @@ function makeDeterministic(fsm) {
 export function determine(fsm) {
   let isDet = isDeterministic(fsm);
   if (isDet === "NotStance") return "NotStance";
-  else if(isDet) return fsm;
+  else if(isDet) return "AlreadyDeterministic";
 
   return makeDeterministic(fsm);
 }
