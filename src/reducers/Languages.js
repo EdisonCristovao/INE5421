@@ -10,6 +10,7 @@ import {
 import uuidv4 from "uuid/v4";
 import InitialState from "./states/language.state";
 import Fsm from "./../model/Fsm";
+import Grammar from "./../model/Grammar";
 
 function _makeNewLanguage(name) {
   return {
@@ -17,7 +18,7 @@ function _makeNewLanguage(name) {
     name: name,
     empty: true,
     valid: true,
-    grammar: "",
+    grammar: "S -> aB | aC \nA -> a",
     expression: "",
     // fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
     fsm: new Fsm([], [], [], "", []),

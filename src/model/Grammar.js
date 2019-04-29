@@ -19,6 +19,8 @@ export default class Grammar {
     for (let nonTerminal in p) {
         
     }
+
+    return p_;
   }
 }
 
