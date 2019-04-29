@@ -1,0 +1,7 @@
+-clicar em add sem que todos os simboos de transição
+levem pra algum estado deixa a pagina em branco
+
+-clicar em salvar o automato e depois adicionar
+outro estado leva pra pagina em branco
+
+- sem virgula no input do estado
