@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "engines": {
+    "node": "10.11.0",
+    "npm": "6.4.1"
+  },
   "dependencies": {
     "autosuggest-highlight": "^3.1.1",
     "babel-preset-stage-2": "^6.24.1",
@@ -84,7 +88,8 @@
   "scripts": {
     "clean": "rimraf dist/*",
     "build": "webpack --progress --bail --env dist -p",
-    "start": "webpack-dev-server --hot"
+    "start": "webpack-dev-server --hot",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
