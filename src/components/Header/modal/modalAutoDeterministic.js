@@ -1,16 +1,35 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from "reactstrap";
+
+import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Input
+} from "reactstrap";
+import Fsm from "./../../../model/Fsm";
 
 class modalAutoDeterministifc extends React.Component {
   state = {
-    modal: false
+    modal: false,
+    detFsm: null
   };
+
+  componentDidMount = () => {
+    // console.log(this.props.language.fsm)
+  };
+
+  componentWillReceiveProps = (nextProps) => {
+    console.log(nextProps)
+  }
 
   toggle = () => {
     this.setState(prevState => ({
       modal: !prevState.modal
     }));
+    this.forceUpdate();
   };
 
   getNextState = (state, letter, transitions) => {
@@ -23,6 +42,18 @@ class modalAutoDeterministifc extends React.Component {
 
   render() {
     const { fsm } = this.props.language;
+    console.log(fsm)
+    let detFsm = new Fsm(
+      fsm.states,
+      fsm.alphabet,
+      fsm.transitions,
+      fsm.initial,
+      fsm.finals
+    );
+    console.log(detFsm.determine())
+
+    if (this.state.modal) detFsm = detFsm.determine();
+
     return (
       <div>
         <li className="pointer" onClick={this.toggle}>
@@ -43,20 +74,20 @@ class modalAutoDeterministifc extends React.Component {
                   </th>
                   <th>F</th>
                   <th>Estado</th>
-                  {fsm.alphabet.map((letter, index) => (
+                  {detFsm.alphabet.map((letter, index) => (
                     <th>{letter}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {fsm.states.map((state, index) => (
+                {detFsm.states.map((state, index) => (
                   <tr>
                     <td>
                       <Input
                         className="position-relative m-0"
                         type="radio"
                         name="initial"
-                        checked={state === fsm.initial}
+                        checked={state === detFsm.initial}
                         // onChange={e => this.setInitialState(e, state)}
                       />
                     </td>
@@ -64,13 +95,13 @@ class modalAutoDeterministifc extends React.Component {
                       <Input
                         className="position-relative m-0"
                         type="checkbox"
-                        checked={fsm.finals[index]}
+                        checked={detFsm.finals[index]}
                         // onChange={e => this.setFinalState(e, index)}
                       />
                     </td>
                     <td>{state}</td>
-                    {fsm.alphabet.map((letter, index) =>
-                      this.getNextState(state, letter, fsm.transitions)
+                    {detFsm.alphabet.map((letter, index) =>
+                      this.getNextState(state, letter, detFsm.transitions)
                     )}
                   </tr>
                 ))}

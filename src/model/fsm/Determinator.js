@@ -179,7 +179,7 @@ function makeDeterministic(fsm) {
 export function determine(fsm) {
   let isDet = isDeterministic(fsm);
   if (isDet === "NotStance") return "NotStance";
-  else if(isDet) return "AlreadyDeterministic";
+  else if(isDet) return fsm;
 
   return makeDeterministic(fsm);
 }
