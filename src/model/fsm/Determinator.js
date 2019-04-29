@@ -1,7 +1,5 @@
 import Fsm from "../Fsm";
 import { EPSILON, DEAD_STATE } from "../SymbolValidator";
-import FSM from "../Fsm";
-import { FSM_EDIT } from "../../actions/Fsm";
 
 export function isDeterministic(fsm) {
   if (!fsm instanceof Fsm) return "NotStance";
