@@ -1,5 +1,3 @@
-import Fsm from "../model/Fsm"
-
 export const FSM_EDIT = 'FSM_EDIT';
 
 //FSM
