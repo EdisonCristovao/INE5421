@@ -18,7 +18,8 @@ export function sentenceRecognize(fsm, sentence) {
                 
                 state = fsm.transitions[j].to;
                 
-                if (state !== undefined && state !== "")
+                if (state !== undefined && state !== ""
+                    && state !== "-")
                     ended = false;
                
                 break;
