@@ -180,8 +180,6 @@ export function determine(fsm) {
     return "NotStance";
   else if(isDet) 
     return fsm;
-  else if (fsm.hasNonDeclaredState())
-    return false;
 
   return makeDeterministic(fsm);
 }

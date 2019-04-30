@@ -1,4 +1,5 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
+import {sentenceRecognize} from "./fsm/Recognizer";
 import * as R from 'ramda';
 
 export default class FSM {
@@ -20,7 +21,21 @@ export default class FSM {
   }
 
   hasNonDeclaredState() {
-    return this.transitions.some(trans => !this.states.includes(trans.to));
+    return this.transitions.some(
+      trans => {
+        if (trans.to !== undefined && trans.to !== ""
+            && trans.to !== "-") {
+          return trans.to.split(",").some(
+            singleState => !this.states.includes(singleState)
+          )
+        } else {
+          return false;
+        }
+      });
+  }
+
+  read(sentence) {
+    return sentenceRecognize(this, sentence);
   }
 
   clone() {
