@@ -19,6 +19,10 @@ export default class FSM {
     return determine(this);
   }
 
+  hasNonDeclaredState() {
+    return this.transitions.some(trans => !this.states.includes(trans.to));
+  }
+
   clone() {
     return new FSM(
       [...this.states],
