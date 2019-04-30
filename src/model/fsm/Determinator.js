@@ -176,8 +176,12 @@ function makeDeterministic(fsm) {
 
 export function determine(fsm) {
   let isDet = isDeterministic(fsm);
-  if (isDet === "NotStance") return "NotStance";
-  else if(isDet) return "AlreadyDeterministic";
+  if (isDet === "NotStance") 
+    return "NotStance";
+  else if(isDet) 
+    return fsm;
+  else if(fsm.transitions.some(trans => !fsm.states.includes(trans.to))) 
+    return "NonDeclaredState";
 
   return makeDeterministic(fsm);
 }
