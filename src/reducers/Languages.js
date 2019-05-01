@@ -6,7 +6,8 @@ import {
   CHANGE_REG_GRAMMA,
   FSM_EDIT,
   ADD_SENTENCE,
-  REMOVE_SENTENCE
+  REMOVE_SENTENCE,
+  addSentence
 } from "./../actions";
 import uuidv4 from "uuid/v4";
 import InitialState from "./states/language.state";
@@ -32,6 +33,7 @@ function _makeNewLanguage(name) {
 }
 
 const languages = (state = InitialState, action) => {
+  const language = state.listLanguages[state.selectedLanguage];
   switch (action.type) {
     case MAKE_NEW_LANGUAGE:
       const newLanguage = _makeNewLanguage(action.payload);
@@ -70,15 +72,8 @@ const languages = (state = InitialState, action) => {
         ...state
       };
     case ADD_SENTENCE:
-      const sentences =
-        state.listLanguages[state.selectedLanguage].userSentences;
-      state.listLanguages[state.selectedLanguage].userSentences = [
-        ...sentences,
-        { sentence: action.payload, valid: false }
-      ];
-      return {
-        ...state
-      };
+      return recognizeReduce(state, action);
+
     case REMOVE_SENTENCE:
       state.listLanguages[
         state.selectedLanguage
@@ -100,3 +95,27 @@ const languages = (state = InitialState, action) => {
 };
 
 export default languages;
+
+const recognizeReduce = (state, action) => {
+  const language = state.listLanguages[state.selectedLanguage];
+  const fsm = language.fsm;
+  const newFsm = new Fsm(
+    fsm.states,
+    fsm.alphabet,
+    fsm.transitions,
+    fsm.initial,
+    fsm.finals
+  );
+
+  state.listLanguages[state.selectedLanguage].userSentences = [
+    ...language.userSentences,
+    {
+      sentence: action.payload,
+      valid: newFsm.recognize(action.payload)
+    }
+  ];
+
+  return {
+    ...state
+  };
+};

@@ -34,7 +34,7 @@ export default class FSM {
       });
   }
 
-  read(sentence) {
+  recognize(sentence) {
     return sentenceRecognize(this, sentence);
   }
 
