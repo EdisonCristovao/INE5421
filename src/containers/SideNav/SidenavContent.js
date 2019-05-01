@@ -6,7 +6,11 @@ import { Input, Button } from "reactstrap";
 
 import IntlMessages from "util/IntlMessages";
 import CustomScrollbars from "util/CustomScrollbars";
-import { makeNewLanguage, changeSelectedLanguage } from "../../actions/index";
+import {
+  makeNewLanguage,
+  changeSelectedLanguage,
+  deleteLanguage
+} from "../../actions/";
 
 class SidenavContent extends Component {
   state = {
@@ -91,7 +95,8 @@ class SidenavContent extends Component {
       listLanguages,
       selectedLanguage,
       makeNewLanguage,
-      changeSelectedLanguage
+      changeSelectedLanguage,
+      deleteLanguage
     } = this.props;
     const { newLanguageName } = this.state;
 
@@ -119,7 +124,7 @@ class SidenavContent extends Component {
                 <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
                 <span className="nav-text">{language.name} </span>
               </Button>
-              <Button className="ml-1">
+              <Button className="ml-1" onClick={e => deleteLanguage(index)}>
                 <i class="zmdi zmdi-tag-close p-0 m-0" />
               </Button>
             </li>
@@ -162,5 +167,5 @@ const mapState = ({ languages, language }) => {
 
 export default connect(
   mapState,
-  { makeNewLanguage, changeSelectedLanguage }
+  { makeNewLanguage, changeSelectedLanguage, deleteLanguage }
 )(withRouter(SidenavContent));

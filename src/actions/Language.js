@@ -1,6 +1,12 @@
+//LANGUAGE =========================================
 export const MAKE_NEW_LANGUAGE = 'MAKE_NEW_LANGUAGE';
 export const CHANGE_SELECTED_LANGUAGE = 'CHANGE_SELECTED_LANGUAGE';
+export const DELETE_LANGUAGE = 'DELETE_LANGUAGE';
+
+//EXPRESSION =========================================
 export const CHANGE_REG_EXPRESSION = 'CHANGE_REG_EXPRESSION';
+
+//GRAMMA =========================================
 export const CHANGE_REG_GRAMMA = 'CHANGE_REG_GRAMMA';
 
 //SENTENCE =========================================
@@ -22,6 +28,12 @@ export function makeNewLanguage(name) {
 export function changeSelectedLanguage(id) {
     return { type: CHANGE_SELECTED_LANGUAGE, payload: id };
 }
+
+export function deleteLanguage(id) {
+    return { type: DELETE_LANGUAGE, payload: id };
+}
+
+
 
 export function changeRegExpression(regExpression) {
     return { type: CHANGE_REG_EXPRESSION, payload: regExpression };
