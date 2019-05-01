@@ -17,9 +17,6 @@ export const REMOVE_SENTENCE = 'REMOVE_SENTENCE';
 export const FSM_EDIT = 'FSM_EDIT';
 
 
-
-
-
 //LANGUAGES =========================================
 export function makeNewLanguage(name) {
     return { type: MAKE_NEW_LANGUAGE, payload: name };

@@ -8,7 +8,7 @@ class TransitionTable extends Component {
     fsm: this.props.language.fsm,
     newState: {
       name: "",
-      states: [],
+      states: []
       // transitions: []
     },
     newAlphabet: {
@@ -63,19 +63,33 @@ class TransitionTable extends Component {
 
     newState.fsm.transitions = [...newState.fsm.transitions, ...transitions];
     newState.fsm.finals = [...newState.fsm.finals, false];
+
     newState.newState.name = "";
     newState.newState.states = [];
     // newState.newState.transitions = [];
     this.setState(newState);
+    // this.props.fsmEdit(this.state.fsm);
   };
 
   addAlphabet = e => {
+    if (e.key == "Enter") {
+      let newState = { ...this.state };
+      newState.fsm.alphabet = [
+        ...newState.fsm.alphabet,
+        newState.newAlphabet.name
+      ];
+      newState.newAlphabet.name = "";
+      this.setState(newState);
+    }
+  };
+
+  clearState = e => {
     let newState = { ...this.state };
-    newState.fsm.alphabet = [
-      ...newState.fsm.alphabet,
-      newState.newAlphabet.name
-    ];
-    newState.newAlphabet.name = "";
+    newState.fsm.states = [];
+    newState.fsm.alphabet = [];
+    newState.fsm.transitions = [];
+    newState.fsm.initial = "";
+    newState.fsm.finals = [];
     this.setState(newState);
   };
 
@@ -86,8 +100,8 @@ class TransitionTable extends Component {
         <Card>
           <CardBody>
             <CardTitle>
-            <h1>Automato Finito</h1>
-            {/* <h1>{fsm.isDeterministic()}</h1> */}
+              <h1>Automato Finito</h1>
+              {/* <h1>{fsm.isDeterministic()}</h1> */}
             </CardTitle>
             <CardText>
               <table className="default-table table table-sm table-responsive-sm table-hover mb-1">
@@ -106,6 +120,7 @@ class TransitionTable extends Component {
                         className=" w-25 mr-2"
                         type="text"
                         value={newAlphabet.name}
+                        onKeyPress={e => this.addAlphabet(e)}
                         onChange={e =>
                           this.setState({
                             ...this.state,
@@ -116,12 +131,6 @@ class TransitionTable extends Component {
                           })
                         }
                       />
-                      <Button
-                        color="primary"
-                        onClick={e => this.addAlphabet(e)}
-                      >
-                        add
-                      </Button>{" "}
                     </th>
                   </tr>
                 </thead>
@@ -192,11 +201,13 @@ class TransitionTable extends Component {
               >
                 add
               </Button>
-              <Button color="secondary">Limpar</Button>
+              <Button color="secondary" onClick={e => this.clearState()}>
+                Limpar
+              </Button>
             </CardText>
-            <Button color="primary" onClick={e => this.props.fsmEdit(fsm)}>
+            {/* <Button color="primary" onClick={e => this.props.fsmEdit(fsm)}>
               Salvar Automato
-            </Button>
+            </Button> */}
           </CardBody>
         </Card>
       </div>

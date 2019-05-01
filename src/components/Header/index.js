@@ -84,9 +84,10 @@ class Header extends React.Component {
       locale,
       navigationStyle,
       horizontalNavPosition,
-      language,
+      listLanguages,
       selectedLanguage
     } = this.props;
+    const language = listLanguages[selectedLanguage];
     const drawerStyle = drawerType.includes(FIXED_DRAWER)
       ? "d-flex d-xl-none"
       : drawerType.includes(COLLAPSED_DRAWER)

@@ -83,7 +83,7 @@ class modalAutoDeterministifc extends React.Component {
                       <Input
                         className="position-relative m-0"
                         type="radio"
-                        name="initial"
+                        name="initialDet"
                         checked={state === detFsm.initial}
                         // onChange={e => this.setInitialState(e, state)}
                       />

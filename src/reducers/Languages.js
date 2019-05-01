@@ -25,8 +25,8 @@ function _makeNewLanguage(name) {
     // fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
     fsm: new Fsm([], [], [], "", []),
     userSentences: [
-      { sentence: "aaabba", valid: false },
-      { sentence: "ababbaa", valid: true }
+      // { sentence: "aaabba", valid: false },
+      // { sentence: "ababbaa", valid: true }
     ],
     enumerationLength: 5
   };
