@@ -97,104 +97,108 @@ class TransitionTable extends Component {
     const { fsm, newState, newAlphabet } = this.state;
     return (
       <div>
-        <Card>
+        <Card style={{ height: "380px"}}>
           <CardBody>
             <CardTitle>
               <h1>Automato Finito</h1>
               {/* <h1>{fsm.isDeterministic()}</h1> */}
             </CardTitle>
             <CardText>
-              <table className="default-table table table-sm table-responsive-sm table-hover mb-1">
-                <thead className="th-border-b">
-                  <tr>
-                    <th>
-                      <i class="zmdi zmdi-arrow-right" />
-                    </th>
-                    <th>F</th>
-                    <th>Estado</th>
-                    {fsm.alphabet.map((letter, index) => (
-                      <th>{letter}</th>
-                    ))}
-                    <th className="d-flex justify-content-center align-items-center">
-                      <Input
-                        className=" w-25 mr-2"
-                        type="text"
-                        value={newAlphabet.name}
-                        onKeyPress={e => this.addAlphabet(e)}
-                        onChange={e =>
-                          this.setState({
-                            ...this.state,
-                            newAlphabet: {
-                              ...newAlphabet,
-                              name: e.target.value
-                            }
-                          })
-                        }
-                      />
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {fsm.states.map((state, index) => (
+              <div style={{ height: "210px", overflow: "auto" }}>
+                <table className="default-table table table-sm table-responsive-sm table-hover mb-1">
+                  <thead className="th-border-b">
                     <tr>
-                      <td>
+                      <th>
+                        <i class="zmdi zmdi-arrow-right" />
+                      </th>
+                      <th>F</th>
+                      <th>Estado</th>
+                      {fsm.alphabet.map((letter, index) => (
+                        <th>{letter}</th>
+                      ))}
+                      <th className="d-flex justify-content-center align-items-center">
                         <Input
-                          className="position-relative m-0"
-                          type="radio"
-                          name="initial"
-                          checked={state === fsm.initial}
-                          onChange={e => this.setInitialState(e, state)}
+                          className=" w-25 mr-2"
+                          type="text"
+                          value={newAlphabet.name}
+                          onKeyPress={e => this.addAlphabet(e)}
+                          onChange={e =>
+                            this.setState({
+                              ...this.state,
+                              newAlphabet: {
+                                ...newAlphabet,
+                                name: e.target.value
+                              }
+                            })
+                          }
                         />
-                      </td>
-                      <td>
-                        <Input
-                          className="position-relative m-0"
-                          type="checkbox"
-                          checked={fsm.finals[index]}
-                          onChange={e => this.setFinalState(e, index)}
-                        />
-                      </td>
-                      <td>{state}</td>
-                      {fsm.alphabet.map((letter, index) =>
-                        this.getNextState(state, letter, fsm.transitions)
-                      )}
-                      <td />
+                      </th>
                     </tr>
-                  ))}
+                  </thead>
+                  <tbody>
+                    {fsm.states.map((state, index) => (
+                      <tr>
+                        <td>
+                          <Input
+                            className="position-relative m-0"
+                            type="radio"
+                            name="initial"
+                            checked={state === fsm.initial}
+                            onChange={e => this.setInitialState(e, state)}
+                          />
+                        </td>
+                        <td>
+                          <Input
+                            className="position-relative m-0"
+                            type="checkbox"
+                            checked={fsm.finals[index]}
+                            onChange={e => this.setFinalState(e, index)}
+                          />
+                        </td>
+                        <td>{state}</td>
+                        {fsm.alphabet.map((letter, index) =>
+                          this.getNextState(state, letter, fsm.transitions)
+                        )}
+                        <td />
+                      </tr>
+                    ))}
 
-                  <tr>
-                    <td> - </td>
-                    <td> - </td>
-                    <td>
-                      <Input
-                        type="text"
-                        value={newState.name}
-                        onChange={e =>
-                          this.setState({
-                            ...this.state,
-                            newState: { ...newState, name: e.target.value }
-                          })
-                        }
-                      />
-                    </td>
-                    {fsm.alphabet.map((letter, index) => (
+                    <tr>
+                      <td> - </td>
+                      <td> - </td>
                       <td>
                         <Input
                           type="text"
-                          disabled={newState.name == ""}
-                          value={
-                            newState.states.length === 0
-                              ? ""
-                              : newState.states[index]
+                          value={newState.name}
+                          onChange={e =>
+                            this.setState({
+                              ...this.state,
+                              newState: { ...newState, name: e.target.value }
+                            })
                           }
-                          onChange={e => this.addTransition(e, index)}
                         />
                       </td>
-                    ))}
-                    <td />
-                  </tr>
-                </tbody>
-              </table>
+                      {fsm.alphabet.map((letter, index) => (
+                        <td>
+                          <Input
+                            type="text"
+                            disabled={newState.name == ""}
+                            value={
+                              newState.states.length === 0
+                                ? ""
+                                : newState.states[index]
+                            }
+                            onChange={e => this.addTransition(e, index)}
+                          />
+                        </td>
+                      ))}
+                      <td />
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="mt-3">
+
               <Button
                 color="primary"
                 onClick={e => this.addTransitionsToAutomata(e)}
@@ -204,6 +208,7 @@ class TransitionTable extends Component {
               <Button color="secondary" onClick={e => this.clearState()}>
                 Limpar
               </Button>
+              </div>
             </CardText>
             {/* <Button color="primary" onClick={e => this.props.fsmEdit(fsm)}>
               Salvar Automato
