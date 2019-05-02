@@ -19,25 +19,28 @@ class RecognizeSentenceCard extends Component {
     const { sentence } = this.state;
     return (
       <div>
-        <Card>
+        <Card style={{ height: "380px"}}>
           <CardBody>
             <CardTitle>
               <h1>Reconhecimento de Sentenças</h1>
             </CardTitle>
             <CardText>
-              {userSentences.map((sentec, index) => (
-                <Alert
-                  color={sentec.valid ? `success` : `danger`}
-                  isOpen={true}
-                  toggle={() => {
-                    removeSentence(index);
-                    this.forceUpdate();
-                  }}
-                >
-                  {sentec.sentence}
-                </Alert>
-              ))}
+              <div className="pr-2" style={{ height: "200px", overflow: "auto" }}>
+                {userSentences.map((sentec, index) => (
+                  <Alert
+                    color={sentec.valid ? `success` : `danger`}
+                    isOpen={true}
+                    toggle={() => {
+                      removeSentence(index);
+                      this.forceUpdate();
+                    }}
+                  >
+                    {sentec.sentence}
+                  </Alert>
+                ))}
+              </div>
               <Input
+              className="mt-2"
                 value={sentence}
                 onKeyPress={e => this.submitSentence(e)}
                 onChange={e => this.setState({ sentence: e.target.value })}
