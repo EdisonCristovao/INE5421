@@ -67,6 +67,7 @@ const languages = (state = InitialState, action) => {
         ...state
       };
     case FSM_EDIT:
+      console.log('fsm edit')
       state.listLanguages[state.selectedLanguage].fsm = action.payload;
       return {
         ...state

@@ -38,6 +38,14 @@ export default class FSM {
     return sentenceRecognize(this, sentence);
   }
 
+  createFsmFromFsm(fsm) {
+    this.states = fsm.states;
+    this.alphabet = fsm.alphabet;
+    this.transitions = fsm.transitions;
+    this.initial = fsm.initial;
+    this.finals = fsm.finals;
+  }
+
   clone() {
     return new FSM(
       [...this.states],

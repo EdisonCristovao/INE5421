@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { CardText, Card, CardBody, CardTitle, Input, Button } from "reactstrap";
 import { connect } from "react-redux";
-import { fsmEdit } from "../../actions";
+import Fsm from "./../../model/Fsm";
+import { fsmEdit } from "./../../actions";
 
 class TransitionTable extends Component {
   state = {
@@ -17,7 +18,18 @@ class TransitionTable extends Component {
   };
 
   componentWillReceiveProps = nextPorps => {
-    this.setState({ ...this.state, fsm: nextPorps.language.fsm });
+    this.loadFsmToState(nextPorps.language.fsm);
+  };
+
+  componentDidMount = () => {
+    this.loadFsmToState(this.props.language.fsm);
+  };
+
+  loadFsmToState = fsm => {
+    const newFsm = new Fsm();
+
+    newFsm.createFsmFromFsm(fsm);
+    this.setState({ ...this.state, fsm: newFsm });
   };
 
   getNextState = (state, letter, transitions) => {
@@ -28,24 +40,32 @@ class TransitionTable extends Component {
     else return <td>{transition.to}</td>;
   };
 
+  // save
   setFinalState = (e, index) => {
     let newState = { ...this.state };
     newState.fsm.finals[index] = !newState.fsm.finals[index];
+
     this.setState(newState);
+    this.props.fsmEdit(this.state.fsm);
   };
 
+  //save
   setInitialState = (e, state) => {
     let newState = { ...this.state };
     newState.fsm.initial = state;
+
     this.setState(newState);
+    this.props.fsmEdit(this.state.fsm);
   };
 
   addTransition = (e, index) => {
     let newState = { ...this.state };
     newState.newState.states[index] = e.target.value;
+
     this.setState(newState);
   };
 
+  //save
   addTransitionsToAutomata = () => {
     let newState = { ...this.state };
     newState.fsm.states = [...newState.fsm.states, newState.newState.name];
@@ -68,7 +88,7 @@ class TransitionTable extends Component {
     newState.newState.states = [];
     // newState.newState.transitions = [];
     this.setState(newState);
-    // this.props.fsmEdit(this.state.fsm);
+    this.props.fsmEdit(this.state.fsm);
   };
 
   addAlphabet = e => {
@@ -80,7 +100,9 @@ class TransitionTable extends Component {
       ];
       newState.newAlphabet.name = "";
       this.setState(newState);
+      this.props.fsmEdit(this.state.fsm);
     }
+
   };
 
   clearState = e => {
@@ -90,14 +112,16 @@ class TransitionTable extends Component {
     newState.fsm.transitions = [];
     newState.fsm.initial = "";
     newState.fsm.finals = [];
+
     this.setState(newState);
+    this.props.fsmEdit(this.state.fsm);
   };
 
   render() {
     const { fsm, newState, newAlphabet } = this.state;
     return (
       <div>
-        <Card style={{ height: "380px"}}>
+        <Card style={{ height: "380px" }}>
           <CardBody>
             <CardTitle>
               <h1>Automato Finito</h1>
@@ -198,16 +222,15 @@ class TransitionTable extends Component {
                 </table>
               </div>
               <div className="mt-3">
-
-              <Button
-                color="primary"
-                onClick={e => this.addTransitionsToAutomata(e)}
-              >
-                add
-              </Button>
-              <Button color="secondary" onClick={e => this.clearState()}>
-                Limpar
-              </Button>
+                <Button
+                  color="primary"
+                  onClick={e => this.addTransitionsToAutomata(e)}
+                >
+                  add
+                </Button>
+                <Button color="secondary" onClick={e => this.clearState()}>
+                  Limpar
+                </Button>
               </div>
             </CardText>
             {/* <Button color="primary" onClick={e => this.props.fsmEdit(fsm)}>
