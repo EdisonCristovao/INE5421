@@ -20,7 +20,7 @@ function _makeNewLanguage(name) {
     name: name,
     empty: true,
     valid: true,
-    grammar: "S -> aB | aC \nA -> a",
+    grammar: "",
     expression: "",
     // fsm: new Fsm(['A', 'B'], ['a','b'], [{from: 'A', to: 'B', when: 'a'}, {from: 'A', to: 'A', when: 'b'}], 'A', [false, true]),
     fsm: new Fsm([], [], [], "", []),
@@ -67,7 +67,15 @@ const languages = (state = InitialState, action) => {
         ...state
       };
     case FSM_EDIT:
-      console.log('fsm edit')
+      let nFsm = new Fsm();
+      nFsm.createFsmFromFsm(action.payload);
+      // if(nFsm.hasNonDeclaredState)
+      state.listLanguages[
+        state.selectedLanguage
+      ].grammar = nFsm.fsmToGrammarConvert().gramaToString();
+      // else
+      // state.listLanguages[state.selectedLanguage].grammar = 'Automato com estado nao declarado'
+
       state.listLanguages[state.selectedLanguage].fsm = action.payload;
       return {
         ...state

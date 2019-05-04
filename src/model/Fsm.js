@@ -1,6 +1,7 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
 import {sentenceRecognize} from "./fsm/Recognizer";
 import * as R from 'ramda';
+import Grammar from "./Grammar";
 
 export default class FSM {
   constructor(states, alphabet, transitions, initial, finals) {
@@ -46,6 +47,16 @@ export default class FSM {
     this.finals = fsm.finals;
   }
 
+  fsmToGrammarConvert() {
+    
+    let vn = [...this.states];
+    let vt = [...this.alphabet];
+    let p = '';
+    let s = this.initial;
+    
+
+    return new Grammar(vn, vt, p, s);
+  }
   clone() {
     return new FSM(
       [...this.states],

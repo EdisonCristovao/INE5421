@@ -10,15 +10,15 @@ export default class Grammar {
   }
 
   gramaToString() {
-    if (!this.s || !this.p) return "";
+    // if (!this.s || !this.p) return "";
 
-    let p = this.p;
+    // let p = this.p;
 
-    let p_ = "";
+    let p_ = "S -> aB | aC \nA -> a";
 
-    for (let nonTerminal in p) {
+    // for (let nonTerminal in p) {
         
-    }
+    // }
 
     return p_;
   }
