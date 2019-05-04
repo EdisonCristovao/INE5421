@@ -45,7 +45,7 @@ class modalAutoDeterministifc extends React.Component {
     let detFsm = new Fsm();
     detFsm.createFsmFromFsm(fsm);
 
-    console.log(fsm)
+    console.log(detFsm)
     if (this.state.modal) detFsm = detFsm.determine();
 
     return (
@@ -113,6 +113,7 @@ class modalAutoDeterministifc extends React.Component {
 }
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
+  console.log(listLanguages[selectedLanguage])
   return { language: listLanguages[selectedLanguage] };
 };
 

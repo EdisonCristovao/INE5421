@@ -18,7 +18,7 @@ class Dashboard extends React.Component {
                 {selectedLanguage !== null &&
                     <div className="app-wrapper">
                         <div className="row">
-                            <div className="col-8">
+                            <div className="col-md-8 col-12">
                                 <TransitionTableCard></TransitionTableCard>
                             </div>
                             <div className="col">

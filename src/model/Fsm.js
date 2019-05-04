@@ -51,9 +51,12 @@ export default class FSM {
     
     let vn = [...this.states];
     let vt = [...this.alphabet];
-    let p = '';
+    let p = [];
     let s = this.initial;
     
+    // this.transitions.forEach(trans => {
+
+    // })
 
     return new Grammar(vn, vt, p, s);
   }
