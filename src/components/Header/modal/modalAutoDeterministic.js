@@ -17,14 +17,6 @@ class modalAutoDeterministifc extends React.Component {
     detFsm: null
   };
 
-  componentDidMount = () => {
-    // console.log(this.props.language.fsm)
-  };
-
-  componentWillReceiveProps = (nextProps) => {
-    // console.log(nextProps)
-  }
-
   toggle = () => {
     this.setState(prevState => ({
       modal: !prevState.modal
@@ -42,13 +34,10 @@ class modalAutoDeterministifc extends React.Component {
 
   render() {
     const { fsm } = this.props.language;
-    let detFsm = new Fsm(
-      fsm.states,
-      fsm.alphabet,
-      fsm.transitions,
-      fsm.initial,
-      fsm.finals
-    );
+    let detFsm = new Fsm();
+    detFsm.createFsmFromFsm(fsm);
+
+    // console.log(detFsm)
     if (this.state.modal) detFsm = detFsm.determine();
 
     return (

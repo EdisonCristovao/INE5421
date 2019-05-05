@@ -12,14 +12,15 @@ import RegularGrammarCard from '../../../components/FmComponents/RegularGrammarC
 class Dashboard extends React.Component {
 
     render() {
-        const { languages, selectedLanguage } = this.props
+        let { language, selectedLanguage } = this.props;
+
         return (
             <div>
                 {selectedLanguage !== null &&
                     <div className="app-wrapper">
                         <div className="row">
-                            <div className="col-8">
-                                <TransitionTableCard></TransitionTableCard>
+                            <div className="col-md-8 col-12">
+                                <TransitionTableCard ></TransitionTableCard>
                             </div>
                             <div className="col">
                                 <RecognizeSentenceCard></RecognizeSentenceCard>
@@ -31,7 +32,7 @@ class Dashboard extends React.Component {
                                     <RegularExpressionCard></RegularExpressionCard>
                                 </div>
                                 <div className="col-6">
-                                    <RegularGrammarCard></RegularGrammarCard>
+                                    <RegularGrammarCard ></RegularGrammarCard>
                                 </div>
                             </div>
                             <div className="col-4">

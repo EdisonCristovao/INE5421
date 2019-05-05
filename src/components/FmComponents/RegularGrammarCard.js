@@ -10,9 +10,13 @@ import {
 import { changeRegGramma } from "../../actions/Language";
 
 class RegularGrammarCard extends Component {
+
+  componentDidMount = () => {
+    setInterval(()=>this.forceUpdate(),3000)
+  }
+
   render() {
-    const { listLanguages, selectedLanguage, changeRegGramma } = this.props;
-    const language = listLanguages[selectedLanguage];
+    const { language, changeRegGramma } = this.props;
     return (
       <div>
         <Card>
@@ -26,7 +30,7 @@ class RegularGrammarCard extends Component {
                 row="5"
                 name="gr"
                 placeholder="Defina uma ER"
-                value={language.grammar}
+                value={language.grammar.replace(/,/g, " ")}
                 onChange={e => {
                   changeRegGramma(e.target.value);
                   this.forceUpdate();
@@ -42,10 +46,11 @@ class RegularGrammarCard extends Component {
 
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
-  return { listLanguages, selectedLanguage };
+  return { language: listLanguages[selectedLanguage] };
 };
 
 export default connect(
   mapState,
+  // null,
   { changeRegGramma }
 )(RegularGrammarCard);

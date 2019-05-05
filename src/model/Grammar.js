@@ -1,3 +1,6 @@
+import { SEPARATOR, DERIVATION } from "./SymbolValidator";
+import Fsm from "./Fsm"
+
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
     this.Vn = Vn;
@@ -9,21 +12,31 @@ export default class Grammar {
     //   this._convertToFSM();
   }
 
+  grammarToFsmConvert(gramma) {
+    // let productions = gramma.split('\n')
+    // let productions = productions.map(prod => console.log(prod.replace(/\s/g, '')));
+    // console.log(productions);
+
+    return new Fsm();
+  }
+
   gramaToString() {
-    if (!this.s || !this.p) return "";
-
-    let p = this.p;
-
+    // if (!this.s || !this.p) return "";
+    
+    let p = this.P;
     let p_ = "";
 
-    for (let nonTerminal in p) {
-        
-    }
-
+    p.forEach(prod => {
+      p_ += `${prod.nonTerminal} ${DERIVATION} ${
+        prod.productions.map((pr, i) => {
+          if (prod.productions.length - 1 === i) 
+            return `${pr} \n`
+          else 
+            return `${pr} ${SEPARATOR} `
+        }
+        )}`
+    });
+    // console.log(p_)
     return p_;
   }
 }
-
-// p= [
-//     {nonTerminal: "S" , production: ["aA, bB, a, b"]}
-// ]

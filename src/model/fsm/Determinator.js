@@ -161,7 +161,7 @@ function makeDeterministic(fsm) {
   eStarCalculate();
 
   // First state will be e* of the original FA first state
-  fsmDet.initial = Array.from(eStar[0]).sort().join(",");
+  fsmDet.initial = Array.from(eStar[fsm.states.indexOf(fsm.initial)]).sort().join(",");
   fsmDet.states.push(fsmDet.initial);
 
   while(actualState !== fsmDet.states.length) {

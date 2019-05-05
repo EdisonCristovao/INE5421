@@ -13,6 +13,7 @@ class RecognizeSentenceCard extends Component {
       this.setState({ sentence: "" });
     }
   };
+
   render() {
     const { removeSentence, language } = this.props;
     const { userSentences } = language;
