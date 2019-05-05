@@ -11,13 +11,13 @@ import { changeRegGramma } from "../../actions/Language";
 
 class RegularGrammarCard extends Component {
 
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log(nextProps, '<-----');
-    return true;
+  componentDidMount = () => {
+    setInterval(()=>this.forceUpdate(),1000)
   }
 
   render() {
-    const { language } = this.props;
+    const { language, changeRegGramma } = this.props;
+    console.log(language.grammar)
     return (
       <div>
         <Card>
@@ -31,7 +31,7 @@ class RegularGrammarCard extends Component {
                 row="5"
                 name="gr"
                 placeholder="Defina uma ER"
-                value={language.grammar}
+                value={language.grammar.replace(/,/g, " ")}
                 onChange={e => {
                   changeRegGramma(e.target.value);
                   this.forceUpdate();
@@ -52,5 +52,6 @@ const mapState = ({ languages }) => {
 
 export default connect(
   mapState,
+  // null,
   { changeRegGramma }
 )(RegularGrammarCard);
