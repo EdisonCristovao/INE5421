@@ -42,13 +42,15 @@ export default class FSM {
   isFinal(stante) {
     return this.finals[this.states.indexOf(stante)];
   }
-  
+
   createFsmFromFsm(fsm) {
-    this.states = fsm.states;
-    this.alphabet = fsm.alphabet;
-    this.transitions = fsm.transitions;
-    this.initial = fsm.initial;
-    this.finals = fsm.finals;
+    if (fsm) {
+      this.states = fsm.states;
+      this.alphabet = fsm.alphabet;
+      this.transitions = fsm.transitions;
+      this.initial = fsm.initial;
+      this.finals = fsm.finals;
+    }
   }
 
   getProductions(vn) {
@@ -56,7 +58,7 @@ export default class FSM {
     this.transitions.forEach(tran => {
       if (tran.from === vn && tran.to !== DEAD_STATE) {
         productions.push(`${tran.when}${tran.to}`)
-        if(this.isFinal(tran.to))
+        if (this.isFinal(tran.to))
           productions.push(`${tran.when}`)
       }
     })
@@ -77,8 +79,8 @@ export default class FSM {
     return new Grammar(vn, vt, p, s);
   }
 
-  
-  
+
+
 
   clone() {
     return new FSM(

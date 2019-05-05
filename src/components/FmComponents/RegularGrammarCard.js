@@ -12,12 +12,11 @@ import { changeRegGramma } from "../../actions/Language";
 class RegularGrammarCard extends Component {
 
   componentDidMount = () => {
-    setInterval(()=>this.forceUpdate(),1000)
+    setInterval(()=>this.forceUpdate(),3000)
   }
 
   render() {
     const { language, changeRegGramma } = this.props;
-    console.log(language.grammar)
     return (
       <div>
         <Card>

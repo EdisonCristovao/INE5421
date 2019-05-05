@@ -1,4 +1,5 @@
 import { SEPARATOR, DERIVATION } from "./SymbolValidator";
+import Fsm from "./Fsm"
 
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
@@ -9,6 +10,14 @@ export default class Grammar {
     // this.fsm = null;
 
     //   this._convertToFSM();
+  }
+
+  grammarToFsmConvert(gramma) {
+    let productions = gramma.split('\n')
+    let productions = productions.map(prod => console.log(prod.replace(/\s/g, '')));
+    console.log(productions);
+
+    return new Fsm();
   }
 
   gramaToString() {
