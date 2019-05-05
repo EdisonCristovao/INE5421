@@ -74,8 +74,6 @@ export default class FSM {
       p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }]
     })
 
-    console.log(p);
-
     return new Grammar(vn, vt, p, s);
   }
 

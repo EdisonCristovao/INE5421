@@ -13,6 +13,7 @@ import {
 import { changeRegExpression } from "../../actions/Language";
 
 class RegularExpression extends Component {
+
   render() {
     const { listLanguages, selectedLanguage, changeRegExpression } = this.props;
     let language = listLanguages[selectedLanguage];

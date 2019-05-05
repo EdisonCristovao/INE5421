@@ -17,9 +17,7 @@ class RegularGrammarCard extends Component {
   }
 
   render() {
-    const { listLanguages, selectedLanguage, changeRegGramma } = this.props;
-    const language = listLanguages[selectedLanguage];
-    console.log(language, "<REGGRAMA");
+    const { language } = this.props;
     return (
       <div>
         <Card>
@@ -49,7 +47,7 @@ class RegularGrammarCard extends Component {
 
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
-  return { listLanguages, selectedLanguage };
+  return { language: listLanguages[selectedLanguage] };
 };
 
 export default connect(
