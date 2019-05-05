@@ -13,9 +13,9 @@ export default class Grammar {
   }
 
   grammarToFsmConvert(gramma) {
-    let productions = gramma.split('\n')
-    let productions = productions.map(prod => console.log(prod.replace(/\s/g, '')));
-    console.log(productions);
+    // let productions = gramma.split('\n')
+    // let productions = productions.map(prod => console.log(prod.replace(/\s/g, '')));
+    // console.log(productions);
 
     return new Fsm();
   }
