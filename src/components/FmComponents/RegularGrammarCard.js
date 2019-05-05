@@ -10,9 +10,16 @@ import {
 import { changeRegGramma } from "../../actions/Language";
 
 class RegularGrammarCard extends Component {
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log(nextProps, '<-----');
+    return true;
+  }
+
   render() {
     const { listLanguages, selectedLanguage, changeRegGramma } = this.props;
     const language = listLanguages[selectedLanguage];
+    console.log(language, "<REGGRAMA");
     return (
       <div>
         <Card>

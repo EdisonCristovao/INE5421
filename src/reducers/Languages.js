@@ -75,7 +75,6 @@ const languages = (state = InitialState, action) => {
       ].grammar = nFsm.fsmToGrammarConvert().gramaToString();
       // else
       // state.listLanguages[state.selectedLanguage].grammar = 'Automato com estado nao declarado'
-
       state.listLanguages[state.selectedLanguage].fsm = action.payload;
       return {
         ...state

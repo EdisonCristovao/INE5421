@@ -1,5 +1,6 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
-import {sentenceRecognize} from "./fsm/Recognizer";
+import { EPSILON, DEAD_STATE } from "./SymbolValidator";
+import { sentenceRecognize } from "./fsm/Recognizer";
 import * as R from 'ramda';
 import Grammar from "./Grammar";
 
@@ -25,7 +26,7 @@ export default class FSM {
     return this.transitions.some(
       trans => {
         if (trans.to !== undefined && trans.to !== ""
-            && trans.to !== "-") {
+          && trans.to !== "-") {
           return trans.to.split(",").some(
             singleState => !this.states.includes(singleState)
           )
@@ -38,7 +39,10 @@ export default class FSM {
   recognize(sentence) {
     return sentenceRecognize(this, sentence);
   }
-
+  isFinal(stante) {
+    return this.finals[this.states.indexOf(stante)];
+  }
+  
   createFsmFromFsm(fsm) {
     this.states = fsm.states;
     this.alphabet = fsm.alphabet;
@@ -47,19 +51,37 @@ export default class FSM {
     this.finals = fsm.finals;
   }
 
+  getProductions(vn) {
+    let productions = [];
+    this.transitions.forEach(tran => {
+      if (tran.from === vn && tran.to !== DEAD_STATE) {
+        productions.push(`${tran.when}${tran.to}`)
+        if(this.isFinal(tran.to))
+          productions.push(`${tran.when}`)
+      }
+    })
+    return productions;
+  }
+
   fsmToGrammarConvert() {
-    
+
     let vn = [...this.states];
     let vt = [...this.alphabet];
     let p = [];
     let s = this.initial;
-    
-    // this.transitions.forEach(trans => {
 
-    // })
+    vn.forEach(vn => {
+      p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }]
+    })
+
+    console.log(p);
 
     return new Grammar(vn, vt, p, s);
   }
+
+  
+  
+
   clone() {
     return new FSM(
       [...this.states],

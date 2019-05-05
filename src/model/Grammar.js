@@ -1,3 +1,5 @@
+import { SEPARATOR, DERIVATION } from "./SymbolValidator";
+
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
     this.Vn = Vn;
@@ -11,19 +13,21 @@ export default class Grammar {
 
   gramaToString() {
     // if (!this.s || !this.p) return "";
+    
+    let p = this.P;
+    let p_ = "";
 
-    // let p = this.p;
-
-    let p_ = "S -> aB | aC \nA -> a";
-
-    // for (let nonTerminal in p) {
-        
-    // }
-
+    p.forEach(prod => {
+      p_ += `${prod.nonTerminal} ${DERIVATION} ${
+        prod.productions.map((pr, i) => {
+          if (prod.productions.length - 1 === i) 
+            return `${pr} \n`
+          else 
+            return `${pr} ${SEPARATOR} `
+        }
+        )}`
+    });
+    // console.log(p_)
     return p_;
   }
 }
-
-// p= [
-//     {nonTerminal: "S" , production: ["aA, bB, a, b"]}
-// ]

@@ -17,14 +17,6 @@ class modalAutoDeterministifc extends React.Component {
     detFsm: null
   };
 
-  componentDidMount = () => {
-    // console.log(this.props.language.fsm)
-  };
-
-  componentWillReceiveProps = (nextProps) => {
-    console.log(nextProps)
-  }
-
   toggle = () => {
     this.setState(prevState => ({
       modal: !prevState.modal
