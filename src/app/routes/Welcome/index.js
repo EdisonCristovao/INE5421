@@ -1,5 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { Button } from "reactstrap";
+import loadTest from "./LoadTest";
 import IntlMessages from "util/IntlMessages";
 
 const Welcome = () => (
@@ -29,6 +31,9 @@ const Welcome = () => (
         <Link className="btn btn-primary" to="/app/dashboard">
           Dashboard
         </Link>
+        <Button color="secondary" onClick={loadTest()}>Quero testar</Button>
+      </p>
+      <p className="text-center zoomIn animation-delay-20 animated">
       </p>
     </div>
   </div>
