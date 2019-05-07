@@ -66,7 +66,6 @@ export default class FSM {
   }
 
   fsmToGrammarConvert() {
-
     let vn = [...this.states];
     let vt = [...this.alphabet];
     let p = [];
@@ -74,13 +73,13 @@ export default class FSM {
 
     vn.forEach(vn => {
       p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }]
-    })
+    });
 
-    return new Grammar(vn, vt, p, s);
+    let grammar = new Grammar(vn, vt, p, s);
+    console.log(grammar);
+    console.log(grammar.grammarToFsmConvert(grammar));
+    return grammar;
   }
-
-
-
 
   clone() {
     return new FSM(

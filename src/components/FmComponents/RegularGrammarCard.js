@@ -29,7 +29,7 @@ class RegularGrammarCard extends Component {
                 type="textarea"
                 row="5"
                 name="gr"
-                placeholder="Defina uma ER"
+                placeholder="Defina uma GR"
                 value={language.grammar.replace(/,/g, " ")}
                 onChange={e => {
                   changeRegGramma(e.target.value);
