@@ -27,7 +27,7 @@ class RegularGrammarCard extends Component {
                 row="5"
                 name="gr"
                 placeholder="Defina uma GR"
-                value={language.grammar.replace(/,/g," ")}
+                value={language.grammar}
                 onChange={e => {
                   changeRegGramma(e.target.value);
                   this.forceUpdate();

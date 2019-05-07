@@ -70,9 +70,11 @@ const languages = (state = InitialState, action) => {
 
 
     case CHANGE_REG_GRAMMA:
-      let nGramma = new Grammar();
-      state.listLanguages[state.selectedLanguage].fsm = nGramma.grammarToFsmConvert(action.payload)
-      state.listLanguages[state.selectedLanguage].grammar = action.payload;
+    let nGramma = new Grammar();
+    state.listLanguages[state.selectedLanguage].fsm = nGramma.grammarToFsmConvert(action.payload)
+    state.listLanguages[state.selectedLanguage].grammar = action.payload;
+    
+    console.log(`CHAMANDO CHANGE REG`, state.listLanguages[state.selectedLanguage])
       return {
         ...state
       };
