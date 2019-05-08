@@ -1,7 +1,7 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
 import { EPSILON, DEAD_STATE } from "./SymbolValidator";
 import { sentenceRecognize } from "./fsm/Recognizer";
-import * as R from 'ramda';
+import * as R from "ramda";
 import Grammar from "./Grammar";
 
 export default class FSM {
@@ -23,17 +23,15 @@ export default class FSM {
   }
 
   hasNonDeclaredState() {
-    return this.transitions.some(
-      trans => {
-        if (trans.to !== undefined && trans.to !== ""
-          && trans.to !== "-") {
-          return trans.to.split(",").some(
-            singleState => !this.states.includes(singleState)
-          )
-        } else {
-          return false;
-        }
-      });
+    return this.transitions.some(trans => {
+      if (trans.to !== undefined && trans.to !== "" && trans.to !== "-") {
+        return trans.to
+          .split(",")
+          .some(singleState => !this.states.includes(singleState));
+      } else {
+        return false;
+      }
+    });
   }
 
   recognize(sentence) {
@@ -55,13 +53,14 @@ export default class FSM {
 
   getProductions(vn) {
     let productions = [];
+
     this.transitions.forEach(tran => {
       if (tran.from === vn && tran.to !== DEAD_STATE) {
-        productions.push(`${tran.when}${tran.to}`)
-        if (this.isFinal(tran.to))
-          productions.push(`${tran.when}`)
+        productions.push(`${tran.when}${tran.to}`);
+        if (this.isFinal(tran.to)) productions.push(`${tran.when}`);
       }
-    })
+    });
+
     return productions;
   }
 
@@ -72,12 +71,18 @@ export default class FSM {
     let s = this.initial;
 
     vn.forEach(vn => {
-      p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }]
+      p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }];
     });
 
+    let initialIsFinal = this.finals[this.states.indexOf(this.initial)];
+
+    if (initialIsFinal)
+      p.map(p_ => {
+        if (p_.nonTerminal === this.initial)
+          return p_.productions.push(`&`)
+      });
+
     let grammar = new Grammar(vn, vt, p, s);
-    console.log(grammar);
-    console.log(grammar.grammarToFsmConvert(grammar));
     return grammar;
   }
 

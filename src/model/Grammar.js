@@ -1,5 +1,5 @@
 import { SEPARATOR, DERIVATION } from "./SymbolValidator";
-import Fsm from "./Fsm"
+import Fsm from "./Fsm";
 
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
@@ -19,42 +19,43 @@ export default class Grammar {
     fsm.initial = grammar.S;
 
     // Initializes final states
-    for (let i = 0; i < fsm.states.length; i++)
-      fsm.finals.push(false);
+    for (let i = 0; i < fsm.states.length; i++) fsm.finals.push(false);
 
     // All states that a symbol leads when in some state
     let toAux = [];
-    for (let i = 0; i < fsm.alphabet.length; i++)
-      toAux.push(new Set());
+    for (let i = 0; i < fsm.alphabet.length; i++) toAux.push(new Set());
 
     grammar.P.forEach(p => {
       // Calculates all terminal symbols that some non terminal symbols leads to
-      let auxTer = fsm.alphabet.filter(
-        letter => p.productions.some(prod => prod === letter));
-        
+      let auxTer = fsm.alphabet.filter(letter =>
+        p.productions.some(prod => prod === letter)
+      );
+
       p.productions.forEach(pAux => {
         if (auxTer.some(letter => letter === pAux)) return;
-        
+
         let to = fsm.states.filter(state => pAux.includes(state))[0];
         let when = fsm.alphabet.filter(letter => pAux.includes(letter))[0];
 
         toAux[fsm.alphabet.indexOf(when)].add(to);
-        
+
         // Checks if the state that the transition leads to is a final one
-        if (auxTer.some(letter => letter === when)) 
+        if (auxTer.some(letter => letter === when))
           fsm.finals[fsm.states.indexOf(to)] = true;
       });
 
       toAux.forEach((when, index) => {
         if (when.size == 0) return;
 
-        let to = Array.from(when).sort().join(",");
+        let to = Array.from(when)
+          .sort()
+          .join(",");
         let symbol = fsm.alphabet[index];
 
         fsm.transitions.push({
-          "from": p.nonTerminal,
-          "to": to,
-          "when": symbol
+          from: p.nonTerminal,
+          to: to,
+          when: symbol
         });
 
         when.clear();
@@ -66,19 +67,21 @@ export default class Grammar {
 
   gramaToString() {
     // if (!this.s || !this.p) return "";
-    
-    let p = this.P;
+
+    let p = this.P.map(prod => {
+      if (prod.nonTerminal == this.S)
+        return { ...prod, nonTerminal: `*${prod.nonTerminal}` };
+      else return prod;
+    });
     let p_ = "";
 
     p.forEach(prod => {
-      p_ += `${prod.nonTerminal} ${DERIVATION} ${
-        prod.productions.map((pr, i) => {
-          if (prod.productions.length - 1 === i) 
-            return `${pr} \n`
-          else 
-            return `${pr} ${SEPARATOR} `
+      p_ += `${prod.nonTerminal} ${DERIVATION} ${prod.productions.map(
+        (pr, i) => {
+          if (prod.productions.length - 1 === i) return `${pr} \n`;
+          else return `${pr} ${SEPARATOR} `;
         }
-        )}`
+      )}`;
     });
     // console.log(p_)
     return p_;
