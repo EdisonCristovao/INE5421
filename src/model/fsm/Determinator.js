@@ -74,7 +74,10 @@ function makeDeterministic(fsm) {
    * in the new automata), with a symbol, whe can go to
    */
   let calculatePossibleStates = function() {
-    fsmDet.states[actualState].split(",").forEach(
+    let stateAux = fsmDet.states[actualState];
+    let lengthAux = stateAux.length;
+
+    stateAux.substring(1, lengthAux - 1).split(",").forEach(
       singleState => {
         fsm.transitions.forEach(
           transition => {
@@ -109,7 +112,7 @@ function makeDeterministic(fsm) {
     possibleStates.forEach(
       (state, index) => {
         let fromStateStr = fsmDet.states[actualState];
-        let toStateStr = Array.from(state).sort().join(",");
+        let toStateStr = "{" + Array.from(state).sort().join(",") + "}";
 
         if (toStateStr === "") toStateStr = DEAD_STATE;
         if (fromStateStr === "") fromStateStr = DEAD_STATE;
@@ -137,8 +140,10 @@ function makeDeterministic(fsm) {
 
   let calculateFinalStates = function() {
     fsmDet.states.forEach(state => {
-      if (state.split(",").some(singleState =>
-        fsm.finals[fsm.states.indexOf(singleState)])) {
+      let lengthAux = state.length;
+
+      if (state.substring(1, lengthAux - 1).split(",").some(
+        singleState => fsm.finals[fsm.states.indexOf(singleState)])) {
         fsmDet.finals.push(true);
       } else {
         fsmDet.finals.push(false);
@@ -161,7 +166,7 @@ function makeDeterministic(fsm) {
   eStarCalculate();
 
   // First state will be e* of the original FA first state
-  fsmDet.initial = Array.from(eStar[fsm.states.indexOf(fsm.initial)]).sort().join(",");
+  fsmDet.initial = "{" + Array.from(eStar[fsm.states.indexOf(fsm.initial)]).sort().join(",") + "}";
   fsmDet.states.push(fsmDet.initial);
 
   while(actualState !== fsmDet.states.length) {
