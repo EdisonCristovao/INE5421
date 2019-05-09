@@ -245,7 +245,7 @@ class TransitionTable extends Component {
 
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
-  return { language: listLanguages[selectedLanguage] };
+  return { language: {...listLanguages[selectedLanguage]} };
 };
 
 export default connect(

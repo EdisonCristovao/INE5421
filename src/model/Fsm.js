@@ -55,7 +55,6 @@ export default class FSM {
     let productions = [];
 
     this.transitions.forEach(tran => {
-      console.log(tran)
       if (tran.from === vn && tran.to !== DEAD_STATE && tran.to !== undefined) {
         productions.push(`${tran.when}${tran.to}`);
         if (this.isFinal(tran.to)) productions.push(`${tran.when}`);

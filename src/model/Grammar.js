@@ -3,20 +3,17 @@ import Fsm from "./Fsm";
 
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
-    this.Vn = Vn;
-    this.Vt = Vt;
-    this.P = P;
+    this.Vn = !Vn || !Array.isArray(Vn) ? [] : Vn;
+    this.Vt = !Vt || !Array.isArray(Vt) ? [] : Vt;
+    this.P = !P || !Array.isArray(P) ? [] : P;
     this.S = S;
-    // this.fsm = null;
-
-    //   this._convertToFSM();
   }
 
-  grammarToFsmConvert(grammar) {
+  grammarToFsmConvert() {
     let fsm = new Fsm();
-    fsm.states = [...grammar.Vn];
-    fsm.alphabet = [...grammar.Vt];
-    fsm.initial = grammar.S;
+    fsm.states = [...this.Vn];
+    fsm.alphabet = [...this.Vt];
+    fsm.initial = this.S;
 
     // Initializes final states
     for (let i = 0; i < fsm.states.length; i++) fsm.finals.push(false);
@@ -25,7 +22,7 @@ export default class Grammar {
     let toAux = [];
     for (let i = 0; i < fsm.alphabet.length; i++) toAux.push(new Set());
 
-    grammar.P.forEach(p => {
+    this.P.forEach(p => {
       // Calculates all terminal symbols that some non terminal symbols leads to
       let auxTer = fsm.alphabet.filter(letter =>
         p.productions.some(prod => prod === letter)
@@ -65,25 +62,59 @@ export default class Grammar {
     return fsm;
   }
 
+  stringToGrammar(grammarString) {
+    let grammar = new Grammar();
+
+    let prodIndex = -1;
+    let nonTerminals = new Set();
+    let terminals = new Set();
+
+    // Sets the first symbol from the first derivation as the grammar initial symbol 
+    grammar.S = grammarString.substring(0, grammarString.indexOf(DERIVATION)).replace(/\s/g, '');
+
+    grammarString.split("\n").forEach(line => {
+      if (line === "") return;
+
+      // Remove all spaces from line
+      line = line.replace(/\s/g, '');
+
+      // Get derivation symbol
+      let nonTerAux = line.substring(0, line.indexOf(DERIVATION));
+
+      // Sees if this derivation symbol has already been added to the productions
+      if (!nonTerminals.has(nonTerAux)) {
+        nonTerminals.add(nonTerAux);
+        grammar.P.push({ "nonTerminal": nonTerAux, "productions": [] });
+        prodIndex++;
+      }
+
+      let lastLength = line.length;
+
+      line.substring(line.indexOf(DERIVATION) + 2, lastLength)
+        .split(SEPARATOR).forEach(prod => {
+          terminals.add(prod[0]);
+          grammar.P[prodIndex].productions.push(prod);
+        });
+    });
+
+    grammar.Vn = Array.from(nonTerminals);
+    grammar.Vt = Array.from(terminals);
+
+    return grammar;
+  }
+
   gramaToString() {
-    // if (!this.s || !this.p) return "";
+    let productions = "";
 
-    let p = this.P.map(prod => {
-      if (prod.nonTerminal == this.S)
-        return { ...prod, nonTerminal: `*${prod.nonTerminal}` };
-      else return prod;
+    // Build the string concatenating each production
+    this.P.forEach(p => {
+      productions += p.nonTerminal + " " + DERIVATION;
+      p.productions.forEach((pAux, index) => {
+        productions += (index === 0) ? " " + pAux : " | " + pAux;
+      });
+      productions += "\n";
     });
-    let p_ = "";
 
-    p.forEach(prod => {
-      p_ += `${prod.nonTerminal} ${DERIVATION} ${prod.productions.map(
-        (pr, i) => {
-          if (prod.productions.length - 1 === i && pr !== undefined) return `${pr} \n`;
-          else if(pr !== undefined) return `${pr} ${SEPARATOR} `;
-        }
-      )}`;
-    });
-    console.log(p_)
-    return p_;
+    return productions;
   }
 }
