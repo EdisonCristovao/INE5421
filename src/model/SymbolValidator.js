@@ -2,6 +2,7 @@ export const EPSILON = '&';
 export const SEPARATOR = '|';
 export const DERIVATION = '->';
 export const DEAD_STATE = '-';
+export const NEW_STATE = "#"
 
 export default {
     isValidTerminal: terminal => {

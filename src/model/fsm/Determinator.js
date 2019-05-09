@@ -114,7 +114,7 @@ function makeDeterministic(fsm) {
         let fromStateStr = fsmDet.states[actualState];
         let toStateStr = "{" + Array.from(state).sort().join(",") + "}";
 
-        if (toStateStr === "") toStateStr = DEAD_STATE;
+        if (toStateStr === "{}") toStateStr = DEAD_STATE;
         if (fromStateStr === "") fromStateStr = DEAD_STATE;
 
         fsmDet.transitions.push(

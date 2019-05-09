@@ -1,3 +1,5 @@
+import { DEAD_STATE } from "../SymbolValidator";
+
 export function sentenceRecognize(fsm, sentence) {
     // Check if all sentence letters are in FSM alphabets.
     if (sentence.split('').some(aChar => !fsm.alphabet.includes(aChar)))
@@ -18,8 +20,7 @@ export function sentenceRecognize(fsm, sentence) {
                 
                 state = fsm.transitions[j].to;
                 
-                if (state !== undefined && state !== ""
-                    && state !== "-")
+                if (state !== undefined && state !== "" && state !== DEAD_STATE)
                     ended = false;
                
                 break;
