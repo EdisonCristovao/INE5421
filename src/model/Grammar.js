@@ -1,4 +1,4 @@
-import { SEPARATOR, DERIVATION } from "./SymbolValidator";
+import { SEPARATOR, DERIVATION, EPSILON, NEW_STATE } from "./SymbolValidator";
 import Fsm from "./Fsm";
 
 export default class Grammar {
@@ -11,42 +11,53 @@ export default class Grammar {
 
   grammarToFsmConvert() {
     let fsm = new Fsm();
-    fsm.states = [...this.Vn];
-    fsm.alphabet = [...this.Vt];
+    if (this.S === "" || this.S === undefined) return fsm;
+
+    fsm.states = [...this.Vn].concat(NEW_STATE);
+    fsm.alphabet = this.Vt.some(t => t == EPSILON) ? this.Vt.filter(t => t !== EPSILON) : [...this.Vt];
     fsm.initial = this.S;
 
     // Initializes final states
-    for (let i = 0; i < fsm.states.length; i++) fsm.finals.push(false);
+    for (let i = 0; i < fsm.states.length-1; i++) fsm.finals.push(false);
+    
+    // New state is final.
+    fsm.finals.push(true);
+
+    // If initial symbol has epsilon, then he's final too.
+    for (let i = 0; i < this.P.length; i++) {
+      if (this.P[i].nonTerminal === this.S && this.P[i].productions.some(p => p === EPSILON)) {
+        fsm.finals[fsm.states.indexOf(fsm.initial)] = true;
+        break;
+      }
+    }
 
     // All states that a symbol leads when in some state
     let toAux = [];
     for (let i = 0; i < fsm.alphabet.length; i++) toAux.push(new Set());
 
     this.P.forEach(p => {
-      // Calculates all terminal symbols that some non terminal symbols leads to
-      let auxTer = fsm.alphabet.filter(letter =>
-        p.productions.some(prod => prod === letter)
-      );
-
       p.productions.forEach(pAux => {
-        if (auxTer.some(letter => letter === pAux)) return;
+        // Skip epsilon
+        if (pAux === EPSILON) return;
 
-        let to = fsm.states.filter(state => pAux.includes(state))[0];
-        let when = fsm.alphabet.filter(letter => pAux.includes(letter))[0];
+        // Construct non deterministic automata
+        let to, when;
+        if (fsm.alphabet.some(letter => letter === pAux)) {
+          to = NEW_STATE;
+          when = pAux;
+        } else {
+          to = fsm.states.filter(state => pAux.includes(state))[0];
+          when = fsm.alphabet.filter(letter => pAux.includes(letter))[0];
+        }
 
         toAux[fsm.alphabet.indexOf(when)].add(to);
-
-        // Checks if the state that the transition leads to is a final one
-        if (auxTer.some(letter => letter === when))
-          fsm.finals[fsm.states.indexOf(to)] = true;
       });
 
+      // Join all states that a states reaches with some symbol into a string
       toAux.forEach((when, index) => {
         if (when.size == 0) return;
 
-        let to = Array.from(when)
-          .sort()
-          .join(",");
+        let to = Array.from(when).sort().join(",");
         let symbol = fsm.alphabet[index];
 
         fsm.transitions.push({
@@ -59,13 +70,15 @@ export default class Grammar {
       });
     });
 
+    console.log(this);
+    console.log(fsm);
+
     return fsm;
   }
 
   stringToGrammar(grammarString) {
     let grammar = new Grammar();
 
-    let prodIndex = -1;
     let nonTerminals = new Set();
     let terminals = new Set();
 
@@ -73,7 +86,7 @@ export default class Grammar {
     grammar.S = grammarString.substring(0, grammarString.indexOf(DERIVATION)).replace(/\s/g, '');
 
     grammarString.split("\n").forEach(line => {
-      if (line === "") return;
+      if (line === "" || !line.includes(DERIVATION)) return;
 
       // Remove all spaces from line
       line = line.replace(/\s/g, '');
@@ -85,15 +98,27 @@ export default class Grammar {
       if (!nonTerminals.has(nonTerAux)) {
         nonTerminals.add(nonTerAux);
         grammar.P.push({ "nonTerminal": nonTerAux, "productions": [] });
-        prodIndex++;
       }
 
       let lastLength = line.length;
 
       line.substring(line.indexOf(DERIVATION) + 2, lastLength)
         .split(SEPARATOR).forEach(prod => {
+          if (prod === "" || prod === undefined) return;
+
           terminals.add(prod[0]);
-          grammar.P[prodIndex].productions.push(prod);
+
+          if (!nonTerminals.has(prod[1]) && prod[1] !== "" && prod[1] !== undefined) {
+            nonTerminals.add(prod[1]);
+            grammar.P.push({ "nonTerminal": prod[1], "productions": [] });
+          }
+
+          let i;
+          for (i = 0; i < grammar.P.length; i++)
+            if (grammar.P[i].nonTerminal === nonTerAux) break;
+
+          if (!grammar.P[i].productions.some(pAux => pAux === prod))
+            grammar.P[i].productions.push(prod);
         });
     });
 
