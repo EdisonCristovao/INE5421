@@ -1,18 +1,18 @@
 # Bem vindo ao FM-IO
 
-## Demostracao
+## Demostração
 
 [Fm-io online](https://fm-io.herokuapp.com/)
 
-## Informacoes
+## Informações
 
-Em nossa aplicacao usamos diversas tecnologias, entre elas:
+Em nossa aplicação usamos diversas tecnologias, entre elas:
 
 - React
 - Redux
 - Bootstrap
 
-## Para rodar local
+## Para rodar em seu computador
 
 Para rodar o projeto local e preciso `node` e `npm`.
 ```
@@ -36,6 +36,7 @@ $ npm start
 - ***Reconhecimento de sentenças em AF (ok)***
 
 ## Itens Pendentes
+
 - Minimização de AFD
 - União e interseção de AFD
 - Conversão de ER para AFD (usando o algoritmo baseado em árvore sintática - Livro

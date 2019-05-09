@@ -1,7 +1,11 @@
 /*Footer Styles*/
 
 .app-footer {
+  position:fixed;
+  left:0px;
+  bottom:0px;
   padding: 0 40px;
+  width: 100%;
   border-top: solid 1px darken($body-bg, 10%);
   background-color: $body-bg;
   color: $sidebar-text-color;

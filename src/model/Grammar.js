@@ -78,12 +78,12 @@ export default class Grammar {
     p.forEach(prod => {
       p_ += `${prod.nonTerminal} ${DERIVATION} ${prod.productions.map(
         (pr, i) => {
-          if (prod.productions.length - 1 === i) return `${pr} \n`;
-          else return `${pr} ${SEPARATOR} `;
+          if (prod.productions.length - 1 === i && pr !== undefined) return `${pr} \n`;
+          else if(pr !== undefined) return `${pr} ${SEPARATOR} `;
         }
       )}`;
     });
-    // console.log(p_)
+    console.log(p_)
     return p_;
   }
 }
