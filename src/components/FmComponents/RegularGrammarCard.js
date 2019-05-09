@@ -11,9 +11,6 @@ import { changeRegGramma } from "../../actions/Language";
 
 class RegularGrammarCard extends Component {
 
-  componentDidMount = () => {
-    setInterval(()=>this.forceUpdate(),3000)
-  }
 
   render() {
     const { language, changeRegGramma } = this.props;
@@ -29,8 +26,8 @@ class RegularGrammarCard extends Component {
                 type="textarea"
                 row="5"
                 name="gr"
-                placeholder="Defina uma ER"
-                value={language.grammar.replace(/,/g, " ")}
+                placeholder="Defina uma GR"
+                value={language.grammar}
                 onChange={e => {
                   changeRegGramma(e.target.value);
                   this.forceUpdate();
@@ -46,7 +43,7 @@ class RegularGrammarCard extends Component {
 
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
-  return { language: listLanguages[selectedLanguage] };
+  return { language: {...listLanguages[selectedLanguage]} };
 };
 
 export default connect(

@@ -43,11 +43,15 @@ const languages = (state = InitialState, action) => {
         listLanguages: newList,
         selectedLanguage: newList.length - 1
       };
+
+
     case CHANGE_SELECTED_LANGUAGE:
       return {
         ...state,
         selectedLanguage: action.payload
       };
+
+
     case DELETE_LANGUAGE:
       return {
         ...state,
@@ -56,31 +60,40 @@ const languages = (state = InitialState, action) => {
           (language, index) => index !== action.payload
         )
       };
+
+
     case CHANGE_REG_EXPRESSION:
       state.listLanguages[state.selectedLanguage].expression = action.payload;
       return {
         ...state
       };
+
+
     case CHANGE_REG_GRAMMA:
-      let nGramma = new Grammar();
-      state.listLanguages[state.selectedLanguage].fsm = nGramma.grammarToFsmConvert(action.payload)
-      state.listLanguages[state.selectedLanguage].grammar = action.payload;
+    let nGramma = new Grammar();
+    // state.listLanguages[state.selectedLanguage].fsm = nGramma.grammarToFsmConvert(action.payload)
+    state.listLanguages[state.selectedLanguage].grammar = action.payload;
+    
+    console.log(`CHAMANDO CHANGE REG`, state.listLanguages[state.selectedLanguage])
       return {
         ...state
       };
+
+
     case FSM_EDIT:
       let nFsm = new Fsm();
       nFsm.createFsmFromFsm(action.payload);
-      // if(nFsm.hasNonDeclaredState)
-      state.listLanguages[
-        state.selectedLanguage
-      ].grammar = nFsm.fsmToGrammarConvert().gramaToString();
-      // else
-      // state.listLanguages[state.selectedLanguage].grammar = 'Automato com estado nao declarado'
+      if(nFsm.isDeterministic())
+        state.listLanguages[state.selectedLanguage].grammar = nFsm.fsmToGrammarConvert().gramaToString();
+      else
+        state.listLanguages[state.selectedLanguage].grammar = 'Automato nao deterministico'
+
       state.listLanguages[state.selectedLanguage].fsm = action.payload;
       return {
         ...state
       };
+
+
     case ADD_SENTENCE:
       return recognizeReduce(state, action);
 
@@ -94,11 +107,14 @@ const languages = (state = InitialState, action) => {
         ...state
       };
 
+
     case "LOAD_STORAGE":
       state = action.payload;
       return {
         ...state
       };
+
+
     default:
       return state;
   }
@@ -117,14 +133,13 @@ const recognizeReduce = (state, action) => {
     fsm.finals
   );
 
-  state.listLanguages[state.selectedLanguage].userSentences = [
-    ...language.userSentences,
-    {
-      sentence: action.payload,
-      valid: newFsm.recognize(action.payload)
-    }
-  ];
+  let valid = false;
+  if(newFsm.isDeterministic())
+    valid = newFsm.recognize(action.payload)
+  else 
+    valid = newFsm.determine().recognize(action.payload)
 
+  state.listLanguages[state.selectedLanguage].userSentences = [...language.userSentences,{sentence: action.payload,valid: valid}];
   return {
     ...state
   };

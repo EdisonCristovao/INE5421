@@ -94,10 +94,10 @@ class modalAutoDeterministifc extends React.Component {
               </tbody>
             </table>
           </ModalBody>
-          <ModalFooter>
+          {/* <ModalFooter>
             <Button color="primary">Do Something</Button>{" "}
             <Button color="secondary">Cancel</Button>
-          </ModalFooter>
+          </ModalFooter> */}
         </Modal>
       </div>
     );

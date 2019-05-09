@@ -12,7 +12,7 @@ class FunctionSwitcher extends React.Component {
       >
         <ul className="list-unstyled">
           <ModalAutoDeterministic />
-          <ModalMinimize />
+          {/* <ModalMinimize /> */}
         </ul>
       </CustomScrollbars>
     );

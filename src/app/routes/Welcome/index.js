@@ -1,8 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import IntlMessages from "util/IntlMessages";
+import { Link, Redirect, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
-const Welcome = () => (
+import { Button } from "reactstrap";
+import loadTest from "./LoadTest";
+import IntlMessages from "util/IntlMessages";
+import LoadTest from "./LoadTest";
+
+const Welcome = ({ loadStorageTest, history }) => (
   <div className="app-wrapper page-error-container animated slideInUpTiny animation-duration-3">
     <div className="page-error-content">
       <div className=" mb-4 animated zoomInDown">
@@ -29,9 +34,18 @@ const Welcome = () => (
         <Link className="btn btn-primary" to="/app/dashboard">
           Dashboard
         </Link>
+        <Button color="secondary" onClick={() => {loadStorageTest(LoadTest); history.push('/app/dashboard')}}>Quero testar</Button>
+      </p>
+      <p className="text-center zoomIn animation-delay-20 animated">
       </p>
     </div>
   </div>
 );
 
-export default Welcome;
+const mapDispatchToProps = dispatch => {
+  return {
+    loadStorageTest: languages => dispatch({ type: "LOAD_STORAGE", payload: languages })
+  }
+}
+
+export default connect(null, mapDispatchToProps)(withRouter(Welcome));
