@@ -151,6 +151,7 @@ class Header extends React.Component {
                     data-toggle="dropdown"
                   >
                     <div className="d-flex align-items-center pointer">
+                      <strong className="mr-2">{`Operação`}</strong>
                       <i class="zmdi zmdi-more-vert zmdi-hc-2x" />
                     </div>
                   </DropdownToggle>

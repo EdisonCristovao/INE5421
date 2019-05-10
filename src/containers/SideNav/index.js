@@ -1,12 +1,13 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import Drawer from 'rmc-drawer';
-import {Config} from 'constants/ThemeColors';
+import { Config } from 'constants/ThemeColors';
 import SidenavContent from './SidenavContent';
 import SidenavLogo from 'components/SidenavLogo';
-import {COLLAPSED_DRAWER, FIXED_DRAWER, HORIZONTAL_NAVIGATION} from 'constants/ActionTypes';
-import {toggleCollapsedNav, updateWindowWidth} from 'actions/Setting';
+import ModalHelp from './ModalHelp';
+import { COLLAPSED_DRAWER, FIXED_DRAWER, HORIZONTAL_NAVIGATION } from 'constants/ActionTypes';
+import { toggleCollapsedNav, updateWindowWidth } from 'actions/Setting';
 
 class SideNav extends React.PureComponent {
 
@@ -17,6 +18,7 @@ class SideNav extends React.PureComponent {
 
     constructor(props) {
         super(props);
+
     }
 
     componentDidMount() {
@@ -26,39 +28,42 @@ class SideNav extends React.PureComponent {
     }
 
     render() {
-        const {navCollapsed, drawerType, width, isDirectionRTL, navigationStyle} = this.props;
+        const { navCollapsed, drawerType, width, isDirectionRTL, navigationStyle } = this.props;
         let drawerStyle = drawerType.includes(FIXED_DRAWER) ? 'd-xl-flex' : drawerType.includes(COLLAPSED_DRAWER) ? '' : 'd-flex';
         let type = true;
         if (drawerType.includes(COLLAPSED_DRAWER) || (drawerType.includes(FIXED_DRAWER) && width < 1200)) {
             type = false;
         }
-        if (navigationStyle===HORIZONTAL_NAVIGATION) {
+        if (navigationStyle === HORIZONTAL_NAVIGATION) {
             drawerStyle = "";
             type = false;
         }
 
         return (
             <Drawer docked={type} className={`app-sidebar ${drawerStyle}`}
-                    style={{overflow: 'auto', height: '100%'}}
-                    touch={true}
-                    position={isDirectionRTL ? 'right' : 'left'}
-                    transitions={true}
-                    enableDragHandle={true}
-                    open={navCollapsed}
-                    onOpenChange={this.onToggleCollapsedNav}
-                    sidebar={<div className="side-nav">
-                        {/* <SidenavLogo drawerType={drawerType}/> */}
-                        <SidenavContent/>
-                    </div>}>
-                <div/>
+                style={{ overflow: 'auto', height: '100%' }}
+                touch={true}
+                position={isDirectionRTL ? 'right' : 'left'}
+                transitions={true}
+                enableDragHandle={true}
+                open={navCollapsed}
+                onOpenChange={this.onToggleCollapsedNav}
+                sidebar={<div className="side-nav">
+                    <SidenavContent />
+                    {/* <SidenavLogo drawerType={drawerType} /> */}
+                    <ModalHelp></ModalHelp>
+                </div>}>
+
+                <div />
+
             </Drawer>
         );
     }
 }
 
-const mapStateToProps = ({settings}) => {
-    const {navCollapsed, drawerType, width, isDirectionRTL, navigationStyle} = settings;
-    return {navCollapsed, drawerType, width, isDirectionRTL, navigationStyle}
+const mapStateToProps = ({ settings }) => {
+    const { navCollapsed, drawerType, width, isDirectionRTL, navigationStyle } = settings;
+    return { navCollapsed, drawerType, width, isDirectionRTL, navigationStyle }
 };
 
-export default withRouter(connect(mapStateToProps, {toggleCollapsedNav, updateWindowWidth})(SideNav));
+export default withRouter(connect(mapStateToProps, { toggleCollapsedNav, updateWindowWidth })(SideNav));
