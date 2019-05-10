@@ -28,7 +28,9 @@ class RegularExpression extends Component {
               <Input
                 type="text"
                 name="er"
-                placeholder="Defina uma ER"
+                disabled
+                // placeholder="Defina uma ER"
+                placeholder="Breve ...."
                 value={language.expression}
                 onChange={e => {
                   changeRegExpression(e.target.value);

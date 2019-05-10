@@ -70,9 +70,6 @@ export default class Grammar {
       });
     });
 
-    console.log(this);
-    console.log(fsm);
-
     return fsm;
   }
 

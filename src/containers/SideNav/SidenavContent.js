@@ -122,7 +122,7 @@ class SidenavContent extends Component {
                 }}
               >
                 <i className="zmdi zmdi-view-dashboard zmdi-hc-fw" />
-                <span className="nav-text">{language.name} </span>
+                <span className="nav-text">{language.name.substring(0,20)} </span>
               </Button>
               <Button className="ml-1" onClick={e => deleteLanguage(index)}>
                 <i class="zmdi zmdi-tag-close p-0 m-0" />
