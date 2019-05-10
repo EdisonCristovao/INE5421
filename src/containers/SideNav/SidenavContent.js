@@ -24,14 +24,14 @@ class SidenavContent extends Component {
 
     const subMenuLi = document.querySelectorAll(".sub-menu > li");
     for (let i = 0; i < subMenuLi.length; i++) {
-      subMenuLi[i].onclick = function(event) {
+      subMenuLi[i].onclick = function (event) {
         event.stopPropagation();
       };
     }
 
     const menuLi = document.getElementsByClassName("menu");
     for (let i = 0; i < menuLi.length; i++) {
-      menuLi[i].onclick = function(event) {
+      menuLi[i].onclick = function (event) {
         for (let j = 0; j < menuLi.length; j++) {
           const parentLi = that.closest(this, "li");
           if (
@@ -54,7 +54,7 @@ class SidenavContent extends Component {
       } else {
         this.closest(activeLi, "li").classList.add("open");
       }
-    } catch (error) {}
+    } catch (error) { }
   }
 
   closest(el, selector) {
@@ -67,7 +67,7 @@ class SidenavContent extends Component {
         "mozMatchesSelector",
         "msMatchesSelector",
         "oMatchesSelector"
-      ].some(function(fn) {
+      ].some(function (fn) {
         if (typeof document.body[fn] == "function") {
           matchesFn = fn;
           return true;
@@ -85,7 +85,7 @@ class SidenavContent extends Component {
         }
         el = parent;
       }
-    } catch (e) {}
+    } catch (e) { }
 
     return null;
   }
@@ -101,8 +101,8 @@ class SidenavContent extends Component {
     const { newLanguageName } = this.state;
 
     return (
-      <CustomScrollbars className="scrollbar" style={{ height: "calc(100vh)" }}>
-        {/* <CustomScrollbars className="scrollbar" style={{height: 'calc(100vh - 70px)'}}> */}
+      // <CustomScrollbars className="scrollbar" style={{ height: "calc(100vh)" }}>
+      <CustomScrollbars className="scrollbar" style={{ height: 'calc(100vh - 70px)' }}>
         <ul className="nav-menu">
           <li className="nav-header">Lista de linguagens</li>
           {/* <li className="menu no-arrow">
