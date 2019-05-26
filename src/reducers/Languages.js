@@ -1,5 +1,6 @@
 import {
   MAKE_NEW_LANGUAGE,
+  MAKE_NEW_LANGUAGE_DET,
   CHANGE_SELECTED_LANGUAGE,
   DELETE_LANGUAGE,
   CHANGE_REG_EXPRESSION,
@@ -44,6 +45,17 @@ const languages = (state = InitialState, action) => {
         selectedLanguage: newList.length - 1
       };
 
+    case MAKE_NEW_LANGUAGE_DET:
+      let newLanguageDet = _makeNewLanguage(`${language.name} DET`);
+      let fsmDet = new Fsm();
+      fsmDet.createFsmFromFsm(action.payload.fsm);
+      newLanguageDet.fsm = fsmDet;
+      const newListLang = [...state.listLanguages, newLanguageDet];
+      return {
+        ...state,
+        listLanguages: newListLang,
+        selectedLanguage: newListLang.length - 1
+      };
 
     case CHANGE_SELECTED_LANGUAGE:
       return {
@@ -70,11 +82,10 @@ const languages = (state = InitialState, action) => {
 
 
     case CHANGE_REG_GRAMMA:
-    let nGramma = new Grammar();
-    state.listLanguages[state.selectedLanguage].fsm = nGramma.stringToGrammar(action.payload).grammarToFsmConvert()
-    state.listLanguages[state.selectedLanguage].grammar = action.payload;
-    
-    // console.log(nGramma.stringToGrammar(action.payload).grammarToFsmConvert())
+      let nGramma = new Grammar();
+      state.listLanguages[state.selectedLanguage].fsm = nGramma.stringToGrammar(action.payload).grammarToFsmConvert()
+      state.listLanguages[state.selectedLanguage].grammar = action.payload;
+
       return {
         ...state
       };
@@ -83,7 +94,7 @@ const languages = (state = InitialState, action) => {
     case FSM_EDIT:
       let nFsm = new Fsm();
       nFsm.createFsmFromFsm(action.payload);
-      if(nFsm.isDeterministic())
+      if (nFsm.isDeterministic())
         state.listLanguages[state.selectedLanguage].grammar = nFsm.fsmToGrammarConvert().gramaToString();
       else
         state.listLanguages[state.selectedLanguage].grammar = 'Automato nao deterministico'
@@ -134,12 +145,12 @@ const recognizeReduce = (state, action) => {
   );
 
   let valid = false;
-  if(newFsm.isDeterministic())
+  if (newFsm.isDeterministic())
     valid = newFsm.recognize(action.payload)
-  else 
+  else
     valid = newFsm.determine().recognize(action.payload)
 
-  state.listLanguages[state.selectedLanguage].userSentences = [...language.userSentences,{sentence: action.payload,valid: valid}];
+  state.listLanguages[state.selectedLanguage].userSentences = [...language.userSentences, { sentence: action.payload, valid: valid }];
   return {
     ...state
   };

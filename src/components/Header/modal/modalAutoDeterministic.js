@@ -10,6 +10,7 @@ import {
   Input
 } from "reactstrap";
 import Fsm from "./../../../model/Fsm";
+import { makeNewLanguageDet } from "./../../../actions/Language";
 
 class modalAutoDeterministifc extends React.Component {
   state = {
@@ -37,7 +38,6 @@ class modalAutoDeterministifc extends React.Component {
     let detFsm = new Fsm();
     detFsm.createFsmFromFsm(fsm);
 
-    // console.log(detFsm)
     if (this.state.modal) detFsm = detFsm.determine();
 
     return (
@@ -50,7 +50,7 @@ class modalAutoDeterministifc extends React.Component {
         </li>
 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>Automato Determinizado</ModalHeader>
+          <ModalHeader >Automato Determinizado</ModalHeader>
           <ModalBody>
             <table className="default-table table table-sm table-responsive-sm table-hover mb-1">
               <thead className="th-border-b">
@@ -74,7 +74,7 @@ class modalAutoDeterministifc extends React.Component {
                         type="radio"
                         name="initialDet"
                         checked={state === detFsm.initial}
-                        // onChange={e => this.setInitialState(e, state)}
+                      // onChange={e => this.setInitialState(e, state)}
                       />
                     </td>
                     <td>
@@ -82,7 +82,7 @@ class modalAutoDeterministifc extends React.Component {
                         className="position-relative m-0"
                         type="checkbox"
                         checked={detFsm.finals[index]}
-                        // onChange={e => this.setFinalState(e, index)}
+                      // onChange={e => this.setFinalState(e, index)}
                       />
                     </td>
                     <td>{state}</td>
@@ -94,10 +94,10 @@ class modalAutoDeterministifc extends React.Component {
               </tbody>
             </table>
           </ModalBody>
-          {/* <ModalFooter>
-            <Button color="primary">Do Something</Button>{" "}
-            <Button color="secondary">Cancel</Button>
-          </ModalFooter> */}
+          <ModalFooter>
+            <Button color="primary" onClick={(e) => { this.toggle(); this.props.makeNewLanguageDet(detFsm) }}>Criar nova linguagem</Button>
+            <Button color="secondary" onClick={this.toggle}>Voltar</Button>
+          </ModalFooter>
         </Modal>
       </div>
     );
@@ -108,4 +108,4 @@ const mapState = ({ languages }) => {
   return { language: listLanguages[selectedLanguage] };
 };
 
-export default connect(mapState)(modalAutoDeterministifc);
+export default connect(mapState, { makeNewLanguageDet })(modalAutoDeterministifc);

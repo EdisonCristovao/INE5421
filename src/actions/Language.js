@@ -1,5 +1,6 @@
 //LANGUAGE =========================================
 export const MAKE_NEW_LANGUAGE = 'MAKE_NEW_LANGUAGE';
+export const MAKE_NEW_LANGUAGE_DET = 'MAKE_NEW_LANGUAGE_DET';
 export const CHANGE_SELECTED_LANGUAGE = 'CHANGE_SELECTED_LANGUAGE';
 export const DELETE_LANGUAGE = 'DELETE_LANGUAGE';
 
@@ -20,6 +21,9 @@ export const FSM_EDIT = 'FSM_EDIT';
 //LANGUAGES =========================================
 export function makeNewLanguage(name) {
     return { type: MAKE_NEW_LANGUAGE, payload: name };
+}
+export function makeNewLanguageDet(fsm) {
+    return { type: MAKE_NEW_LANGUAGE_DET, payload: {fsm} };
 }
 
 export function changeSelectedLanguage(id) {
