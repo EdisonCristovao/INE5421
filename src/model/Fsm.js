@@ -1,5 +1,5 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
-import { EPSILON, DEAD_STATE } from "./SymbolValidator";
+import { EPSILON, DEAD_STATE, ALPHABET } from "./SymbolValidator";
 import { sentenceRecognize } from "./fsm/Recognizer";
 import { minimize } from "./fsm/Minimizer";
 import * as R from "ramda";
@@ -88,8 +88,23 @@ export default class FSM {
           return p_.productions.push(`&`)
       });
 
-    this.minimize();
     return new Grammar(vn, vt, p, s);
+  }
+
+  renameStates() {
+    let fsm = this.clone();
+
+    fsm.initial = ALPHABET[0];
+
+    fsm.transitions.forEach(t => {
+      t.from = ALPHABET[fsm.states.indexOf(t.from)];
+      t.to = ALPHABET[fsm.states.indexOf(t.to)];
+    });
+
+    for (let i = 0; i < fsm.states.length; i++)
+      fsm.states[i] = ALPHABET[i];
+
+    return fsm;
   }
 
   clone() {
