@@ -92,19 +92,19 @@ export default class FSM {
   }
 
   renameStates() {
-    let fsm = this.clone();
+    let newFsm = this.clone();
 
-    fsm.initial = ALPHABET[0];
+    newFsm.initial = ALPHABET[0];
 
-    fsm.transitions.forEach(t => {
-      t.from = ALPHABET[fsm.states.indexOf(t.from)];
-      t.to = ALPHABET[fsm.states.indexOf(t.to)];
+    newFsm.transitions.forEach(t => {
+      t.from = ALPHABET[newFsm.states.indexOf(t.from)];
+      t.to = ALPHABET[newFsm.states.indexOf(t.to)];
     });
 
-    for (let i = 0; i < fsm.states.length; i++)
-      fsm.states[i] = ALPHABET[i];
+    for (let i = 0; i < newFsm.states.length; i++)
+    newFsm.states[i] = ALPHABET[i];
 
-    return fsm;
+    return newFsm;
   }
 
   clone() {
