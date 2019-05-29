@@ -147,57 +147,66 @@ export function minimize(fsm) {
     // Get unreachable states.
     let unreachables = getUnreachables(fsm);
 
-    // Delete unreachable states.
-    minFsm.states = fsm.states.filter(s => !unreachables.some(s1 => s1 === s));
+    // Does the FSM contains an unreachable state?
+    if (unreachables.length > 0) {
+        // Delete unreachable states.
+        minFsm.states = fsm.states.filter(s => !unreachables.some(s1 => s1 === s));
 
-    // Null FSM?
-    if (minFsm.states.length === 0) return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
-    
-    // Delete unreachable states from final states array.
-    minFsm.finals = fsm.finals.filter((_, i) => !unreachables.some(s => s === fsm.states[i]));
+        // Null FSM?
+        if (minFsm.states.length === 0) return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+        
+        // Delete unreachable states from final states array.
+        minFsm.finals = fsm.finals.filter((_, i) => !unreachables.some(s => s === fsm.states[i]));
 
-    // Delete unreachable states from transitions.
-    minFsm.transitions = fsm.transitions.filter(t => !unreachables.some(s => (s === t.from || s === t.to)));
+        // Delete unreachable states from transitions.
+        minFsm.transitions = fsm.transitions.filter(t => !unreachables.some(s => (s === t.from || s === t.to)));
+    } else {
+        minFsm = fsm.clone();
+    }
 
     // Get dead states.
     let deads = getDeads(minFsm);
 
-    // Delete dead states from final states array.
-    minFsm.finals = minFsm.finals.filter((_, i) => !deads.some(s => s === minFsm.states[i]));
+    // Does the FSM have a dead state?
+    if (deads.length > 0) {
+        // Delete dead states from final states array.
+        minFsm.finals = minFsm.finals.filter((_, i) => !deads.some(s => s === minFsm.states[i]));
 
-    // Delete dead states from transitions.
-    minFsm.transitions = minFsm.transitions.filter(t => !deads.some(s => (s === t.from || s === t.to)));
+        // Delete dead states from transitions.
+        minFsm.transitions = minFsm.transitions.filter(t => !deads.some(s => (s === t.from || s === t.to)));
 
-    // Delete dead states.
-    minFsm.states = minFsm.states.filter(s => !deads.some(s1 => s1 === s));
+        // Delete dead states.
+        minFsm.states = minFsm.states.filter(s => !deads.some(s1 => s1 === s));
 
-    // Null FSM?
-    if (minFsm.states.length === 0) return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+        // Null FSM?
+        if (minFsm.states.length === 0) return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+    }
 
     // Get equivalent states
     let eqStates = getEquivalents(minFsm);
 
-    console.log(eqStates);
+    // Does any equivalent groups contains more than one state?
+    if (eqStates.some(group => group.length > 1)) {
+        // Filtering final states so that we have just one per equivalent group.
+        minFsm.finals = minFsm.finals.filter((_, i) => eqStates.some(group => group[0] === minFsm.states[i]));
+        
+        // Filtering states so that we have just one per equivalent group.
+        minFsm.states = minFsm.states.filter(s => eqStates.some(group => s === group[0]));
+        
+        // Filtering transitions to remove the ones that start in a removed state.
+        minFsm.transitions = minFsm.transitions.filter(t => minFsm.states.some(s => t.from === s));
 
-    // Filtering final states so that we have just one per equivalent group.
-    minFsm.finals = minFsm.finals.filter((_, i) => eqStates.some(group => group[0] === minFsm.states[i]));
-    
-    // Filtering states so that we have just one per equivalent group.
-    minFsm.states = minFsm.states.filter(s => eqStates.some(group => s === group[0]));
-    
-    // Filtering transitions to remove the ones that start in a removed state.
-    minFsm.transitions = minFsm.transitions.filter(t => minFsm.states.some(s => t.from === s));
-
-    // Changing ".to" attribute of transitions to a equivalent state that was not removed. 
-    minFsm.transitions.forEach(t => {
-        if (!minFsm.states.some(s => s === t.to)) {
-            for (let i = 0; i < eqStates.length; i++) {
-                if (eqStates[i].some(s => s === t.to)) {
-                    t.to = eqStates[i][0];
-                }
-            }        
-        } 
-    });
+        // Changing ".to" attribute of transitions to a equivalent state that was not removed. 
+        minFsm.transitions.forEach(t => {
+            if (!minFsm.states.some(s => s === t.to)) {
+                for (let i = 0; i < eqStates.length; i++) {
+                    if (eqStates[i].some(s => s === t.to)) {
+                        t.to = eqStates[i][0];
+                    }
+                }        
+            } 
+        });
+    }
 
     return minFsm;
 }
