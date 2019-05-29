@@ -49,7 +49,11 @@ const languages = (state = InitialState, action) => {
       let newLanguageDet = _makeNewLanguage(`${language.name} DET`);
       let fsmDet = new Fsm();
       fsmDet.createFsmFromFsm(action.payload.fsm);
+      fsmDet = fsmDet.renameStates()
       newLanguageDet.fsm = fsmDet;
+
+      newLanguageDet.grammar = fsmDet.fsmToGrammarConvert().gramaToString();
+
       const newListLang = [...state.listLanguages, newLanguageDet];
       return {
         ...state,

@@ -19,6 +19,7 @@ import FunctionSwitcher from "./FunctionSwitcher";
 import UserInfo from "components/UserInfo";
 import Menu from "components/Header/Menu";
 import ModalAutoDeterministic from "./modal/modalAutoDeterministic";
+import ModalAutoMinimized from "./modal/modalAutoMinimized";
 
 class Header extends React.Component {
   onAppNotificationSelect = () => {
@@ -142,6 +143,9 @@ class Header extends React.Component {
             <ul className="header-notifications list-inline ml-auto">
               <li className="list-inline-item">
                 <ModalAutoDeterministic></ModalAutoDeterministic>
+              </li>
+              <li>
+                <ModalAutoMinimized></ModalAutoMinimized>
               </li>
               {/* <li className="list-inline-item">
                 <Dropdown
