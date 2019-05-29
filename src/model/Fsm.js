@@ -1,6 +1,7 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
-import { EPSILON, DEAD_STATE } from "./SymbolValidator";
+import { EPSILON, DEAD_STATE, ALPHABET } from "./SymbolValidator";
 import { sentenceRecognize } from "./fsm/Recognizer";
+import { minimize } from "./fsm/Minimizer";
 import * as R from "ramda";
 import Grammar from "./Grammar";
 
@@ -22,6 +23,10 @@ export default class FSM {
     return determine(this);
   }
 
+  minimize() {
+    return minimize(this);
+  }
+
   hasNonDeclaredState() {
     return this.transitions.some(trans => {
       if (trans.to !== undefined && trans.to !== "" && trans.to !== "-") {
@@ -37,6 +42,7 @@ export default class FSM {
   recognize(sentence) {
     return sentenceRecognize(this, sentence);
   }
+
   isFinal(stante) {
     return this.finals[this.states.indexOf(stante)];
   }
@@ -82,8 +88,23 @@ export default class FSM {
           return p_.productions.push(`&`)
       });
 
-    let grammar = new Grammar(vn, vt, p, s);
-    return grammar;
+    return new Grammar(vn, vt, p, s);
+  }
+
+  renameStates() {
+    let fsm = this.clone();
+
+    fsm.initial = ALPHABET[0];
+
+    fsm.transitions.forEach(t => {
+      t.from = ALPHABET[fsm.states.indexOf(t.from)];
+      t.to = ALPHABET[fsm.states.indexOf(t.to)];
+    });
+
+    for (let i = 0; i < fsm.states.length; i++)
+      fsm.states[i] = ALPHABET[i];
+
+    return fsm;
   }
 
   clone() {

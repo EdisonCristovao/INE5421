@@ -12,6 +12,7 @@ export default class Grammar {
   grammarToFsmConvert() {
     let fsm = new Fsm();
     if (this.S === "" || this.S === undefined) return fsm;
+    if (this.P.length === 1 && this.P[0].productions.length === 0) return fsm;
 
     fsm.states = [...this.Vn].concat(NEW_STATE);
     fsm.alphabet = this.Vt.some(t => t == EPSILON) ? this.Vt.filter(t => t !== EPSILON) : [...this.Vt];
