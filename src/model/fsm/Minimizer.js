@@ -140,29 +140,26 @@ function getEquivalents(fsm) {
 }
 
 export function minimize(fsm) {
-    let minFsm = new FSM();
-    minFsm.initial = fsm.initial;
-    minFsm.alphabet = [...fsm.alphabet];
+    // Cloning fsm to return the new minimized one.
+    let minFsm = fsm.clone();
 
     // Get unreachable states.
-    let unreachables = getUnreachables(fsm);
+    let unreachables = getUnreachables(minFsm);
 
     // Does the FSM contains an unreachable state?
     if (unreachables.length > 0) {
+        // Delete unreachable states from final states array.
+        minFsm.finals = minFsm.finals.filter((_, i) => !unreachables.some(s => s === minFsm.states[i]));
+
+        // Delete unreachable states from transitions.
+        minFsm.transitions = minFsm.transitions.filter(t => !unreachables.some(s => (s === t.from || s === t.to)));
+        
         // Delete unreachable states.
-        minFsm.states = fsm.states.filter(s => !unreachables.some(s1 => s1 === s));
+        minFsm.states = minFsm.states.filter(s => !unreachables.some(s1 => s1 === s));
 
         // Null FSM?
         if (minFsm.states.length === 0) return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
-        
-        // Delete unreachable states from final states array.
-        minFsm.finals = fsm.finals.filter((_, i) => !unreachables.some(s => s === fsm.states[i]));
-
-        // Delete unreachable states from transitions.
-        minFsm.transitions = fsm.transitions.filter(t => !unreachables.some(s => (s === t.from || s === t.to)));
-    } else {
-        minFsm = fsm.clone();
-    }
+    } 
 
     // Get dead states.
     let deads = getDeads(minFsm);
