@@ -20,6 +20,7 @@ import UserInfo from "components/UserInfo";
 import Menu from "components/Header/Menu";
 import ModalAutoDeterministic from "./modal/modalAutoDeterministic";
 import ModalAutoMinimized from "./modal/modalAutoMinimized";
+import ModalUnionIntersect from "./modal/modalUnionIntersect";
 
 class Header extends React.Component {
   onAppNotificationSelect = () => {
@@ -146,6 +147,9 @@ class Header extends React.Component {
               </li>
               <li>
                 <ModalAutoMinimized></ModalAutoMinimized>
+              </li>
+              <li>
+                <ModalUnionIntersect></ModalUnionIntersect>
               </li>
               {/* <li className="list-inline-item">
                 <Dropdown

@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
-class modalMinimize extends React.Component {
+class ModalMinimize extends React.Component {
   state = {
     modal: false
   };
@@ -46,4 +46,4 @@ class modalMinimize extends React.Component {
   }
 }
 
-export default modalMinimize;
+export default ModalMinimize;

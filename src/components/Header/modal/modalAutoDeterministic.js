@@ -12,7 +12,7 @@ import {
 import Fsm from "./../../../model/Fsm";
 import { makeNewLanguageDet } from "./../../../actions/Language";
 
-class modalAutoDeterministifc extends React.Component {
+class ModalAutoDeterministifc extends React.Component {
   state = {
     modal: false,
     detFsm: null
@@ -108,4 +108,4 @@ const mapState = ({ languages }) => {
   return { language: listLanguages[selectedLanguage] };
 };
 
-export default connect(mapState, { makeNewLanguageDet })(modalAutoDeterministifc);
+export default connect(mapState, { makeNewLanguageDet })(ModalAutoDeterministifc);

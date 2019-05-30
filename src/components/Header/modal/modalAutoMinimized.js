@@ -12,7 +12,7 @@ import {
 import Fsm from "./../../../model/Fsm";
 import { makeNewLanguageDet } from "./../../../actions/Language";
 
-class modalAutoMinimized extends React.Component {
+class ModalAutoMinimized extends React.Component {
   state = {
     modal: false,
     detFsm: null
@@ -50,7 +50,7 @@ class modalAutoMinimized extends React.Component {
         </li>
 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader >Automato Determinizado</ModalHeader>
+          <ModalHeader >Automato Minimizado</ModalHeader>
           <ModalBody>
             <table className="default-table table table-sm table-responsive-sm table-hover mb-1">
               <thead className="th-border-b">
@@ -108,4 +108,4 @@ const mapState = ({ languages }) => {
   return { language: listLanguages[selectedLanguage] };
 };
 
-export default connect(mapState, { makeNewLanguageDet })(modalAutoMinimized);
+export default connect(mapState, { makeNewLanguageDet })(ModalAutoMinimized);

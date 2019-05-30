@@ -8,7 +8,10 @@ import {
   FSM_EDIT,
   ADD_SENTENCE,
   REMOVE_SENTENCE,
-  addSentence
+  UNION_INTERSECT_LANGUAGE,
+  UNION,
+  INTERSECT,
+  makeNewLanguage
 } from "./../actions";
 import uuidv4 from "uuid/v4";
 import InitialState from "./states/language.state";
@@ -67,6 +70,13 @@ const languages = (state = InitialState, action) => {
         selectedLanguage: action.payload
       };
 
+    case UNION_INTERSECT_LANGUAGE:
+      console.log(action.payload, 'sadas');
+      let unOpLangu = state.listLanguages.map(lang => lang.id === action.payload.id);
+
+    return {
+      ...state
+    }
 
     case DELETE_LANGUAGE:
       return {
@@ -93,8 +103,7 @@ const languages = (state = InitialState, action) => {
       return {
         ...state
       };
-
-
+    
     case FSM_EDIT:
       let nFsm = new Fsm();
       nFsm.createFsmFromFsm(action.payload);
