@@ -24,7 +24,7 @@ export default class FSM {
   }
 
   minimize() {
-    return minimize(this);
+    return this.isDeterministic() ? minimize(this.determine()) : minimize(this);
   }
 
   hasNonDeclaredState() {
