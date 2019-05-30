@@ -86,14 +86,7 @@ class Modalhelp extends React.Component {
               <strong>Determinizador</strong>
             </h2>
             <p>
-              O determinizador fica no canto superior direiro em `operacoes`.{" "}
-            </p>
-
-            <h2>
-              <strong>Expressão regular</strong>
-            </h2>
-            <p>
-              <strong>Breve...</strong>{" "}
+              O determinizador fica no canto superior direito em `operacoes`.{" "}
             </p>
           </ModalBody>
           <ModalFooter>

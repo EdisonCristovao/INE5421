@@ -2,6 +2,8 @@ import { isDeterministic, determine } from "./fsm/Determinator";
 import { EPSILON, DEAD_STATE, ALPHABET } from "./SymbolValidator";
 import { sentenceRecognize } from "./fsm/Recognizer";
 import { minimize } from "./fsm/Minimizer";
+import { unite } from "./fsm/Uniter";
+import { intersect } from "./fsm/Intersecter";
 import * as R from "ramda";
 import Grammar from "./Grammar";
 
@@ -24,7 +26,15 @@ export default class FSM {
   }
 
   minimize() {
-    return minimize(this);
+    return this.isDeterministic() ? minimize(this.determine()) : minimize(this);
+  }
+
+  unite(fsm) {
+    return unite(this, fsm);
+  }
+
+  intersect(fsm) {
+    return intersect(this, fsm);
   }
 
   hasNonDeclaredState() {
