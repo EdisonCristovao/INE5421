@@ -194,11 +194,11 @@ export function minimize(fsm) {
         minFsm.transitions = minFsm.transitions.filter(t => minFsm.states.some(s => t.from === s));
 
         // Changing ".to" attribute of transitions to a equivalent state that was not removed. 
-        minFsm.transitions.forEach(t => {
+        minFsm.transitions.forEach((t,i) => {
             if (!minFsm.states.some(s => s === t.to)) {
-                for (let i = 0; i < eqStates.length; i++) {
-                    if (eqStates[i].some(s => s === t.to)) {
-                        t.to = eqStates[i][0];
+                for (let j = 0; j < eqStates.length; j++) {
+                    if (eqStates[j].some(s => s === t.to)) {
+                        minFsm.transitions[i].to = eqStates[j][0];
                     }
                 }        
             } 
