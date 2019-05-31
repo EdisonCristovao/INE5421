@@ -25,7 +25,9 @@ class ModalUnionIntersect extends React.Component {
 
   toggle = () => {
     this.setState(prevState => ({
-      modal: !prevState.modal
+      modal: !prevState.modal,
+      rSelected: null,
+      languageToOp: null
     }));
     this.forceUpdate();
   };
@@ -39,6 +41,7 @@ class ModalUnionIntersect extends React.Component {
   };
 
   render() {
+    const { rSelected, languageToOp } = this.state;
     const { language, listLanguages } = this.props;
     return (
       <div>
@@ -55,15 +58,16 @@ class ModalUnionIntersect extends React.Component {
             <div className="d-flex justify-content-center">
               <div className="d-flex align-itens-center p-3">
                 <ButtonGroup>
-                  <Button color="primary" onClick={() => this.setState({rSelected: UNION})} active={this.state.rSelected === UNION}>União</Button>
-                  <Button color="primary" onClick={() => this.setState({rSelected: INTERSECT})} active={this.state.rSelected === INTERSECT}>Interseção</Button>
+                  <Button color="primary" onClick={() => this.setState({ rSelected: UNION })} active={this.state.rSelected === UNION}>União</Button>
+                  <Button color="primary" onClick={() => this.setState({ rSelected: INTERSECT })} active={this.state.rSelected === INTERSECT}>Interseção</Button>
                 </ButtonGroup>
               </div>
 
               <FormGroup className="ml-3">
                 <Label for="exampleSelect">Selecione a linguagem para operação.</Label>
-                <Input type="select" name="selectLinguage" onClick={(e)=> this.setState({languageToOp: e.target.value})}>
-                  {listLanguages.map((language , index) =>
+                <Input type="select" name="selectLinguage" onClick={(e) => this.setState({ languageToOp: e.target.value })}>
+                  <option>---- Linguagem ----</option>
+                  {listLanguages.map((language, index) =>
                     <option key={index} value={language.id}>{language.name}</option>
                   )}
                 </Input>
@@ -71,7 +75,7 @@ class ModalUnionIntersect extends React.Component {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={(e) => { this.toggle(); this.props.unionIntersectLanguage(language, this.state.rSelected, this.state.languageToOp) }}>Criar nova linguagem</Button>
+            <Button color="primary" disabled={!rSelected || !languageToOp} onClick={(e) => { this.toggle(); this.props.unionIntersectLanguage(language, this.state.rSelected, this.state.languageToOp) }}>Criar nova linguagem</Button>
             <Button color="secondary" onClick={this.toggle}>Voltar</Button>
           </ModalFooter>
         </Modal>
