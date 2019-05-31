@@ -70,13 +70,31 @@ const languages = (state = InitialState, action) => {
         selectedLanguage: action.payload
       };
 
-    case UNION_INTERSECT_LANGUAGE:
-      console.log(action.payload, 'sadas');
-      let unOpLangu = state.listLanguages.map(lang => lang.id === action.payload.id);
+    //Bloodhound Gang - The Bad Touch <---essa musica é muito sarro
 
-    return {
-      ...state
-    }
+    case UNION_INTERSECT_LANGUAGE:
+      let fsmA = new Fsm();
+      fsmA.createFsmFromFsm(action.payload.language.fsm);
+
+      let fsmB = new Fsm();
+      const unOpLangu = state.listLanguages.find(lang => lang.id === action.payload.languageId);
+      fsmB.createFsmFromFsm(unOpLangu.fsm)
+      
+      let opLanguage = null;
+      if (action.payload.operation === UNION) {
+        opLanguage = _makeNewLanguage(`${action.payload.language.name} U ${unOpLangu.name}`)
+        opLanguage.fsm = fsmA.unite(fsmB);
+      } else {
+        opLanguage = _makeNewLanguage(`${action.payload.language.name} I ${unOpLangu.name}`)
+        opLanguage.fsm = fsmA.intersect(fsmB)
+      }
+
+      const newListUniInte = [...state.listLanguages, opLanguage];
+
+      return {
+        ...state,
+        listLanguages: newListUniInte,
+      }
 
     case DELETE_LANGUAGE:
       return {
@@ -103,7 +121,7 @@ const languages = (state = InitialState, action) => {
       return {
         ...state
       };
-    
+
     case FSM_EDIT:
       let nFsm = new Fsm();
       nFsm.createFsmFromFsm(action.payload);

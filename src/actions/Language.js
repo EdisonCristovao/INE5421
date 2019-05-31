@@ -39,8 +39,8 @@ export function deleteLanguage(id) {
     return { type: DELETE_LANGUAGE, payload: id };
 }
 
-export function unionIntersectLanguage(fsm, operation, languageId) {
-    return { type: UNION_INTERSECT_LANGUAGE, payload: {fsm, operation, languageId} };
+export function unionIntersectLanguage(language, operation, languageId) {
+    return { type: UNION_INTERSECT_LANGUAGE, payload: {language, operation, languageId} };
 }
 
 export function changeRegExpression(regExpression) {
