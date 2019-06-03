@@ -21,12 +21,39 @@ export default class FSM {
     return isDeterministic(this);
   }
 
+  isEqualTo(fsm) {
+    // Checking attributes length and fsm initials
+    if (this.states.length !== fsm.states.length 
+    || this.alphabet.length !== fsm.alphabet.length 
+    || this.transitions.length !== fsm.transitions.length
+    || this.finals.length !== fsm.finals.length 
+    || this.initial !== fsm.initial) { 
+      return false;
+    }
+
+    // Are all states equals?
+    if (this.states.some(s1 => !fsm.states.some(s2 => s1 === s2))) return false;
+    
+    // Are all alphabet symbols equals?
+    if (this.alphabet.some(a1 => !fsm.alphabet.some(a2 => a1 === a2))) return false;
+    
+    // Are all transitions equals?
+    if (this.transitions.some(t1 => !fsm.transitions.some(t2 => 
+      t1.from === t2.from && t1.to === t2.to && t1.when === t2.when))) return false;
+
+    // Are all finals equals?
+    if (this.finals.some((f,i) => f !== fsm.finals[fsm.states.indexOf(this.states[i])])) return false;
+
+    // Passed all tests
+    return true;
+  }
+
   determine() {
     return determine(this);
   }
 
   minimize() {
-    return this.isDeterministic() ? minimize(this.determine()) : minimize(this);
+    return this.isDeterministic() ? minimize(this) : minimize(this.determine());
   }
 
   unite(fsm) {
@@ -34,7 +61,8 @@ export default class FSM {
   }
 
   intersect(fsm) {
-    return intersect(this, fsm);
+    // Determining so we don't have to deal with epsilon transitions.
+    return intersect(this.determine(), fsm.determine());
   }
 
   hasNonDeclaredState() {
@@ -50,7 +78,7 @@ export default class FSM {
   }
 
   recognize(sentence) {
-    return sentenceRecognize(this, sentence);
+    return sentenceRecognize(this.determine(), sentence);
   }
 
   isFinal(stante) {
@@ -115,6 +143,21 @@ export default class FSM {
     newFsm.states[i] = ALPHABET[i];
 
     return newFsm;
+  }
+
+  renameForIdentification(id) {
+    let newFSM = this.clone();
+
+    newFSM.initial += id;
+
+    newFSM.states.forEach((_, i, s) => s[i] += id);
+
+    newFSM.transitions.forEach((t, i, a) => {
+        a[i].from += id;
+        a[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + id).join(","); 
+    });
+
+    return newFSM;
   }
 
   clone() {
