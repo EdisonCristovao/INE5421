@@ -2,28 +2,11 @@ import { EPSILON, DEAD_STATE, NEW_STATE } from "../SymbolValidator";
 import FSM from "../Fsm";
 
 export function unite(fsm1, fsm2) {
-    let fsm1Aux = fsm1.clone();
-    let fsm2Aux = fsm2.clone();
     let uFsm = new FSM();
 
     /* Renaming states of each FSM so we can know from each FSM they are (1st or 2nd). */
-    fsm1Aux.initial += "1";
-
-    fsm1Aux.states.forEach((_, i, s) => s[i] += "1");
-
-    fsm1Aux.transitions.forEach((t, i) => {
-        fsm1Aux.transitions[i].from += "1";
-        fsm1Aux.transitions[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + "1").join(","); 
-    });
-
-    fsm2Aux.initial += "2";
-
-    fsm2Aux.states.forEach((_, i, s) => s[i] += "2");
-
-    fsm2Aux.transitions.forEach((t, i) => {
-        fsm2Aux.transitions[i].from += "2";
-        fsm2Aux.transitions[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + "2").join(",");
-    });
+    let fsm1Aux = fsm1.clone().renameForIdentification("1");
+    let fsm2Aux = fsm2.clone().renameForIdentification("2");
 
     /* Initial state will be a new state. */
     uFsm.initial = NEW_STATE;

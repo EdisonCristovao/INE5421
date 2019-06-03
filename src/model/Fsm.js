@@ -53,7 +53,7 @@ export default class FSM {
   }
 
   minimize() {
-    return this.isDeterministic() ? minimize(this.determine()) : minimize(this);
+    return this.isDeterministic() ? minimize(this) : minimize(this.determine());
   }
 
   unite(fsm) {
@@ -61,7 +61,8 @@ export default class FSM {
   }
 
   intersect(fsm) {
-    return intersect(this, fsm);
+    // Determining so we don't have to deal with epsilon transitions.
+    return intersect(this.determine(), fsm.determine());
   }
 
   hasNonDeclaredState() {
@@ -77,7 +78,7 @@ export default class FSM {
   }
 
   recognize(sentence) {
-    return sentenceRecognize(this, sentence);
+    return sentenceRecognize(this.determine(), sentence);
   }
 
   isFinal(stante) {
@@ -142,6 +143,21 @@ export default class FSM {
     newFsm.states[i] = ALPHABET[i];
 
     return newFsm;
+  }
+
+  renameForIdentification(id) {
+    let newFSM = this.clone();
+
+    newFSM.initial += id;
+
+    newFSM.states.forEach((_, i, s) => s[i] += id);
+
+    newFSM.transitions.forEach((t, i, a) => {
+        a[i].from += id;
+        a[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + id).join(","); 
+    });
+
+    return newFSM;
   }
 
   clone() {
