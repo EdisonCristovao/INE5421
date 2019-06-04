@@ -7,6 +7,7 @@ export default class Grammar {
     this.Vt = !Vt || !Array.isArray(Vt) ? [] : Vt;
     this.P = !P || !Array.isArray(P) ? [] : P;
     this.S = S;
+    this.isRegular = true;
   }
 
   grammarToFsmConvert() {
@@ -82,54 +83,79 @@ export default class Grammar {
   stringToGrammar(grammarString) {
     let grammar = new Grammar();
 
-    let nonTerminals = new Set();
-    let terminals = new Set();
+    // Auxiliar array and index to utilize throught some iterations
     let prodElements = [];
+    let i = 0;
+
+    // Skip isRegular test
+    let skip = false;
+
+    // Gets all nonTerminals (scanning each head of a production).
+    grammar.Vn = Array.from(new Set(
+      grammarString.split("\n")
+      .map(l => l.substring(0, l.indexOf(DERIVATION)).trimLeft().trimRight())
+      .filter(nonTerminal => nonTerminal !== ""))
+    );
+
+    // Initializes all productions arrays.
+    grammar.Vn.forEach(nT => grammar.P.push({"nonTerminal": nT, "productions": []}));
 
     // Sets the first symbol from the first derivation as the grammar initial symbol 
-    grammar.S = grammarString.substring(0, grammarString.indexOf(DERIVATION)).replace(/\s/g, '');
+    grammar.S = grammar.Vn[0];
 
     grammarString.split("\n").forEach(line => {
+      // Grammar still on construction or blank line ?
       if (line === "" || !line.includes(DERIVATION)) return;
+      
       // Get the head of a production
       let head = line.substring(0, line.indexOf(DERIVATION)).trimLeft().trimRight();
+      i = grammar.Vn.indexOf(head);
 
-      // Sees if this head has already been added to the productions
-      if (!nonTerminals.has(head)) {
-        nonTerminals.add(head);
-        grammar.P.push({ "nonTerminal": head, "productions": [] });
-      }
+      let originalLength = line.length;
+      line.substring(line.indexOf(DERIVATION) + DERIVATION.length, originalLength)
+      .split(SEPARATOR)
+      .forEach(prod => {
+        if (prod === "" || prod === undefined) return;
+        
+        // Removes any initial and final spaces from the production.
+        prod = prod.trimLeft().trimRight();
 
-      let lastLength = line.length;
-
-      line.substring(line.indexOf(DERIVATION) + DERIVATION.length, lastLength)
-        .split(SEPARATOR).forEach(prod => {
-          if (prod === "" || prod === undefined) return;
-
-          prod = prod.trimLeft().trimRight();
-
-          // Split a production into its terminal and non terminal elements
-          prodElements = prod.split(" ");
-
-          terminals.add(prodElements[0]);
-
-          if (prodElements.length === 2 && !nonTerminals.has(prodElements[1])) {
-            nonTerminals.add(prodElements[1]);
-            grammar.P.push({ "nonTerminal": prodElements[1], "productions": [] });
+        // Gets all terminal symbols of a production
+        prodElements = prod.split(" ");
+        
+        // Skip test because the grammar is already non regular.
+        if (!skip) {
+          // Is this a regular grammar?
+          if (prodElements.length > 2) {
+            grammar.isRegular = false;
+          } else if (prodElements.length === 2) {
+            if (!grammar.Vn.some(nT => prodElements[1] === nT))
+              grammar.isRegular = false;
+            else if (grammar.Vn.some(nT => prodElements[0] === nT))
+              grammar.isRegular = false;
+          } else if (prodElements.length === 1) {
+            if (grammar.Vn.some(nT => prodElements[0] === nT))
+              grammar.isRegular = false;
           }
 
-          let i;
-          for (i = 0; i < grammar.P.length; i++)
-            if (grammar.P[i].nonTerminal === head) break;
-
-          if (!grammar.P[i].productions.some(pAux => pAux === prod))
-            grammar.P[i].productions.push(prod);
+          if (!grammar.isRegular)
+            skip = true;
+        }
+        
+        // Adding terminal symbols into the grammar.
+        prodElements.forEach(el => {
+          if (!grammar.Vn.some(nT => nT === el) && !grammar.Vt.some(t => t === el))
+            grammar.Vt.push(el);
         });
+
+        // Adding the production into the grammar.
+        if (!grammar.P[i].productions.some(p => p === prod))
+          grammar.P[i].productions.push(prod);
+      });
     });
 
-    grammar.Vn = Array.from(nonTerminals);
-    grammar.Vt = Array.from(terminals);
-
+    console.log(grammar);
+    
     return grammar;
   }
 
