@@ -47,6 +47,7 @@ export default class Grammar {
           to = NEW_STATE;
           when = pAux;
         } else {
+          console.log(pAux);
           to = fsm.states.filter(state => pAux.includes(state))[0];
           when = fsm.alphabet.filter(letter => pAux.includes(letter))[0];
         }
@@ -128,6 +129,8 @@ export default class Grammar {
 
   gramaToString() {
     let productions = "";
+
+    console.log(this);
 
     // Build the string concatenating each production
     this.P.forEach(p => {

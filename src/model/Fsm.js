@@ -101,8 +101,8 @@ export default class FSM {
 
     this.transitions.forEach(tran => {
       if (tran.from === vn && tran.to !== DEAD_STATE && tran.to !== undefined) {
-        productions.push(`${tran.when}${tran.to}`);
-        if (this.isFinal(tran.to)) productions.push(`${tran.when}`);
+        productions.push(tran.when+" "+tran.to);
+        if (this.isFinal(tran.to)) productions.push(tran.when);
       }
     });
 
