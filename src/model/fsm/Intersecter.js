@@ -27,7 +27,7 @@ export function intersect(fsm1, fsm2) {
     iFsm.finals.push(fsm1Aux.finals[0] || fsm2Aux.finals[0]);
 
     do {
-        // Increasing index to iterate over the new state and reseting logical variable
+        // Increasing index to iterate over the new state
         auxIndex++;
 
         // Calculate possible new states
@@ -53,6 +53,8 @@ export function intersect(fsm1, fsm2) {
         newStates.forEach((set, i, a) => {
             // Creating the new state sorting each element so we can do some comparisons later
             newState = Array.from(set).sort().join(",");
+
+            if (newState === "") return;
 
             // Checking if this states was already added.
             if (!iFsm.states.some(s => s === newState)) {

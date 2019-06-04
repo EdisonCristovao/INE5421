@@ -61,8 +61,9 @@ export default class FSM {
   }
 
   intersect(fsm) {
-    // Determining so we don't have to deal with epsilon transitions.
-    return intersect(this.determine(), fsm.determine());
+  // Determining so we don't have to deal with epsilon transitions.
+  return intersect(this.isDeterministic() ? this : this.determine().renameStates(),
+         fsm.isDeterministic() ? fsm : fsm.determine().renameStates());
   }
 
   hasNonDeclaredState() {
