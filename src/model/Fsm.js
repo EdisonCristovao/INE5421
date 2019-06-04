@@ -53,7 +53,9 @@ export default class FSM {
   }
 
   minimize() {
-    return this.isDeterministic() ? minimize(this) : minimize(this.determine());
+    //Determining so we don't have to deal with epsilon transitions.
+    //If it's already deterministic, determine() will return the same FSM.
+    return minimize(this.determine());
   }
 
   unite(fsm) {
@@ -62,6 +64,7 @@ export default class FSM {
 
   intersect(fsm) {
   // Determining so we don't have to deal with epsilon transitions.
+  // Renaming states so we don't have any bugs related to commas on state names 
   return intersect(this.isDeterministic() ? this : this.determine().renameStates(),
          fsm.isDeterministic() ? fsm : fsm.determine().renameStates());
   }

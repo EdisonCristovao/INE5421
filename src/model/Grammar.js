@@ -154,8 +154,6 @@ export default class Grammar {
       });
     });
 
-    console.log(grammar);
-    
     return grammar;
   }
 
