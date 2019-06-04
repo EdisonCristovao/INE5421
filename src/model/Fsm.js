@@ -119,9 +119,8 @@ export default class FSM {
       p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }];
     });
 
-    let initialIsFinal = this.finals[this.states.indexOf(this.initial)];
-
-    if (initialIsFinal)
+    // If initial state is final
+    if (this.finals[this.states.indexOf(this.initial)])
       p.map(p_ => {
         if (p_.nonTerminal === this.initial)
           return p_.productions.push(`&`)

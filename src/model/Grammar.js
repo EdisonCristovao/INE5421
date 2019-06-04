@@ -36,21 +36,25 @@ export default class Grammar {
     let toAux = [];
     for (let i = 0; i < fsm.alphabet.length; i++) toAux.push(new Set());
 
+    // Productions elements (terminal and nonTerminal symbols for each iteration)
+    let prodElements = [];
+
     this.P.forEach(p => {
       p.productions.forEach(pAux => {
         // Skip epsilon
         if (pAux === EPSILON) return;
 
+        prodElements = pAux.split(" ");
+
         // Construct non deterministic automata
         let to, when;
-        if (fsm.alphabet.some(letter => letter === pAux)) {
+        if (prodElements.length === 1) {
           to = NEW_STATE;
-          when = pAux;
-        } else {
-          console.log(pAux);
-          to = fsm.states.filter(state => pAux.includes(state))[0];
-          when = fsm.alphabet.filter(letter => pAux.includes(letter))[0];
-        }
+          when = prodElements[0];
+        } else if (prodElements.length === 2) {
+          to = fsm.states[fsm.states.indexOf(prodElements[1])];
+          when = fsm.alphabet[fsm.alphabet.indexOf(prodElements[0])];
+        } else return;
 
         toAux[fsm.alphabet.indexOf(when)].add(to);
       });
@@ -80,41 +84,43 @@ export default class Grammar {
 
     let nonTerminals = new Set();
     let terminals = new Set();
+    let prodElements = [];
 
     // Sets the first symbol from the first derivation as the grammar initial symbol 
     grammar.S = grammarString.substring(0, grammarString.indexOf(DERIVATION)).replace(/\s/g, '');
 
     grammarString.split("\n").forEach(line => {
       if (line === "" || !line.includes(DERIVATION)) return;
+      // Get the head of a production
+      let head = line.substring(0, line.indexOf(DERIVATION)).trimLeft().trimRight();
 
-      // Remove all spaces from line
-      line = line.replace(/\s/g, '');
-
-      // Get derivation symbol
-      let nonTerAux = line.substring(0, line.indexOf(DERIVATION));
-
-      // Sees if this derivation symbol has already been added to the productions
-      if (!nonTerminals.has(nonTerAux)) {
-        nonTerminals.add(nonTerAux);
-        grammar.P.push({ "nonTerminal": nonTerAux, "productions": [] });
+      // Sees if this head has already been added to the productions
+      if (!nonTerminals.has(head)) {
+        nonTerminals.add(head);
+        grammar.P.push({ "nonTerminal": head, "productions": [] });
       }
 
       let lastLength = line.length;
 
-      line.substring(line.indexOf(DERIVATION) + 2, lastLength)
+      line.substring(line.indexOf(DERIVATION) + DERIVATION.length, lastLength)
         .split(SEPARATOR).forEach(prod => {
           if (prod === "" || prod === undefined) return;
 
-          terminals.add(prod[0]);
+          prod = prod.trimLeft().trimRight();
 
-          if (!nonTerminals.has(prod[1]) && prod[1] !== "" && prod[1] !== undefined) {
-            nonTerminals.add(prod[1]);
-            grammar.P.push({ "nonTerminal": prod[1], "productions": [] });
+          // Split a production into its terminal and non terminal elements
+          prodElements = prod.split(" ");
+
+          terminals.add(prodElements[0]);
+
+          if (prodElements.length === 2 && !nonTerminals.has(prodElements[1])) {
+            nonTerminals.add(prodElements[1]);
+            grammar.P.push({ "nonTerminal": prodElements[1], "productions": [] });
           }
 
           let i;
           for (i = 0; i < grammar.P.length; i++)
-            if (grammar.P[i].nonTerminal === nonTerAux) break;
+            if (grammar.P[i].nonTerminal === head) break;
 
           if (!grammar.P[i].productions.some(pAux => pAux === prod))
             grammar.P[i].productions.push(prod);
@@ -129,8 +135,6 @@ export default class Grammar {
 
   gramaToString() {
     let productions = "";
-
-    console.log(this);
 
     // Build the string concatenating each production
     this.P.forEach(p => {
