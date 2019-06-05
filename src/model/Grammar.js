@@ -1,5 +1,6 @@
-import { SEPARATOR, DERIVATION, EPSILON, NEW_STATE } from "./SymbolValidator";
-import Fsm from "./Fsm";
+import { SEPARATOR, DERIVATION } from "./SymbolValidator";
+import { grammarToFsmConvert } from "./regularGrammar/Converter"
+import { removeEpsilon } from "./contextFreeGrammar/EpsilonEliminator"
 
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
@@ -10,74 +11,27 @@ export default class Grammar {
     this.isRegular = true;
   }
 
+  removeEpsilon() {
+    return removeEpsilon(this);
+  }
+
+  // TODO
+  removeUnitary() {
+    return this;
+  }
+
+  // TODO
+  removeUseless() {
+    return this;
+  }
+
+  // TODO
+  transformToChomsky() {
+    return this;
+  }
+
   grammarToFsmConvert() {
-    let fsm = new Fsm();
-    if (this.S === "" || this.S === undefined) return fsm;
-    if (this.P.length === 1 && this.P[0].productions.length === 0) return fsm;
-
-    fsm.states = [...this.Vn].concat(NEW_STATE);
-    fsm.alphabet = this.Vt.some(t => t == EPSILON) ? this.Vt.filter(t => t !== EPSILON) : [...this.Vt];
-    fsm.initial = this.S;
-
-    // Initializes final states
-    for (let i = 0; i < fsm.states.length-1; i++) fsm.finals.push(false);
-    
-    // New state is final.
-    fsm.finals.push(true);
-
-    // If initial symbol has epsilon, then he's final too.
-    for (let i = 0; i < this.P.length; i++) {
-      if (this.P[i].nonTerminal === this.S && this.P[i].productions.some(p => p === EPSILON)) {
-        fsm.finals[fsm.states.indexOf(fsm.initial)] = true;
-        break;
-      }
-    }
-
-    // All states that a symbol leads when in some state
-    let toAux = [];
-    for (let i = 0; i < fsm.alphabet.length; i++) toAux.push(new Set());
-
-    // Productions elements (terminal and nonTerminal symbols for each iteration)
-    let prodElements = [];
-
-    this.P.forEach(p => {
-      p.productions.forEach(pAux => {
-        // Skip epsilon
-        if (pAux === EPSILON) return;
-
-        prodElements = pAux.split(" ");
-
-        // Construct non deterministic automata
-        let to, when;
-        if (prodElements.length === 1) {
-          to = NEW_STATE;
-          when = prodElements[0];
-        } else if (prodElements.length === 2) {
-          to = fsm.states[fsm.states.indexOf(prodElements[1])];
-          when = fsm.alphabet[fsm.alphabet.indexOf(prodElements[0])];
-        } else return;
-
-        toAux[fsm.alphabet.indexOf(when)].add(to);
-      });
-
-      // Join all states that a states reaches with some symbol into a string
-      toAux.forEach((when, index) => {
-        if (when.size == 0) return;
-
-        let to = Array.from(when).sort().join(",");
-        let symbol = fsm.alphabet[index];
-
-        fsm.transitions.push({
-          from: p.nonTerminal,
-          to: to,
-          when: symbol
-        });
-
-        when.clear();
-      });
-    });
-
-    return fsm;
+    return grammarToFsmConvert(this);
   }
 
   stringToGrammar(grammarString) {
@@ -86,9 +40,6 @@ export default class Grammar {
     // Auxiliar array and index to utilize throught some iterations
     let prodElements = [];
     let i = 0;
-
-    // Skip isRegular test
-    let skip = false;
 
     // Gets all nonTerminals (scanning each head of a production).
     grammar.Vn = Array.from(new Set(
@@ -115,7 +66,7 @@ export default class Grammar {
       line.substring(line.indexOf(DERIVATION) + DERIVATION.length, originalLength)
       .split(SEPARATOR)
       .forEach(prod => {
-        if (prod === "" || prod === undefined) return;
+        if (prod.replace(/\s/g, '') === "" || prod === undefined) return;
         
         // Removes any initial and final spaces from the production.
         prod = prod.trimLeft().trimRight();
@@ -123,8 +74,8 @@ export default class Grammar {
         // Gets all terminal symbols of a production
         prodElements = prod.split(" ");
         
-        // Skip test because the grammar is already non regular.
-        if (!skip) {
+        // Skip test if the grammar is already non regular.
+        if (grammar.isRegular) {
           // Is this a regular grammar?
           if (prodElements.length > 2) {
             grammar.isRegular = false;
@@ -137,9 +88,6 @@ export default class Grammar {
             if (grammar.Vn.some(nT => prodElements[0] === nT))
               grammar.isRegular = false;
           }
-
-          if (!grammar.isRegular)
-            skip = true;
         }
         
         // Adding terminal symbols into the grammar.
@@ -153,7 +101,8 @@ export default class Grammar {
           grammar.P[i].productions.push(prod);
       });
     });
-
+    
+    grammar.removeEpsilon();
     return grammar;
   }
 

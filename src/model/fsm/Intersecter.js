@@ -1,16 +1,16 @@
-import { EPSILON, DEAD_STATE } from "../SymbolValidator";
 import FSM from "../Fsm";
 
 export function intersect(fsm1, fsm2) {
-    // Testing if the intersection of each FSMs alphabets isn't null
+    // Testing if the intersection of each FSMs alphabets isn't null.
     if (!fsm1.alphabet.some(s1 => fsm2.alphabet.some(s2 => s1 == s2))) return null;
     
+    // Auxiliary variables to construct the new FSM
     let iFsm = new FSM();
     let auxIndex = -1;
     let newStates = [];
     let newState = "";
     
-    /* Renaming states of each FSM so we can know from each FSM they are (1st or 2nd). */
+    // Renaming states of each FSM so we can know from each FSM they are (1st or 2nd).
     let fsm1Aux = fsm1.clone().renameForIdentification("1");
     let fsm2Aux = fsm2.clone().renameForIdentification("2");
     
@@ -27,7 +27,7 @@ export function intersect(fsm1, fsm2) {
     iFsm.finals.push(fsm1Aux.finals[0] || fsm2Aux.finals[0]);
 
     do {
-        // Increasing index to iterate over the new state
+        // Increasing index to iterate over the new state.
         auxIndex++;
 
         // Calculate possible new states
@@ -51,7 +51,7 @@ export function intersect(fsm1, fsm2) {
 
         // Push possible new states (if this state wasn't added yet).
         newStates.forEach((set, i, a) => {
-            // Creating the new state sorting each element so we can do some comparisons later
+            // Creating the new state sorting each element so we can do some comparisons later.
             newState = Array.from(set).sort().join(",");
 
             if (newState === "") return;
@@ -61,7 +61,7 @@ export function intersect(fsm1, fsm2) {
                 // Adding the new state.
                 iFsm.states.push(newState);
 
-                // Is this a final state?
+                // Is this a final state?.
                 iFsm.finals.push(newState.split(",").every(
                     s => s[s.length-1] === "1" ?
                         fsm1Aux.finals[fsm1Aux.states.indexOf(s)]
@@ -85,7 +85,7 @@ export function intersect(fsm1, fsm2) {
     }  while(auxIndex < iFsm.states.length-1);
 
 
-    // There's no accepting state, so the intersection is null
+    // There's no accepting state, so the intersection is null.
     if (!iFsm.finals.some(f => f)) return null;
 
     // Adding brackets

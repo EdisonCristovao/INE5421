@@ -1,11 +1,11 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
-import { EPSILON, DEAD_STATE, ALPHABET } from "./SymbolValidator";
+import { DEAD_STATE, ALPHABET } from "./SymbolValidator";
 import { sentenceRecognize } from "./fsm/Recognizer";
 import { minimize } from "./fsm/Minimizer";
 import { unite } from "./fsm/Uniter";
 import { intersect } from "./fsm/Intersecter";
-import * as R from "ramda";
 import Grammar from "./Grammar";
+import * as R from "ramda";
 
 export default class FSM {
   constructor(states, alphabet, transitions, initial, finals) {
@@ -19,33 +19,6 @@ export default class FSM {
 
   isDeterministic() {
     return isDeterministic(this);
-  }
-
-  isEqualTo(fsm) {
-    // Checking attributes length and fsm initials
-    if (this.states.length !== fsm.states.length 
-    || this.alphabet.length !== fsm.alphabet.length 
-    || this.transitions.length !== fsm.transitions.length
-    || this.finals.length !== fsm.finals.length 
-    || this.initial !== fsm.initial) { 
-      return false;
-    }
-
-    // Are all states equals?
-    if (this.states.some(s1 => !fsm.states.some(s2 => s1 === s2))) return false;
-    
-    // Are all alphabet symbols equals?
-    if (this.alphabet.some(a1 => !fsm.alphabet.some(a2 => a1 === a2))) return false;
-    
-    // Are all transitions equals?
-    if (this.transitions.some(t1 => !fsm.transitions.some(t2 => 
-      t1.from === t2.from && t1.to === t2.to && t1.when === t2.when))) return false;
-
-    // Are all finals equals?
-    if (this.finals.some((f,i) => f !== fsm.finals[fsm.states.indexOf(this.states[i])])) return false;
-
-    // Passed all tests
-    return true;
   }
 
   determine() {
@@ -123,11 +96,13 @@ export default class FSM {
     });
 
     // If initial state is final
-    if (this.finals[this.states.indexOf(this.initial)])
-      p.map(p_ => {
-        if (p_.nonTerminal === this.initial)
-          return p_.productions.push(`&`)
-      });
+    if (this.finals[this.states.indexOf(this.initial)]) {
+      for (let i = 0; i < p.length; i++)  {
+        if (p[i].nonTerminal === this.initial) {
+          p[i].productions.push("&");
+        }
+      }
+    }
 
     return new Grammar(vn, vt, p, s);
   }
