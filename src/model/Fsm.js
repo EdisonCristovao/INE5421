@@ -58,8 +58,8 @@ export default class FSM {
     return sentenceRecognize(this.determine(), sentence);
   }
 
-  isFinal(stante) {
-    return this.finals[this.states.indexOf(stante)];
+  isFinal(state) {
+    return this.finals[this.states.indexOf(state)];
   }
 
   createFsmFromFsm(fsm) {
@@ -139,6 +139,33 @@ export default class FSM {
     });
 
     return newFSM;
+  }
+
+  isEqualTo(fsm) {
+    // Checking attributes length and fsm initials
+    if (this.states.length !== fsm.states.length 
+    || this.alphabet.length !== fsm.alphabet.length 
+    || this.transitions.length !== fsm.transitions.length
+    || this.finals.length !== fsm.finals.length 
+    || this.initial !== fsm.initial) { 
+      return false;
+    }
+
+    // Are all states equals?
+    if (this.states.some(s1 => !fsm.states.some(s2 => s1 === s2))) return false;
+
+    // Are all alphabet symbols equals?
+    if (this.alphabet.some(a1 => !fsm.alphabet.some(a2 => a1 === a2))) return false;
+
+    // Are all transitions equals?
+    if (this.transitions.some(t1 => !fsm.transitions.some(t2 => 
+      t1.from === t2.from && t1.to === t2.to && t1.when === t2.when))) return false;
+
+    // Are all finals equals?
+    if (this.finals.some((f,i) => f !== fsm.finals[fsm.states.indexOf(this.states[i])])) return false;
+
+    // Passed all tests
+    return true;
   }
 
   clone() {

@@ -91,6 +91,6 @@ export function intersect(fsm1, fsm2) {
     // Adding brackets
     iFsm.initial = "{" + iFsm.initial + "}";
     iFsm.states.forEach((s, i, a) => a[i] = "{" + s + "}");
-
+    
     return iFsm;
 }
