@@ -27,7 +27,7 @@ export function intersect(fsm1, fsm2) {
     iFsm.finals.push(fsm1Aux.finals[0] || fsm2Aux.finals[0]);
 
     do {
-        // Increasing index to iterate over the new state and reseting logical variable
+        // Increasing index to iterate over the new state
         auxIndex++;
 
         // Calculate possible new states
@@ -54,13 +54,15 @@ export function intersect(fsm1, fsm2) {
             // Creating the new state sorting each element so we can do some comparisons later
             newState = Array.from(set).sort().join(",");
 
+            if (newState === "") return;
+
             // Checking if this states was already added.
             if (!iFsm.states.some(s => s === newState)) {
                 // Adding the new state.
                 iFsm.states.push(newState);
 
-                // Is this state a final one?
-                iFsm.finals.push(newState.split(",").some(
+                // Is this a final state?
+                iFsm.finals.push(newState.split(",").every(
                     s => s[s.length-1] === "1" ?
                         fsm1Aux.finals[fsm1Aux.states.indexOf(s)]
                         :
@@ -81,6 +83,10 @@ export function intersect(fsm1, fsm2) {
             a[i].clear();
         });
     }  while(auxIndex < iFsm.states.length-1);
+
+
+    // There's no accepting state, so the intersection is null
+    if (!iFsm.finals.some(f => f)) return null;
 
     // Adding brackets
     iFsm.initial = "{" + iFsm.initial + "}";

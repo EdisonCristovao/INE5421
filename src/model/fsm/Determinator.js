@@ -4,11 +4,8 @@ import FSM from "../Fsm";
 export function isDeterministic(fsm) {
   if (!fsm instanceof FSM) return "NotStance";
 
-  return (
-    !hasMultTransitions(fsm.transitions) || 
-    !hasEpsilon(fsm.alphabet) || 
-    fsm.states.some(s => s.includes("{") || s.includes("}"))
-    );
+  return ((!hasMultTransitions(fsm.transitions) && !hasEpsilon(fsm.alphabet)) ||
+        fsm.states.some(s => s.includes("{") || s.includes("}")));
 }
 
 

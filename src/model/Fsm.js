@@ -53,7 +53,9 @@ export default class FSM {
   }
 
   minimize() {
-    return this.isDeterministic() ? minimize(this) : minimize(this.determine());
+    //Determining so we don't have to deal with epsilon transitions.
+    //If it's already deterministic, determine() will return the same FSM.
+    return minimize(this.determine());
   }
 
   unite(fsm) {
@@ -61,8 +63,10 @@ export default class FSM {
   }
 
   intersect(fsm) {
-    // Determining so we don't have to deal with epsilon transitions.
-    return intersect(this.determine(), fsm.determine());
+  // Determining so we don't have to deal with epsilon transitions.
+  // Renaming states so we don't have any bugs related to commas on state names 
+  return intersect(this.isDeterministic() ? this : this.determine().renameStates(),
+         fsm.isDeterministic() ? fsm : fsm.determine().renameStates());
   }
 
   hasNonDeclaredState() {
@@ -100,8 +104,8 @@ export default class FSM {
 
     this.transitions.forEach(tran => {
       if (tran.from === vn && tran.to !== DEAD_STATE && tran.to !== undefined) {
-        productions.push(`${tran.when}${tran.to}`);
-        if (this.isFinal(tran.to)) productions.push(`${tran.when}`);
+        productions.push(tran.when+" "+tran.to);
+        if (this.isFinal(tran.to)) productions.push(tran.when);
       }
     });
 
@@ -118,9 +122,8 @@ export default class FSM {
       p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }];
     });
 
-    let initialIsFinal = this.finals[this.states.indexOf(this.initial)];
-
-    if (initialIsFinal)
+    // If initial state is final
+    if (this.finals[this.states.indexOf(this.initial)])
       p.map(p_ => {
         if (p_.nonTerminal === this.initial)
           return p_.productions.push(`&`)

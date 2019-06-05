@@ -59,17 +59,13 @@ class Modalhelp extends React.Component {
               <strong>Definindo uma Gramatica</strong>
             </h2>
             <p>
-              As produções são do tipo: <strong>S -> aS | a </strong>
+              As produções são do tipo: "<strong>S -> a S' b | b A | b A' | S </strong>" (espaço entre cada simbolo de uma produção).
+              <br />
+              Espaços necessarios p/ aceitar simbolos com mais de um caracter.
               <br />
               Epsilon representado por : <strong>{`&`}</strong> <br />A{" "}
               <strong>primeira</strong> produção adicionada contem o simbolo
               inicial da gramatica.
-              <br />
-              Ao escrever uma gramatica, simbolos terminais e não terminais{" "}
-              <strong>devem ambos</strong> ter só um caracter.
-              <br />
-              Ou seja, simbolos não terminais do tipo "a^" ou terminais do tipo
-              "q0" não serão aceitos.
               <br />
             </p>
 
