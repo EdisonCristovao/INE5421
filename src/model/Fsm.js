@@ -131,8 +131,11 @@ export default class FSM {
     newFSM.states.forEach((_, i, s) => s[i] += id);
 
     newFSM.transitions.forEach((t, i, a) => {
-        a[i].from += id;
-        a[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + id).join(","); 
+      // Skip transitions to dead state.
+      if (t.to === "" || t.to === undefined || t.to === DEAD_STATE) return;
+      
+      a[i].from += id;
+      a[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + id).join(","); 
     });
 
     return newFSM;
