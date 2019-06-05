@@ -1,4 +1,4 @@
-import { SEPARATOR, DERIVATION, EPSILON, NEW_STATE } from "../SymbolValidator";
+import { EPSILON } from "../SymbolValidator";
 import Grammar from "../Grammar"
 
 function getNullables(grammar) {
@@ -87,7 +87,7 @@ export function removeEpsilon(grammar) {
 
     // Initial symbol is nullable?
     if (nullables.has(grammar.S)) {
-        newGrammar.Vn.push(grammar.S+"'");
+        newGrammar.Vn = [grammar.S+"'"].concat(newGrammar.Vn);
         newGrammar.S = grammar.S+"'";
         newGrammar.P.push({"nonTerminal": newGrammar.S, "productions": [grammar.S, EPSILON]});
     } else {
@@ -110,6 +110,6 @@ export function removeEpsilon(grammar) {
         // Adding new productions.
         pArray[i].productions = p.productions.concat(prodAux);
     })
-    
+
     return newGrammar;
 }

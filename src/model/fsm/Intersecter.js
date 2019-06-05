@@ -84,7 +84,6 @@ export function intersect(fsm1, fsm2) {
         });
     }  while(auxIndex < iFsm.states.length-1);
 
-
     // There's no accepting state, so the intersection is null.
     if (!iFsm.finals.some(f => f)) return null;
 

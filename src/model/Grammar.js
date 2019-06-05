@@ -1,6 +1,8 @@
 import { SEPARATOR, DERIVATION } from "./SymbolValidator";
 import { grammarToFsmConvert } from "./regularGrammar/Converter"
 import { removeEpsilon } from "./contextFreeGrammar/EpsilonEliminator"
+import { removeUnitary } from "./contextFreeGrammar/UnitaryEliminator"
+import { removeUseless } from "./contextFreeGrammar/UselessEliminator"
 
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
@@ -15,19 +17,16 @@ export default class Grammar {
     return removeEpsilon(this);
   }
 
-  // TODO
   removeUnitary() {
-    return this;
+    return removeUnitary(this);
   }
 
-  // TODO
   removeUseless() {
-    return this;
+    return removeUseless(this);
   }
 
-  // TODO
   transformToChomsky() {
-    return this;
+    return this.removeEpsilon().removeUnitary().removeUseless();
   }
 
   grammarToFsmConvert() {
@@ -85,8 +84,9 @@ export default class Grammar {
             else if (grammar.Vn.some(nT => prodElements[0] === nT))
               grammar.isRegular = false;
           } else if (prodElements.length === 1) {
-            if (grammar.Vn.some(nT => prodElements[0] === nT))
+            if (grammar.Vn.some(nT => prodElements[0] === nT)){
               grammar.isRegular = false;
+            }
           }
         }
         
@@ -102,7 +102,8 @@ export default class Grammar {
       });
     });
     
-    grammar.removeEpsilon();
+    grammar.removeEpsilon().removeUnitary();
+
     return grammar;
   }
 
