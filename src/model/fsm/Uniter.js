@@ -1,4 +1,4 @@
-import { EPSILON, DEAD_STATE, NEW_STATE } from "../SymbolValidator";
+import { EPSILON, NEW_STATE } from "../SymbolValidator";
 import FSM from "../Fsm";
 
 export function unite(fsm1, fsm2) {
