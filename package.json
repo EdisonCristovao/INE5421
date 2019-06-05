@@ -66,6 +66,7 @@
     "react-swipeable-views": "^0.12.8",
     "react-table": "^6.8.0",
     "react-text-mask": "^5.0.2",
+    "react-toastify": "^5.2.1",
     "react-toggle-switch": "^3.0.4",
     "reactstrap": "^6.2.0",
     "recharts": "^1.0.0-alpha.7",
