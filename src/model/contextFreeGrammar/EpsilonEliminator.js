@@ -10,13 +10,23 @@ function getNullables(grammar) {
             nullables.add(p.nonTerminal);
     });
 
-    // Heads that contain a nullable production.
-    grammar.P.forEach(p => {
-        if (p.productions.some(p1 => p1.split(" ")
-            .filter(s => grammar.Vn.some(nT => nT === s))
-            .some(nT => nullables.has(nT))))
-            nullables.add(p.nonTerminal);
-    })
+    // Auxiliar boolean so we can know when to stop the loop below.
+    let hasNewNull = (nullables.size > 0);
+
+    while (hasNewNull) {
+        // Reset test variable.
+        hasNewNull = false;
+
+        // Heads that contain a nullable production.
+        grammar.P.forEach(p => {
+            if (!nullables.has(p.nonTerminal)) {
+                if (p.productions.some(p1 => p1.split(" ").every(s => nullables.has(s)))) {
+                    nullables.add(p.nonTerminal);
+                    hasNewNull = true;
+                }
+            }
+        });
+    }
 
     return nullables;
 }
@@ -53,6 +63,7 @@ function calculateNewProductions(prod, nullables) {
         
         // Calculating new productions
         nullsArr.forEach(arr => {
+            let newProdString = "";
             let newProdAux = [];
             let indexArr = 0;
 
@@ -63,8 +74,17 @@ function calculateNewProductions(prod, nullables) {
                 else newProdAux.push(el);
             })
             
-            if (newProdAux.length > 0)
-                newProd.push(newProdAux.join(" "));
+            // Is this a valid production ?
+            if (newProdAux.length > 0) {
+                // Transforming this production to a string.
+                newProdString = newProdAux.join(" ");
+                // Testing if this productions ins't already in the grammar productions
+                if (!prod.some(pAux => pAux === newProdString)) {
+                    // Testing if this production ins't already in the new productions array
+                    if (!newProd.some(prodAux => prodAux === newProdString)) 
+                        newProd.push(newProdAux.join(" "));
+                }
+            }
         });
 
         // Clear array for next iteration
@@ -109,7 +129,7 @@ export function removeEpsilon(grammar) {
 
         // Adding new productions.
         pArray[i].productions = p.productions.concat(prodAux);
-    })
+    });
 
     return newGrammar;
 }
