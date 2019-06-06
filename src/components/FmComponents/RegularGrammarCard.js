@@ -8,18 +8,27 @@ import {
   Input,
 } from "reactstrap";
 import { changeRegGramma } from "../../actions/Language";
+import Grammar from './../../model/Grammar'
 
 class RegularGrammarCard extends Component {
 
 
   render() {
     const { language, changeRegGramma } = this.props;
+    let gramma = new Grammar();
+    gramma = gramma.stringToGrammar(language.grammar);
+    console.log('is regular', gramma.isRegular);
+
     return (
       <div>
         <Card>
           <CardBody>
             <CardTitle>
-              <h1>Gramatica Regular</h1>
+              {gramma.isRegular ?
+                <h1>Gramatica Regular</h1>
+                :
+                <h1>Gramatica LLC</h1>
+              }
             </CardTitle>
             <CardText>
               <Input
@@ -43,7 +52,7 @@ class RegularGrammarCard extends Component {
 
 const mapState = ({ languages }) => {
   const { listLanguages, selectedLanguage } = languages;
-  return { language: {...listLanguages[selectedLanguage]} };
+  return { language: { ...listLanguages[selectedLanguage] } };
 };
 
 export default connect(
