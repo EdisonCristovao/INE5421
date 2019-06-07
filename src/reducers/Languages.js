@@ -50,7 +50,7 @@ const languages = (state = InitialState, action) => {
       };
 
     case MAKE_NEW_LANGUAGE_DET:
-      let newLanguageDet = _makeNewLanguage(`${language.name} DET`);
+      let newLanguageDet = _makeNewLanguage(`${language.name} NL`);
       let fsmDet = new Fsm();
       fsmDet.createFsmFromFsm(action.payload.fsm);
       fsmDet = fsmDet.renameStates();
