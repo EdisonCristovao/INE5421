@@ -26,5 +26,7 @@ export function unite(fsm1, fsm2) {
      * a final one plus the concatenation of both FSMs final state arrays .      */
     uFsm.finals = [false].concat(fsm1Aux.finals).concat(fsm2Aux.finals);
 
+    uFsm.setAuxiliarDeadState();
+    
     return uFsm;
 }

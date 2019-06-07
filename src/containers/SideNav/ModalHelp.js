@@ -50,8 +50,7 @@ class Modalhelp extends React.Component {
               <strong>"limpar"</strong>.<br />
               Transição nao deterministica deve-se usar virgula, ex:{" "}
               <strong>A,B</strong>.<br />
-              Transição para estado morto são representadas por transições em
-              branco. <br />
+              Transição para estado morto é representado por "<strong>-</strong>". <br />
               Epsilon é representado por "<strong>{`${"&"}`}"</strong>.{" "}
             </p>
 

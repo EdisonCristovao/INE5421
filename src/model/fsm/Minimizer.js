@@ -52,7 +52,6 @@ function getEquivalents(fsm) {
     let eqGroups0 = [[], []];   /* First iteration.   */
     let eqGroups1 = [];         /* Next iterations.   */
     let i = 0, j = 0;           /* Loop indexes.      */
-    let count = 0;              /* Auxiliary counter. */
     let found = false;          /* Stop?.             */
     let size0, size1;           /* Group sizes.       */
 
@@ -70,26 +69,21 @@ function getEquivalents(fsm) {
 
         // Calculates to which groups each member of a group points to.
         eqGroups0.forEach(group => {
-            group.forEach(s => {
+            group.forEach((s, sIndex, a) => {
                 // Reset pointers.
                 s.pointers = [];
 
-                // Find all transitions from some state.
-                for (i = 0, count = 0; count < fsm.alphabet.length; i++) {
-                    // Transition not from that state.
-                    if (fsm.transitions[i].from !== s.id) continue;
-                    
-                    // Found a transiton from that state.
-                    count++;
+                fsm.transitions.forEach(t => {
+                    // Skip transitions that aren't from that state.
+                    if (t.from !== s.id) return;
 
                     // Record what group is being pointed.
                     for (j = 0; j < eqGroups0.length; j++) {
-                        if (eqGroups0[j].some(s1 => s1.id === fsm.transitions[i].to)) {
-                            s.pointers.push(j);
-                            break;
+                        if (eqGroups0[j].some(s1 => s1.id === t.to)) {
+                            a[sIndex].pointers.push(j);
                         }
                     }
-                }
+                });
             });
         });
 
@@ -139,8 +133,29 @@ function getEquivalents(fsm) {
     return eq;
 }
 
+function calculateAcceptAllFSM(fsm) {
+    let transitions = [];
+  
+    fsm.alphabet.forEach(a => {
+        if (fsm.transitions.some(t => t.when === a)) {
+            transitions.push({"from": "A", "to": "A", "when": a});
+        }
+    });
+  
+        return new FSM(["A"], [...fsm.alphabet], transitions, ["A"], [true]);
+}
+
 export function minimize(fsm) {
-    // Cloning fsm to return the new minimized one.
+    // If the FSM doens't have any acceptance state, than return a NULL FSM.
+    if (!fsm.finals.some(f => f)) return  new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+  
+    // If all states accept
+    if (fsm.finals.every(f => f)) return calculateAcceptAllFSM(fsm);
+
+    // If FSM has less than 2 states.
+    if (fsm.states.length <= 1) return fsm;
+    
+    // Cloning fsm and removing useless transitions.
     let minFsm = fsm.clone();
 
     // Get unreachable states.
@@ -158,7 +173,11 @@ export function minimize(fsm) {
         minFsm.states = minFsm.states.filter(s => !unreachables.some(s1 => s1 === s));
 
         // Null FSM?
-        if (minFsm.states.length === 0) return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+        if (minFsm.states.length === 0 || !minFsm.finals.some(f => f))
+            return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+
+        // If all states accept
+        if (minFsm.finals.every(f => f)) return calculateAcceptAllFSM(minFsm);
     } 
 
     // Get dead states.
@@ -176,7 +195,11 @@ export function minimize(fsm) {
         minFsm.states = minFsm.states.filter(s => !deads.some(s1 => s1 === s));
 
         // Null FSM?
-        if (minFsm.states.length === 0) return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+        if (minFsm.states.length === 0 || !minFsm.finals.some(f => f))
+            return new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
+
+        // If all states accept
+        if (minFsm.finals.every(f => f)) return calculateAcceptAllFSM(minFsm);
     }
 
     // Get equivalent states

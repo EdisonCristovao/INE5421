@@ -21,7 +21,7 @@ export default class FSM {
     return isDeterministic(this);
   }
 
-  determine() {
+  determine() { 
     return determine(this);
   }
 
@@ -42,18 +42,6 @@ export default class FSM {
          fsm.isDeterministic() ? fsm : fsm.determine().renameStates());
   }
 
-  hasNonDeclaredState() {
-    return this.transitions.some(trans => {
-      if (trans.to !== undefined && trans.to !== "" && trans.to !== "-") {
-        return trans.to
-          .split(",")
-          .some(singleState => !this.states.includes(singleState));
-      } else {
-        return false;
-      }
-    });
-  }
-
   recognize(sentence) {
     return sentenceRecognize(this.determine(), sentence);
   }
@@ -63,6 +51,10 @@ export default class FSM {
   }
 
   createFsmFromFsm(fsm) {
+    fsm.transitions.forEach((t, i, a) => {
+      if (t.to === undefined) a[i].to = DEAD_STATE;
+    });
+
     if (fsm) {
       this.states = fsm.states;
       this.alphabet = fsm.alphabet;
@@ -92,7 +84,7 @@ export default class FSM {
     let s = this.initial;
 
     vn.forEach(vn => {
-      p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }];
+      p = [...p, { nonTerminal: vn, productions: this.getProductions(vn)}];
     });
 
     // If initial state is final
@@ -114,13 +106,37 @@ export default class FSM {
 
     newFsm.transitions.forEach(t => {
       t.from = ALPHABET[newFsm.states.indexOf(t.from)];
-      t.to = ALPHABET[newFsm.states.indexOf(t.to)];
+      if (t.to !== DEAD_STATE) 
+        t.to = ALPHABET[newFsm.states.indexOf(t.to)];
     });
 
     for (let i = 0; i < newFsm.states.length; i++)
-    newFsm.states[i] = ALPHABET[i];
+      newFsm.states[i] = ALPHABET[i];
 
     return newFsm;
+  }
+
+  setAuxiliarDeadState() {
+    // Any non declared state?
+    if (!this.transitions.some(t => this.states.some(s => t.to.split(",").some(s1 => s1 === s)))) {
+      // No transitions to dead state or dead state already added
+      if (!this.transitions.some(t => t.to === DEAD_STATE) || this.states.some(s => S === DEAD_STATE)) {
+        return;
+      }
+    }
+    
+    // Renaming transitions.
+    this.transitions.forEach((t, i, a) => {
+      if (!this.states.some(s => t.to.split(",").some(s1 => s1 === s))) {
+        a[i].to = DEAD_STATE;
+      }
+    })
+    
+    this.states.push(DEAD_STATE);
+    this.alphabet.forEach(a => {
+      this.transitions.push({"from": DEAD_STATE, "to": DEAD_STATE, "when": a});
+    });
+    this.finals.push(false);
   }
 
   renameForIdentification(id) {
@@ -131,10 +147,11 @@ export default class FSM {
     newFSM.states.forEach((_, i, s) => s[i] += id);
 
     newFSM.transitions.forEach((t, i, a) => {
-      // Skip transitions to dead state.
-      if (t.to === "" || t.to === undefined || t.to === DEAD_STATE) return;
-      
       a[i].from += id;
+
+      // Skip transitions to dead state.
+      if (t.to === DEAD_STATE) return;
+      
       a[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + id).join(","); 
     });
 
