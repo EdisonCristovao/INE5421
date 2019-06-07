@@ -18,6 +18,9 @@ import LanguageSwitcher from "components/LanguageSwitcher/index";
 import FunctionSwitcher from "./FunctionSwitcher";
 import UserInfo from "components/UserInfo";
 import Menu from "components/Header/Menu";
+import ModalAutoDeterministic from "./modal/modalAutoDeterministic";
+import ModalAutoMinimized from "./modal/modalAutoMinimized";
+import ModalUnionIntersect from "./modal/modalUnionIntersect";
 
 class Header extends React.Component {
   onAppNotificationSelect = () => {
@@ -91,8 +94,8 @@ class Header extends React.Component {
     const drawerStyle = drawerType.includes(FIXED_DRAWER)
       ? "d-flex d-xl-none"
       : drawerType.includes(COLLAPSED_DRAWER)
-      ? "d-flex"
-      : "d-none";
+        ? "d-flex"
+        : "d-none";
 
     return (
       <div className="app-main-header">
@@ -121,13 +124,13 @@ class Header extends React.Component {
               </div>
             </div>
           ) : (
-            <span
-              className={`jr-menu-icon pointer ${drawerStyle}`}
-              onClick={this.onToggleCollapsedNav}
-            >
-              <span className="menu-icon" />
-            </span>
-          )}
+              <span
+                className={`jr-menu-icon pointer ${drawerStyle}`}
+                onClick={this.onToggleCollapsedNav}
+              >
+                <span className="menu-icon" />
+              </span>
+            )}
 
           <div>
             <h1 className="m-0">
@@ -140,6 +143,15 @@ class Header extends React.Component {
           {selectedLanguage !== null && (
             <ul className="header-notifications list-inline ml-auto">
               <li className="list-inline-item">
+                <ModalAutoDeterministic></ModalAutoDeterministic>
+              </li>
+              <li>
+                <ModalAutoMinimized></ModalAutoMinimized>
+              </li>
+              <li>
+                <ModalUnionIntersect></ModalUnionIntersect>
+              </li>
+              {/* <li className="list-inline-item">
                 <Dropdown
                   className="quick-menu"
                   isOpen={this.state.langSwitcher}
@@ -160,7 +172,7 @@ class Header extends React.Component {
                     <FunctionSwitcher />
                   </DropdownMenu>
                 </Dropdown>
-              </li>
+              </li> */}
             </ul>
           )}
           {/* <li className="d-inline-block d-lg-none list-inline-item">

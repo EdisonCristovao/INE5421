@@ -50,8 +50,7 @@ class Modalhelp extends React.Component {
               <strong>"limpar"</strong>.<br />
               Transição nao deterministica deve-se usar virgula, ex:{" "}
               <strong>A,B</strong>.<br />
-              Transição para estado morto são representadas por transições em
-              branco. <br />
+              Transição para estado morto é representado por "<strong>-</strong>". <br />
               Epsilon é representado por "<strong>{`${"&"}`}"</strong>.{" "}
             </p>
 
@@ -59,17 +58,13 @@ class Modalhelp extends React.Component {
               <strong>Definindo uma Gramatica</strong>
             </h2>
             <p>
-              As produções são do tipo: <strong>S -> aS | a </strong>
+              As produções são do tipo: "<strong>S -> a S' b | b A | b A' | S </strong>" (espaço entre cada simbolo de uma produção).
+              <br />
+              Espaços necessarios p/ aceitar simbolos com mais de um caracter.
               <br />
               Epsilon representado por : <strong>{`&`}</strong> <br />A{" "}
               <strong>primeira</strong> produção adicionada contem o simbolo
               inicial da gramatica.
-              <br />
-              Ao escrever uma gramatica, simbolos terminais e não terminais{" "}
-              <strong>devem ambos</strong> ter só um caracter.
-              <br />
-              Ou seja, simbolos não terminais do tipo "a^" ou terminais do tipo
-              "q0" não serão aceitos.
               <br />
             </p>
 
@@ -86,14 +81,7 @@ class Modalhelp extends React.Component {
               <strong>Determinizador</strong>
             </h2>
             <p>
-              O determinizador fica no canto superior direiro em `operacoes`.{" "}
-            </p>
-
-            <h2>
-              <strong>Expressão regular</strong>
-            </h2>
-            <p>
-              <strong>Breve...</strong>{" "}
+              O determinizador fica no canto superior direito em `operacoes`.{" "}
             </p>
           </ModalBody>
           <ModalFooter>

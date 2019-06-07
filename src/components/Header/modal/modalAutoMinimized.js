@@ -12,7 +12,7 @@ import {
 import Fsm from "./../../../model/Fsm";
 import { makeNewLanguageDet } from "./../../../actions/Language";
 
-class ModalAutoDeterministifc extends React.Component {
+class ModalAutoMinimized extends React.Component {
   state = {
     modal: false,
     detFsm: null
@@ -38,19 +38,19 @@ class ModalAutoDeterministifc extends React.Component {
     let detFsm = new Fsm();
     detFsm.createFsmFromFsm(fsm);
 
-    if (this.state.modal) detFsm = detFsm.determine();
+    if (this.state.modal) detFsm = detFsm.minimize();
 
     return (
       <div>
         <li className="pointer" onClick={this.toggle}>
           <div className="d-flex align-items-center">
             {/* <i className={`flag flag-24 flag-${icon}`} /> */}
-            <h4 className="mb-0 ml-2">Determinizar</h4>
+            <h4 className="mb-0 ml-2">Minimizar</h4>
           </div>
         </li>
 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader >Automato Determinizado</ModalHeader>
+          <ModalHeader >Automato Minimizado</ModalHeader>
           <ModalBody>
             <table className="default-table table table-sm table-responsive-sm table-hover mb-1">
               <thead className="th-border-b">
@@ -108,4 +108,4 @@ const mapState = ({ languages }) => {
   return { language: listLanguages[selectedLanguage] };
 };
 
-export default connect(mapState, { makeNewLanguageDet })(ModalAutoDeterministifc);
+export default connect(mapState, { makeNewLanguageDet })(ModalAutoMinimized);

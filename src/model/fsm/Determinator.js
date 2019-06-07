@@ -4,11 +4,10 @@ import FSM from "../Fsm";
 export function isDeterministic(fsm) {
   if (!fsm instanceof FSM) return "NotStance";
 
-  return !(
-    hasMultTransitions(fsm.transitions) || 
-    hasEpsilon(fsm.alphabet)
-    );
+  return ((!hasMultTransitions(fsm.transitions) && !hasEpsilon(fsm.alphabet)) ||
+        fsm.states.some(s => s.includes("{") || s.includes("}")));
 }
+
 
 function hasMultTransitions(transitions) {
   return transitions.some(tran => {
@@ -186,5 +185,7 @@ export function determine(fsm) {
   else if(isDet) 
     return fsm;
 
-  return makeDeterministic(fsm);
+  let fsmAux = fsm.clone();
+  fsmAux.setAuxiliarDeadState();
+  return makeDeterministic(fsmAux);
 }

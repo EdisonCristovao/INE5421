@@ -1,8 +1,11 @@
 import { isDeterministic, determine } from "./fsm/Determinator";
-import { EPSILON, DEAD_STATE } from "./SymbolValidator";
+import { DEAD_STATE, ALPHABET } from "./SymbolValidator";
 import { sentenceRecognize } from "./fsm/Recognizer";
-import * as R from "ramda";
+import { minimize } from "./fsm/Minimizer";
+import { unite } from "./fsm/Uniter";
+import { intersect } from "./fsm/Intersecter";
 import Grammar from "./Grammar";
+import * as R from "ramda";
 
 export default class FSM {
   constructor(states, alphabet, transitions, initial, finals) {
@@ -18,30 +21,40 @@ export default class FSM {
     return isDeterministic(this);
   }
 
-  determine() {
+  determine() { 
     return determine(this);
   }
 
-  hasNonDeclaredState() {
-    return this.transitions.some(trans => {
-      if (trans.to !== undefined && trans.to !== "" && trans.to !== "-") {
-        return trans.to
-          .split(",")
-          .some(singleState => !this.states.includes(singleState));
-      } else {
-        return false;
-      }
-    });
+  minimize() {
+    //Determining so we don't have to deal with epsilon transitions.
+    //If it's already deterministic, determine() will return the same FSM.
+    return minimize(this.determine());
+  }
+
+  unite(fsm) {
+    return unite(this, fsm);
+  }
+
+  intersect(fsm) {
+  // Determining so we don't have to deal with epsilon transitions.
+  // Renaming states so we don't have any bugs related to commas on state names 
+  return intersect(this.isDeterministic() ? this : this.determine().renameStates(),
+         fsm.isDeterministic() ? fsm : fsm.determine().renameStates());
   }
 
   recognize(sentence) {
-    return sentenceRecognize(this, sentence);
+    return sentenceRecognize(this.determine(), sentence);
   }
-  isFinal(stante) {
-    return this.finals[this.states.indexOf(stante)];
+
+  isFinal(state) {
+    return this.finals[this.states.indexOf(state)];
   }
 
   createFsmFromFsm(fsm) {
+    fsm.transitions.forEach((t, i, a) => {
+      if (t.to === undefined) a[i].to = DEAD_STATE;
+    });
+
     if (fsm) {
       this.states = fsm.states;
       this.alphabet = fsm.alphabet;
@@ -56,8 +69,8 @@ export default class FSM {
 
     this.transitions.forEach(tran => {
       if (tran.from === vn && tran.to !== DEAD_STATE && tran.to !== undefined) {
-        productions.push(`${tran.when}${tran.to}`);
-        if (this.isFinal(tran.to)) productions.push(`${tran.when}`);
+        productions.push(tran.when+" "+tran.to);
+        if (this.isFinal(tran.to)) productions.push(tran.when);
       }
     });
 
@@ -71,19 +84,105 @@ export default class FSM {
     let s = this.initial;
 
     vn.forEach(vn => {
-      p = [...p, { nonTerminal: vn, productions: this.getProductions(vn) }];
+      p = [...p, { nonTerminal: vn, productions: this.getProductions(vn)}];
     });
 
-    let initialIsFinal = this.finals[this.states.indexOf(this.initial)];
+    // If initial state is final
+    if (this.finals[this.states.indexOf(this.initial)]) {
+      for (let i = 0; i < p.length; i++)  {
+        if (p[i].nonTerminal === this.initial) {
+          p[i].productions.push("&");
+        }
+      }
+    }
 
-    if (initialIsFinal)
-      p.map(p_ => {
-        if (p_.nonTerminal === this.initial)
-          return p_.productions.push(`&`)
-      });
+    return new Grammar(vn, vt, p, s);
+  }
 
-    let grammar = new Grammar(vn, vt, p, s);
-    return grammar;
+  renameStates() {
+    let newFsm = this.clone();
+
+    newFsm.initial = ALPHABET[0];
+
+    newFsm.transitions.forEach(t => {
+      t.from = ALPHABET[newFsm.states.indexOf(t.from)];
+      if (t.to !== DEAD_STATE) 
+        t.to = ALPHABET[newFsm.states.indexOf(t.to)];
+    });
+
+    for (let i = 0; i < newFsm.states.length; i++)
+      newFsm.states[i] = ALPHABET[i];
+
+    return newFsm;
+  }
+
+  setAuxiliarDeadState() {
+    // Any non declared state?
+    if (!this.transitions.some(t => this.states.some(s => t.to.split(",").some(s1 => s1 === s)))) {
+      // No transitions to dead state or dead state already added
+      if (!this.transitions.some(t => t.to === DEAD_STATE) || this.states.some(s => S === DEAD_STATE)) {
+        return;
+      }
+    }
+    
+    // Renaming transitions.
+    this.transitions.forEach((t, i, a) => {
+      if (!this.states.some(s => t.to.split(",").some(s1 => s1 === s))) {
+        a[i].to = DEAD_STATE;
+      }
+    })
+    
+    this.states.push(DEAD_STATE);
+    this.alphabet.forEach(a => {
+      this.transitions.push({"from": DEAD_STATE, "to": DEAD_STATE, "when": a});
+    });
+    this.finals.push(false);
+  }
+
+  renameForIdentification(id) {
+    let newFSM = this.clone();
+
+    newFSM.initial += id;
+
+    newFSM.states.forEach((_, i, s) => s[i] += id);
+
+    newFSM.transitions.forEach((t, i, a) => {
+      a[i].from += id;
+
+      // Skip transitions to dead state.
+      if (t.to === DEAD_STATE) return;
+      
+      a[i].to = t.to.split(",").map(s => s.replace(/\s/g, '') + id).join(","); 
+    });
+
+    return newFSM;
+  }
+
+  isEqualTo(fsm) {
+    // Checking attributes length and fsm initials
+    if (this.states.length !== fsm.states.length 
+    || this.alphabet.length !== fsm.alphabet.length 
+    || this.transitions.length !== fsm.transitions.length
+    || this.finals.length !== fsm.finals.length 
+    || this.initial !== fsm.initial) { 
+      return false;
+    }
+
+    // Are all states equals?
+    if (this.states.some(s1 => !fsm.states.some(s2 => s1 === s2))) return false;
+
+    // Are all alphabet symbols equals?
+    if (this.alphabet.some(a1 => !fsm.alphabet.some(a2 => a1 === a2))) return false;
+
+    // Are all transitions equals?
+    if (this.transitions.some(t1 => !fsm.transitions.some(t2 => 
+      t1.from === t2.from && t1.to === t2.to && t1.when === t2.when))) return false;
+
+    // Are all finals equals?
+    if (this.finals.some((f,i) => f !== fsm.finals[fsm.states.indexOf(this.states[i])])) return false;
+
+    // Passed all tests
+    return true;
   }
 
   clone() {
