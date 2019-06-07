@@ -38,7 +38,7 @@ class ModalAutoMinimized extends React.Component {
     let detFsm = new Fsm();
     detFsm.createFsmFromFsm(fsm);
 
-    if (this.state.modal) detFsm = detFsm.determine().minimize();
+    if (this.state.modal) detFsm = detFsm.minimize();
 
     return (
       <div>

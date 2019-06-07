@@ -10,7 +10,7 @@ export default class Grammar {
     this.Vt = !Vt || !Array.isArray(Vt) ? [] : Vt;
     this.P = !P || !Array.isArray(P) ? [] : P;
     this.S = S;
-    this.isRegular = true;
+    this.isRegular = null;
   }
 
   removeEpsilon() {
@@ -70,22 +70,27 @@ export default class Grammar {
         // Removes any initial and final spaces from the production.
         prod = prod.trimLeft().trimRight();
 
-        // Gets all terminal symbols of a production
+        // Gets all symbols (terminal and non terminals) of a production
         prodElements = prod.split(" ");
         
         // Skip test if the grammar is already non regular.
-        if (grammar.isRegular) {
+        if (grammar.isRegular || grammar.isRegular === null) {
           // Is this a regular grammar?
           if (prodElements.length > 2) {
             grammar.isRegular = false;
           } else if (prodElements.length === 2) {
-            if (!grammar.Vn.some(nT => prodElements[1] === nT))
+            if (!grammar.Vn.some(nT => prodElements[1] === nT)) {
               grammar.isRegular = false;
-            else if (grammar.Vn.some(nT => prodElements[0] === nT))
+            } else if (grammar.Vn.some(nT => prodElements[0] === nT)) {
               grammar.isRegular = false;
+            } else {
+              grammar.isRegular = true;
+            }
           } else if (prodElements.length === 1) {
             if (grammar.Vn.some(nT => prodElements[0] === nT)){
               grammar.isRegular = false;
+            } else {
+              grammar.isRegular = true;
             }
           }
         }
@@ -101,8 +106,6 @@ export default class Grammar {
           grammar.P[i].productions.push(prod);
       });
     });
-    
-    grammar.removeEpsilon().removeUnitary();
 
     return grammar;
   }

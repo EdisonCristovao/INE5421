@@ -17,14 +17,16 @@ class RegularGrammarCard extends Component {
     const { language, changeRegGramma } = this.props;
     let gramma = new Grammar();
     gramma = gramma.stringToGrammar(language.grammar);
-    console.log('is regular', gramma.isRegular);
 
     return (
       <div>
         <Card>
           <CardBody>
             <CardTitle>
-              {gramma.isRegular ?
+              {gramma.isRegular === null ?
+                <h1>Gramatica</h1>
+                :
+                gramma.isRegular ? 
                 <h1>Gramatica Regular</h1>
                 :
                 <h1>Gramatica LLC</h1>

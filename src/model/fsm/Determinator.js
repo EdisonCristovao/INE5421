@@ -185,5 +185,7 @@ export function determine(fsm) {
   else if(isDet) 
     return fsm;
 
-  return makeDeterministic(fsm);
+  let fsmAux = fsm.clone();
+  fsmAux.setAuxiliarDeadState();
+  return makeDeterministic(fsmAux);
 }

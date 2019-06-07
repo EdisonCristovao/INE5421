@@ -13,6 +13,9 @@ export function intersect(fsm1, fsm2) {
     // Renaming states of each FSM so we can know from each FSM they are (1st or 2nd).
     let fsm1Aux = fsm1.clone().renameForIdentification("1");
     let fsm2Aux = fsm2.clone().renameForIdentification("2");
+
+    fsm1Aux.setAuxiliarDeadState();
+    fsm2Aux.setAuxiliarDeadState();
     
     // alphabet will be all the symbols that both FSMs alphabets contains.
     iFsm.alphabet = fsm1Aux.alphabet.filter(s1 => fsm2Aux.alphabet.some(s2 => s1 == s2));

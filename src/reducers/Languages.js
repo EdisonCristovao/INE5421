@@ -104,7 +104,6 @@ const languages = (state = InitialState, action) => {
       }
       
       const newListUniInte = [...state.listLanguages, opLanguage];
-      console.log(newListUniInte)
 
       return {
         ...state,
