@@ -33,7 +33,8 @@ function _makeNewLanguage(name) {
       // { sentence: "aaabba", valid: false },
       // { sentence: "ababbaa", valid: true }
     ],
-    enumerationLength: 5
+    enumerationLength: 5,
+    type: null
   };
 }
 
@@ -41,7 +42,8 @@ const languages = (state = InitialState, action) => {
   const language = state.listLanguages[state.selectedLanguage];
   switch (action.type) {
     case MAKE_NEW_LANGUAGE:
-      const newLanguage = _makeNewLanguage(action.payload);
+      let newLanguage = _makeNewLanguage(action.payload.name);
+      newLanguage.type = action.payload.type;
       const newList = [...state.listLanguages, newLanguage];
       return {
         ...state,

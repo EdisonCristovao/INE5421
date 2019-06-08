@@ -21,6 +21,7 @@ import Menu from "components/Header/Menu";
 import ModalAutoDeterministic from "./modal/modalAutoDeterministic";
 import ModalAutoMinimized from "./modal/modalAutoMinimized";
 import ModalUnionIntersect from "./modal/modalUnionIntersect";
+import ModalChonskyForm from "./modal/modalChonskyForm";
 
 class Header extends React.Component {
   onAppNotificationSelect = () => {
@@ -94,8 +95,8 @@ class Header extends React.Component {
     const drawerStyle = drawerType.includes(FIXED_DRAWER)
       ? "d-flex d-xl-none"
       : drawerType.includes(COLLAPSED_DRAWER)
-        ? "d-flex"
-        : "d-none";
+      ? "d-flex"
+      : "d-none";
 
     return (
       <div className="app-main-header">
@@ -124,13 +125,13 @@ class Header extends React.Component {
               </div>
             </div>
           ) : (
-              <span
-                className={`jr-menu-icon pointer ${drawerStyle}`}
-                onClick={this.onToggleCollapsedNav}
-              >
-                <span className="menu-icon" />
-              </span>
-            )}
+            <span
+              className={`jr-menu-icon pointer ${drawerStyle}`}
+              onClick={this.onToggleCollapsedNav}
+            >
+              <span className="menu-icon" />
+            </span>
+          )}
 
           <div>
             <h1 className="m-0">
@@ -140,132 +141,27 @@ class Header extends React.Component {
             </h1>
           </div>
 
-          {selectedLanguage !== null && (
+          {selectedLanguage !== null && language.type === 1 && (
             <ul className="header-notifications list-inline ml-auto">
               <li className="list-inline-item">
-                <ModalAutoDeterministic></ModalAutoDeterministic>
+                <ModalAutoDeterministic />
               </li>
               <li>
-                <ModalAutoMinimized></ModalAutoMinimized>
+                <ModalAutoMinimized />
               </li>
               <li>
-                <ModalUnionIntersect></ModalUnionIntersect>
+                <ModalUnionIntersect />
               </li>
-              {/* <li className="list-inline-item">
-                <Dropdown
-                  className="quick-menu"
-                  isOpen={this.state.langSwitcher}
-                  toggle={this.onLangSwitcherSelect.bind(this)}
-                >
-                  <DropdownToggle
-                    className="d-inline-block"
-                    tag="span"
-                    data-toggle="dropdown"
-                  >
-                    <div className="d-flex align-items-center pointer">
-                      <strong className="mr-2">{`Operação`}</strong>
-                      <i class="zmdi zmdi-more-vert zmdi-hc-2x" />
-                    </div>
-                  </DropdownToggle>
-
-                  <DropdownMenu right className="w-50">
-                    <FunctionSwitcher />
-                  </DropdownMenu>
-                </Dropdown>
-              </li> */}
             </ul>
           )}
-          {/* <li className="d-inline-block d-lg-none list-inline-item">
-                            <Dropdown
-                                className="quick-menu nav-searchbox"
-                                isOpen={this.state.searchBox}
-                                toggle={this.onSearchBoxSelect.bind(this)}>
 
-                                <DropdownToggle
-                                    className="d-inline-block"
-                                    tag="span"
-                                    data-toggle="dropdown">
-                                    <span className="icon-btn size-30">
-                                        <i className="zmdi zmdi-search zmdi-hc-fw"/>
-                                    </span>
-                                </DropdownToggle>
-
-                                <DropdownMenu right className="p-0">
-                                    <SearchBox styleName="search-dropdown" placeholder=""
-                                               onChange={this.updateSearchText.bind(this)}
-                                               value={this.state.searchText}/>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </li> */}
-          {/* <li className="list-inline-item app-tour">
-                            <Dropdown
-                                className="quick-menu"
-                                isOpen={this.state.appNotification}
-                                toggle={this.onAppNotificationSelect.bind(this)}>
-
-                                <DropdownToggle
-                                    className="d-inline-block"
-                                    tag="span"
-                                    data-toggle="dropdown">
-                                    <span className="icon-btn size-20 font-size-16">
-                                        <i className="zmdi zmdi-notifications-active zmdi-hc-lg icon-alert"/>
-                                    </span>
-                                </DropdownToggle>
-
-                                <DropdownMenu right>
-                                    <CardHeader styleName="align-items-center"
-                                                heading={<IntlMessages id="appNotification.title"/>}/>
-                                    <AppNotification/>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </li> */}
-          {/* <li className="list-inline-item mail-tour">
-                            <Dropdown
-                                className="quick-menu"
-                                isOpen={this.state.mailNotification}
-                                toggle={this.onMailNotificationSelect.bind(this)}
-                            >
-                                <DropdownToggle
-                                    className="d-inline-block"
-                                    tag="span"
-                                    data-toggle="dropdown">
-
-                                    <span className="icon-btn size-20 font-size-16">
-                                        <i className="zmdi zmdi-comment-alt-text icon-alert zmdi-hc-lg"/>
-                                    </span>
-                                </DropdownToggle>
-
-
-                                <DropdownMenu right>
-                                    <CardHeader styleName="align-items-center"
-                                                heading={<IntlMessages id="mailNotification.title"/>}/>
-                                    <MailNotification/>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </li> */}
-          {/* <li className="list-inline-item user-nav">
-                            <Dropdown
-                                className="quick-menu"
-                                isOpen={this.state.userInfo}
-                                toggle={this.onUserInfoSelect.bind(this)}>
-
-                                <DropdownToggle
-                                    className="d-inline-block"
-                                    tag="span"
-                                    data-toggle="dropdown">
-                                    <img
-                                        alt='...'
-                                        src='http://via.placeholder.com/150x150'
-                                        className="pointer user-avatar size-30"/>
-                                </DropdownToggle>
-
-                                <DropdownMenu right>
-
-                                    <UserInfo/>
-                                </DropdownMenu>
-                            </Dropdown>
-
-                        </li> */}
+          {selectedLanguage !== null && language.type === 2 && (
+            <ul className="header-notifications list-inline ml-auto">
+              <li>
+                <ModalChonskyForm />
+              </li>
+            </ul>
+          )}
         </div>
       </div>
     );
