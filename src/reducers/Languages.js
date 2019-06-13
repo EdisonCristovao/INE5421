@@ -61,6 +61,9 @@ const languages = (state = InitialState, action) => {
 
       newLanguageDet.grammar = fsmDet.fsmToGrammarConvert().gramaToString();
 
+      // Language Type = regular
+      newLanguageDet.type = 1
+
       const newListLang = [...state.listLanguages, newLanguageDet];
       return {
         ...state,
@@ -74,8 +77,6 @@ const languages = (state = InitialState, action) => {
         selectedLanguage: action.payload
       };
 
-    //Bloodhound Gang - The Bad Touch <---essa musica é muito sarro
-
     case UNION_INTERSECT_LANGUAGE:
       let fsmA = new Fsm();
       fsmA.createFsmFromFsm(action.payload.language.fsm);
@@ -87,6 +88,10 @@ const languages = (state = InitialState, action) => {
       fsmB.createFsmFromFsm(unOpLangu.fsm);
 
       let opLanguage = null;
+
+      // Language Type = regular
+      opLanguage.type = 1
+
       if (action.payload.operation === UNION) {
         opLanguage = _makeNewLanguage(
           `${action.payload.language.name} U ${unOpLangu.name}`
