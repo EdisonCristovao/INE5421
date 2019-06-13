@@ -8,7 +8,6 @@ export function isDeterministic(fsm) {
         fsm.states.some(s => s.includes("{") || s.includes("}")));
 }
 
-
 function hasMultTransitions(transitions) {
   return transitions.some(tran => {
     if (tran.to !== undefined && tran.to !== "")  
@@ -128,7 +127,7 @@ function makeDeterministic(fsm) {
          * Makes sure that the new state
          * isn't on states list before adding it.
          */
-        if (!fsmDet.states.includes(toStateStr))
+        if (!fsmDet.states.includes(toStateStr) && toStateStr !== DEAD_STATE)
           fsmDet.states.push(toStateStr);
 
         // Set context variables for next iteration

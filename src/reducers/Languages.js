@@ -52,7 +52,8 @@ const languages = (state = InitialState, action) => {
       };
 
     case MAKE_NEW_LANGUAGE_DET:
-      let newLanguageDet = _makeNewLanguage(`${language.name} NL`);
+      let attach = action.payload.fsm.isMin ? "MIN" : "DET";
+      let newLanguageDet = _makeNewLanguage(language.name + " " + attach);
       let fsmDet = new Fsm();
       fsmDet.createFsmFromFsm(action.payload.fsm);
       fsmDet = fsmDet.renameStates();

@@ -15,6 +15,7 @@ export default class FSM {
       !transitions || !Array.isArray(transitions) ? [] : transitions;
     this.initial = initial;
     this.finals = !finals || !Array.isArray(finals) ? [] : finals;
+    this.isMin = false;
   }
 
   isDeterministic() {
@@ -28,7 +29,9 @@ export default class FSM {
   minimize() {
     //Determining so we don't have to deal with epsilon transitions.
     //If it's already deterministic, determine() will return the same FSM.
-    return minimize(this.determine());
+    let minFsm = minimize(this.determine());
+    minFsm.isMin = true;
+    return minFsm;
   }
 
   unite(fsm) {
@@ -61,6 +64,7 @@ export default class FSM {
       this.transitions = fsm.transitions;
       this.initial = fsm.initial;
       this.finals = fsm.finals;
+      this.isMin = fsm.isMin;
     }
   }
 

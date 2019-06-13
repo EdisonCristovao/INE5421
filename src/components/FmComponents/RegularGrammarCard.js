@@ -23,14 +23,7 @@ class RegularGrammarCard extends Component {
         <Card>
           <CardBody>
             <CardTitle>
-              {gramma.isRegular === null ?
-                <h1>Gramatica</h1>
-                :
-                gramma.isRegular ? 
-                <h1>Gramatica Regular</h1>
-                :
-                <h1>Gramatica LLC</h1>
-              }
+              <h1>Gramática Regular</h1>
             </CardTitle>
             <CardText>
               <Input
