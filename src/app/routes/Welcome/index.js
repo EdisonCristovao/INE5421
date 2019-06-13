@@ -32,7 +32,7 @@ const Welcome = ({ loadStorageTest, history }) => (
             </form> */}
       <p className="text-center zoomIn animation-delay-20 animated">
         <Link className="btn btn-primary" to="/app/dashboard">
-          Dashboard
+            Iniciar
         </Link>
         <Button color="secondary" onClick={() => {loadStorageTest(LoadTest); history.push('/app/dashboard')}}>Quero testar</Button>
       </p>

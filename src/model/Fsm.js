@@ -29,9 +29,7 @@ export default class FSM {
   minimize() {
     //Determining so we don't have to deal with epsilon transitions.
     //If it's already deterministic, determine() will return the same FSM.
-    let minFsm = minimize(this.determine());
-    minFsm.isMin = true;
-    return minFsm;
+    return minimize(this.isDeterministic() ? this : this.determine().renameStates());
   }
 
   unite(fsm) {
@@ -141,6 +139,12 @@ export default class FSM {
       this.transitions.push({"from": DEAD_STATE, "to": DEAD_STATE, "when": a});
     });
     this.finals.push(false);
+  }
+
+  removeAuxiliarDeadState() {
+    this.states = this.states.filter(s => s !== DEAD_STATE);
+    this.transitions = this.transitions.filter(t => t.from !== DEAD_STATE);
+    this.finals = this.finals.filter((_, i, a) => i < a.length - 1);
   }
 
   renameForIdentification(id) {

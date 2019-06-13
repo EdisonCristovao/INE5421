@@ -55,6 +55,9 @@ function getEquivalents(fsm) {
     let found = false;          /* Stop?.             */
     let size0, size1;           /* Group sizes.       */
 
+    // Set auxiliar dead state if necessary
+    fsm.setAuxiliarDeadState();
+
     // Initialize groups.
     fsm.finals.forEach((isFinal, i) => {
         if (isFinal)
@@ -130,7 +133,11 @@ function getEquivalents(fsm) {
             eq[i].push(eqGroups0[i][j].id);
     }
 
-    return eq;
+    // Removing auxiliar dead state
+    fsm.removeAuxiliarDeadState();
+    
+    // Removing dead state from equivalent groups
+    return eq.filter(group => group[0] !== DEAD_STATE);
 }
 
 function calculateAcceptAllFSM(fsm) {
@@ -146,6 +153,7 @@ function calculateAcceptAllFSM(fsm) {
 }
 
 export function minimize(fsm) {
+    console.log(fsm.clone());
     // If the FSM doens't have any acceptance state, than return a NULL FSM.
     if (!fsm.finals.some(f => f)) return  new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
   
@@ -227,6 +235,9 @@ export function minimize(fsm) {
             } 
         });
     }
+
+    // Boolean signal for visual interface
+    minFsm.isMin = true;
 
     return minFsm;
 }

@@ -89,9 +89,6 @@ const languages = (state = InitialState, action) => {
 
       let opLanguage = null;
 
-      // Language Type = regular
-      opLanguage.type = 1
-
       if (action.payload.operation === UNION) {
         opLanguage = _makeNewLanguage(
           `${action.payload.language.name} U ${unOpLangu.name}`
@@ -112,6 +109,9 @@ const languages = (state = InitialState, action) => {
       }
       
       const newListUniInte = [...state.listLanguages, opLanguage];
+
+      // Language Type = regular
+      opLanguage.type = 1
 
       return {
         ...state,
