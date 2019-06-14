@@ -23,7 +23,7 @@ class RegularGrammarCard extends Component {
         <Card>
           <CardBody>
             <CardTitle>
-                <h1>Gramatica LLC</h1>
+                <h1>Gramática LLC</h1>
             </CardTitle>
             <CardText>
               <Input
