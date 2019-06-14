@@ -52,13 +52,17 @@ const languages = (state = InitialState, action) => {
       };
 
     case MAKE_NEW_LANGUAGE_DET:
-      let newLanguageDet = _makeNewLanguage(`${language.name} NL`);
+      let attach = action.payload.fsm.isMin ? "MIN" : "DET";
+      let newLanguageDet = _makeNewLanguage(language.name + " " + attach);
       let fsmDet = new Fsm();
       fsmDet.createFsmFromFsm(action.payload.fsm);
       fsmDet = fsmDet.renameStates();
       newLanguageDet.fsm = fsmDet;
 
       newLanguageDet.grammar = fsmDet.fsmToGrammarConvert().gramaToString();
+
+      // Language Type = regular
+      newLanguageDet.type = 1
 
       const newListLang = [...state.listLanguages, newLanguageDet];
       return {
@@ -73,8 +77,6 @@ const languages = (state = InitialState, action) => {
         selectedLanguage: action.payload
       };
 
-    //Bloodhound Gang - The Bad Touch <---essa musica é muito sarro
-
     case UNION_INTERSECT_LANGUAGE:
       let fsmA = new Fsm();
       fsmA.createFsmFromFsm(action.payload.language.fsm);
@@ -86,6 +88,7 @@ const languages = (state = InitialState, action) => {
       fsmB.createFsmFromFsm(unOpLangu.fsm);
 
       let opLanguage = null;
+
       if (action.payload.operation === UNION) {
         opLanguage = _makeNewLanguage(
           `${action.payload.language.name} U ${unOpLangu.name}`
@@ -106,6 +109,9 @@ const languages = (state = InitialState, action) => {
       }
       
       const newListUniInte = [...state.listLanguages, opLanguage];
+
+      // Language Type = regular
+      opLanguage.type = 1
 
       return {
         ...state,

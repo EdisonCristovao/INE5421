@@ -48,34 +48,17 @@ class ModalUnionIntersect extends React.Component {
         <li className="pointer" onClick={this.toggle}>
           <div className="d-flex align-items-center">
             {/* <i className={`flag flag-24 flag-${icon}`} /> */}
-            <h4 className="mb-0 ml-2">XONSKI</h4>
+            <h4 className="mb-0 ml-2">Chomsky</h4>
           </div>
         </li>
 
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
-          <ModalHeader >Forma normal de XONSKI</ModalHeader>
-          <ModalBody>
-            <div className="d-flex justify-content-center">
-              <div className="d-flex align-itens-center p-3">
-                <ButtonGroup>
-                  <Button color="primary" onClick={() => this.setState({ rSelected: UNION })} active={this.state.rSelected === UNION}>União</Button>
-                  <Button color="primary" onClick={() => this.setState({ rSelected: INTERSECT })} active={this.state.rSelected === INTERSECT}>Interseção</Button>
-                </ButtonGroup>
-              </div>
-
-              <FormGroup className="ml-3">
-                <Label for="exampleSelect">Selecione a linguagem para operação.</Label>
-                <Input type="select" name="selectLinguage" onClick={(e) => this.setState({ languageToOp: e.target.value })}>
-                  <option>---- Linguagem ----</option>
-                  {listLanguages.map((language, index) =>
-                    <option key={index} value={language.id}>{language.name}</option>
-                  )}
-                </Input>
-              </FormGroup>
-            </div>
+          <ModalHeader >Forma normal de Chomsky</ModalHeader>
+          <ModalBody> 
+            {/* Body Here. */}
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" disabled={!rSelected || !languageToOp} onClick={(e) => { this.toggle(); this.props.unionIntersectLanguage(language, this.state.rSelected, this.state.languageToOp) }}>Criar nova linguagem</Button>
+            <Button color="primary" onClick={(e) => { this.toggle(); this.props.makeNewLanguageDet(detFsm) }}>Criar nova linguagem</Button>
             <Button color="secondary" onClick={this.toggle}>Voltar</Button>
           </ModalFooter>
         </Modal>
