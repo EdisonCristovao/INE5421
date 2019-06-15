@@ -7,14 +7,14 @@ import {
   CardTitle,
   Input,
 } from "reactstrap";
-import { changeRegGramma } from "../../actions/Language";
+import { changeLLCExpression } from "../../actions/Language";
 import Grammar from './../../model/Grammar'
 
 class RegularGrammarCard extends Component {
 
 
   render() {
-    const { language, changeRegGramma } = this.props;
+    const { language, changeLLCExpression } = this.props;
     let gramma = new Grammar();
     gramma = gramma.stringToGrammar(language.grammar);
 
@@ -34,7 +34,7 @@ class RegularGrammarCard extends Component {
                 placeholder="Defina uma GR"
                 value={language.grammar}
                 onChange={e => {
-                  changeRegGramma(e.target.value);
+                  changeLLCExpression(e.target.value);
                   this.forceUpdate();
                 }}
               />
@@ -53,6 +53,5 @@ const mapState = ({ languages }) => {
 
 export default connect(
   mapState,
-  // null,
-  { changeRegGramma }
+  { changeLLCExpression }
 )(RegularGrammarCard);

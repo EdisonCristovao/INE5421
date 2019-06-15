@@ -15,6 +15,7 @@ import {
 import RegularExpressionCard from "../../../components/FmComponents/RegularExpressionCard";
 import TransitionTableCard from "../../../components/FmComponents/TransitionTableCard";
 import RecognizeSentenceCard from "../../../components/FmComponents/RecognizeSentenceCard";
+import RecognizeSentenceLCCCard from "../../../components/FmComponents/RecognizeSentenceLCCCard";
 import RegularGrammarCard from "../../../components/FmComponents/RegularGrammarCard";
 import LCGrammarCard from "../../../components/FmComponents/LCGrammarCard";
 
@@ -55,7 +56,7 @@ class Dashboard extends React.Component {
                 <LCGrammarCard />
               </div>
               <div className="col">
-                <RecognizeSentenceCard />
+                <RecognizeSentenceLCCCard />
               </div>
             </div>
           </div>

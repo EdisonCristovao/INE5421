@@ -65,7 +65,8 @@ export default {
           valid: true
         }
       ],
-      enumerationLength: 5
+      enumerationLength: 5,
+      type: 1
     },
     {
       id: "9d7979d6-f86b-45ea-8e7f-4d12802ac75a",
@@ -114,7 +115,8 @@ export default {
           valid: false
         }
       ],
-      enumerationLength: 5
+      enumerationLength: 5,
+      type: 1
     },
     {
       id: "9c80aee9-05db-4bc0-a053-5bab9f4a3e51",
@@ -218,7 +220,8 @@ export default {
           valid: true
         }
       ],
-      enumerationLength: 5
+      enumerationLength: 5,
+      type: 1
     },
     {
       id: "17b2d4e9-2073-44c6-9b88-59dc5879f442",
@@ -294,7 +297,8 @@ export default {
           valid: false
         }
       ],
-      enumerationLength: 5
+      enumerationLength: 5,
+      type: 1
     },
     {
       id: "fc76341c-b849-4aa3-bbf2-866b57b09dba",
@@ -370,7 +374,8 @@ export default {
           valid: false
         }
       ],
-      enumerationLength: 5
+      enumerationLength: 5,
+      type: 1
     },
     {
       id: "82e4bc67-fa37-4002-8867-ac9e5870d45e",
@@ -430,7 +435,8 @@ export default {
           valid: false
         }
       ],
-      enumerationLength: 5
+      enumerationLength: 5,
+      type: 1
     },
     {
       id: "f824916f-493c-43a0-ba06-81edd2e565db",
@@ -510,7 +516,8 @@ export default {
           valid: false
         }
       ],
-      enumerationLength: 5
+      enumerationLength: 5,
+      type: 1
     }
   ],
   selectedLanguage: 6

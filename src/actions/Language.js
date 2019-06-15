@@ -15,6 +15,8 @@ export const CHANGE_REG_EXPRESSION = "CHANGE_REG_EXPRESSION";
 //GRAMMA =========================================
 export const CHANGE_REG_GRAMMA = "CHANGE_REG_GRAMMA";
 
+export const CHANGE_LLC_GRAMMA = "CHANGE_LLC_GRAMMA";
+
 //SENTENCE =========================================
 export const ADD_SENTENCE = "ADD_SENTENCE";
 export const REMOVE_SENTENCE = "REMOVE_SENTENCE";
@@ -48,6 +50,10 @@ export function unionIntersectLanguage(language, operation, languageId) {
 
 export function changeRegExpression(regExpression) {
   return { type: CHANGE_REG_EXPRESSION, payload: regExpression };
+}
+
+export function changeLLCExpression(llcExpression) {
+  return { type: CHANGE_LLC_GRAMMA, payload: llcExpression };
 }
 
 export function changeRegGramma(regGramma) {

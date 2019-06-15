@@ -10,6 +10,7 @@ import {
   REMOVE_SENTENCE,
   UNION_INTERSECT_LANGUAGE,
   UNION,
+  CHANGE_LLC_GRAMMA,
   INTERSECT,
   makeNewLanguage
 } from "./../actions";
@@ -100,14 +101,14 @@ const languages = (state = InitialState, action) => {
         );
         opLanguage.fsm = fsmA.intersect(fsmB);
       }
-      
+
       if (opLanguage.fsm === null) {
         toast.warn("Intersecção vazia.");
         return {
           ...state
         };
       }
-      
+
       const newListUniInte = [...state.listLanguages, opLanguage];
 
       // Language Type = regular
@@ -172,6 +173,12 @@ const languages = (state = InitialState, action) => {
       return {
         ...state
       };
+
+    case CHANGE_LLC_GRAMMA:
+      console.log('CHANGE_LLC_GRAMMA');
+      return {
+        ...state
+      }
 
     case "LOAD_STORAGE":
       state = action.payload;
