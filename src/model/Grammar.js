@@ -106,6 +106,8 @@ export default class Grammar {
           grammar.P[i].productions.push(prod);
       });
     });
+
+    grammar.removeUseless();
     
     return grammar;
   }
