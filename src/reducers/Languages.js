@@ -175,7 +175,7 @@ const languages = (state = InitialState, action) => {
       };
 
     case CHANGE_LLC_GRAMMA:
-      console.log('CHANGE_LLC_GRAMMA');
+      state.listLanguages[state.selectedLanguage].grammar = action.payload
       return {
         ...state
       }
