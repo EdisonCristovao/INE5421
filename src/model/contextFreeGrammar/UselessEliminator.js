@@ -1,4 +1,4 @@
-import { EPSILON, MARKER } from "../SymbolValidator";
+import { MARKER } from "../SymbolValidator";
 import Grammar from "../Grammar"
 
 function removeUnproductives(productions, terminals, nonTerminals) {
@@ -106,8 +106,8 @@ function removeUnproductives(productions, terminals, nonTerminals) {
 }
 
 function removeUnreachables(initial, prods, nonTerminals) {
-    let markedSymbols = new Set(initial);
-    let lastAdded = new Set(initial);
+    let markedSymbols = new Set([initial]);
+    let lastAdded = new Set([initial]);
     let hasNewMarked = true;
     let newProds = [];
 
@@ -160,8 +160,6 @@ export function removeUseless(grammar) {
     
     // Removing non terminals that aren't on the procutions
     newGrammar.Vn = grammar.Vn.filter(nT => newGrammar.P.some(p => p.nonTerminal === nT));
-
-    console.log(newGrammar);
 
     return newGrammar;
 }
