@@ -2,9 +2,12 @@ import { EPSILON, MARKER } from "../SymbolValidator";
 import Grammar from "../Grammar"
 
 function removeUnproductives(productions, terminals, nonTerminals) {
-    let prods = [...productions];
+    let prods = [];
+    // Initializing prods
+    productions.forEach(prod => 
+        prods.push(({"nonTerminal": prod.nonTerminal, "productions": [...prod.productions]})));
 
-    // First step, marking all terminal symbos in each production]
+    // First step, marking all terminal symbos in each production
     prods.forEach((prod, i) => {
         prod.productions.forEach((p, j) => {
             let index = 0;
@@ -102,29 +105,63 @@ function removeUnproductives(productions, terminals, nonTerminals) {
     return newProds;
 }
 
-function removeUnreachables(prods, terminals) {
+function removeUnreachables(initial, prods, nonTerminals) {
+    let markedSymbols = new Set(initial);
+    let lastAdded = new Set(initial);
+    let hasNewMarked = true;
+    let newProds = [];
 
+    while(hasNewMarked) {
+        hasNewMarked = false;
+
+        prods.forEach(prod => {
+            if (lastAdded.has(prod.nonTerminal)) {
+                // Push this production
+                newProds.push(({"nonTerminal": prod.nonTerminal, "productions": [...prod.productions]}));
+
+                // Remove from last added set
+                lastAdded.delete(prod.nonTerminal);
+                
+                // Add new non terminal symbols to last added set
+                prod.productions.forEach(p => {
+                    p.split(" ").forEach(s => {
+                        if (!markedSymbols.has(s) && nonTerminals.some(nT => nT === s)) {
+                            // Storing who was already marked
+                            markedSymbols.add(s);
+
+                            // Storing partial marks for this and next iteration
+                            lastAdded.add(s);
+
+                            // Ensure next iteration
+                            hasNewMarked = true;
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    return newProds;
 }
 
 export function removeUseless(grammar) {
     let newGrammar = new Grammar();
     
-    // Initial symbol will be the same
+    // Initializing new grammar
+    newGrammar.isRegular = false;
     newGrammar.S = grammar.S;
-
-    // Terminals will be the same
     newGrammar.Vt = [...grammar.Vt];
 
     // Removing unproductive productions
-    newGrammar.P = removeUnproductives(grammar.P , grammar.Vt, grammar.Vn);
-
-    console.log(newGrammar.P);
+    newGrammar.P = removeUnproductives(grammar.P, grammar.Vt, grammar.Vn);
 
     // Removing unreachable productions
-    //newGrammar.P = removeUnreachables([...newGrammar.P], [...grammar.Vt]);
+    newGrammar.P = removeUnreachables(newGrammar.S, newGrammar.P, grammar.Vn);
     
     // Removing non terminals that aren't on the procutions
-    //newGrammar.Vn = grammar.Vn.filter(nT => newGrammar.P.some(p => p.nonTerminal === nT));
+    newGrammar.Vn = grammar.Vn.filter(nT => newGrammar.P.some(p => p.nonTerminal === nT));
+
+    console.log(newGrammar);
 
     return newGrammar;
 }
