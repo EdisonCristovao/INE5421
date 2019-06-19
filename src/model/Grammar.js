@@ -3,6 +3,7 @@ import { grammarToFsmConvert } from "./regularGrammar/Converter"
 import { removeEpsilon } from "./contextFreeGrammar/EpsilonEliminator"
 import { removeUnitary } from "./contextFreeGrammar/UnitaryEliminator"
 import { removeUseless } from "./contextFreeGrammar/UselessEliminator"
+import { simplifyProductions } from "./contextFreeGrammar/prodSimplifier"
 
 export default class Grammar {
   constructor(Vn, Vt, P, S) {
@@ -26,7 +27,7 @@ export default class Grammar {
   }
 
   transformToChomsky() {
-    return this.removeEpsilon().removeUnitary().removeUseless();
+    return simplifyProductions(this.removeEpsilon().removeUnitary().removeUseless());
   }
 
   grammarToFsmConvert() {
@@ -106,7 +107,9 @@ export default class Grammar {
           grammar.P[i].productions.push(prod);
       });
     });
-    
+
+    grammar.transformToChomsky();
+
     return grammar;
   }
 

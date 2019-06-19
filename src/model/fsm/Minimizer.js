@@ -153,7 +153,6 @@ function calculateAcceptAllFSM(fsm) {
 }
 
 export function minimize(fsm) {
-    console.log(fsm.clone());
     // If the FSM doens't have any acceptance state, than return a NULL FSM.
     if (!fsm.finals.some(f => f)) return  new FSM([DEAD_STATE], [], [], DEAD_STATE, [false]);
   
