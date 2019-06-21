@@ -4,6 +4,7 @@ export const INTERSECT = 2;
 //LANGUAGE =========================================
 export const MAKE_NEW_LANGUAGE = "MAKE_NEW_LANGUAGE";
 export const MAKE_NEW_LANGUAGE_DET = "MAKE_NEW_LANGUAGE_DET";
+export const MAKE_NEW_LANGUAGE_FROM_CHOMSKY = "MAKE_NEW_LANGUAGE_FROM_CHOMSKY";
 export const CHANGE_SELECTED_LANGUAGE = "CHANGE_SELECTED_LANGUAGE";
 export const DELETE_LANGUAGE = "DELETE_LANGUAGE";
 
@@ -29,6 +30,11 @@ export function makeNewLanguage(name, type) {
   if (!type) type = 1;
   return { type: MAKE_NEW_LANGUAGE, payload: { name, type } };
 }
+
+export function makeNewLanguageFromCHomsky(name, gramma) {
+  return { type: MAKE_NEW_LANGUAGE_FROM_CHOMSKY, payload: { name, type:2 , gramma} };
+}
+
 export function makeNewLanguageDet(fsm) {
   return { type: MAKE_NEW_LANGUAGE_DET, payload: { fsm } };
 }

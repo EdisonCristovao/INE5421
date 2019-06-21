@@ -58,7 +58,5 @@ export function simplifyProductions(grammar) {
         newGrammar.P = productions;
     }
 
-    console.log(newGrammar);
-
     return newGrammar;
 }

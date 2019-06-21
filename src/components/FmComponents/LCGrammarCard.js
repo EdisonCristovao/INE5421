@@ -15,8 +15,6 @@ class RegularGrammarCard extends Component {
 
   render() {
     const { language, changeLLCExpression } = this.props;
-    let gramma = new Grammar();
-    gramma = gramma.stringToGrammar(language.grammar);
 
     return (
       <div>

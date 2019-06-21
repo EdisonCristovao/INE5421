@@ -11,8 +11,7 @@ import {
   UNION_INTERSECT_LANGUAGE,
   UNION,
   CHANGE_LLC_GRAMMA,
-  INTERSECT,
-  makeNewLanguage
+  MAKE_NEW_LANGUAGE_FROM_CHOMSKY
 } from "./../actions";
 import uuidv4 from "uuid/v4";
 import InitialState from "./states/language.state";
@@ -63,7 +62,7 @@ const languages = (state = InitialState, action) => {
       newLanguageDet.grammar = fsmDet.fsmToGrammarConvert().gramaToString();
 
       // Language Type = regular
-      newLanguageDet.type = 1
+      newLanguageDet.type = 1;
 
       const newListLang = [...state.listLanguages, newLanguageDet];
       return {
@@ -112,7 +111,7 @@ const languages = (state = InitialState, action) => {
       const newListUniInte = [...state.listLanguages, opLanguage];
 
       // Language Type = regular
-      opLanguage.type = 1
+      opLanguage.type = 1;
 
       return {
         ...state,
@@ -175,10 +174,22 @@ const languages = (state = InitialState, action) => {
       };
 
     case CHANGE_LLC_GRAMMA:
-      state.listLanguages[state.selectedLanguage].grammar = action.payload
+      state.listLanguages[state.selectedLanguage].grammar = action.payload;
       return {
         ...state
-      }
+      };
+
+    case MAKE_NEW_LANGUAGE_FROM_CHOMSKY:
+      let newGlc = _makeNewLanguage(action.payload.name);
+      newGlc.type = action.payload.type;
+      newGlc.grammar = action.payload.gramma;
+
+      let newListLanguage = [...state.listLanguages, newGlc];
+
+      return {
+        ...state,
+        listLanguages: newListLanguage
+      };
 
     case "LOAD_STORAGE":
       state = action.payload;
