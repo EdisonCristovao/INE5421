@@ -34,13 +34,15 @@ $ npm start
 - ***Conversão de AFND (com e sem ε) para AFD (ok)***
 - ***Conversão de AFD para GR e de GR para AFND (ok)***
 - ***Reconhecimento de sentenças em AF (ok)***
-- ***Minimização de AFD***
-- ***União e interseção de AFD***
-- ***Conversão de ER para AFD (usando o algoritmo baseado em árvore sintática - Livro Aho - seção 3.9)***
-- ***Leitura, gravação e edição de GLC.***
-- ***Transformação de GLC para uma GLC na forma normal de Chomsky***
+- ***Minimização de AFD (ok)***
+- ***União e interseção de AFD (ok)***
+- ***Leitura, gravação e edição de GLC. (ok)***
+- ***Transformação de GLC para uma GLC na forma normal de Chomsky (ok)***
 
 ## Itens Pendentes
 - Eliminação de recursão a esquerda
 - Fatoração
 - Reconhecimento de sentenças em AP (teorema GLC ↔ AP)
+
+## Itens Eliminados do trabalho
+- Conversão de ER para AFD (usando o algoritmo baseado em árvore sintática - Livro Aho - seção 3.9)
