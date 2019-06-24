@@ -10,8 +10,8 @@ import {
   REMOVE_SENTENCE,
   UNION_INTERSECT_LANGUAGE,
   UNION,
-  INTERSECT,
-  makeNewLanguage
+  CHANGE_LLC_GRAMMA,
+  MAKE_NEW_LANGUAGE_FROM_CHOMSKY
 } from "./../actions";
 import uuidv4 from "uuid/v4";
 import InitialState from "./states/language.state";
@@ -33,7 +33,8 @@ function _makeNewLanguage(name) {
       // { sentence: "aaabba", valid: false },
       // { sentence: "ababbaa", valid: true }
     ],
-    enumerationLength: 5
+    enumerationLength: 5,
+    type: null
   };
 }
 
@@ -41,7 +42,8 @@ const languages = (state = InitialState, action) => {
   const language = state.listLanguages[state.selectedLanguage];
   switch (action.type) {
     case MAKE_NEW_LANGUAGE:
-      const newLanguage = _makeNewLanguage(action.payload);
+      let newLanguage = _makeNewLanguage(action.payload.name);
+      newLanguage.type = action.payload.type;
       const newList = [...state.listLanguages, newLanguage];
       return {
         ...state,
@@ -50,13 +52,17 @@ const languages = (state = InitialState, action) => {
       };
 
     case MAKE_NEW_LANGUAGE_DET:
-      let newLanguageDet = _makeNewLanguage(`${language.name} NL`);
+      let attach = action.payload.fsm.isMin ? "MIN" : "DET";
+      let newLanguageDet = _makeNewLanguage(language.name + " " + attach);
       let fsmDet = new Fsm();
       fsmDet.createFsmFromFsm(action.payload.fsm);
       fsmDet = fsmDet.renameStates();
       newLanguageDet.fsm = fsmDet;
 
       newLanguageDet.grammar = fsmDet.fsmToGrammarConvert().gramaToString();
+
+      // Language Type = regular
+      newLanguageDet.type = 1;
 
       const newListLang = [...state.listLanguages, newLanguageDet];
       return {
@@ -71,8 +77,6 @@ const languages = (state = InitialState, action) => {
         selectedLanguage: action.payload
       };
 
-    //Bloodhound Gang - The Bad Touch <---essa musica é muito sarro
-
     case UNION_INTERSECT_LANGUAGE:
       let fsmA = new Fsm();
       fsmA.createFsmFromFsm(action.payload.language.fsm);
@@ -84,6 +88,7 @@ const languages = (state = InitialState, action) => {
       fsmB.createFsmFromFsm(unOpLangu.fsm);
 
       let opLanguage = null;
+
       if (action.payload.operation === UNION) {
         opLanguage = _makeNewLanguage(
           `${action.payload.language.name} U ${unOpLangu.name}`
@@ -95,15 +100,18 @@ const languages = (state = InitialState, action) => {
         );
         opLanguage.fsm = fsmA.intersect(fsmB);
       }
-      
+
       if (opLanguage.fsm === null) {
         toast.warn("Intersecção vazia.");
         return {
           ...state
         };
       }
-      
+
       const newListUniInte = [...state.listLanguages, opLanguage];
+
+      // Language Type = regular
+      opLanguage.type = 1;
 
       return {
         ...state,
@@ -163,6 +171,24 @@ const languages = (state = InitialState, action) => {
       ].userSentences.filter((sent, index) => index !== action.payload);
       return {
         ...state
+      };
+
+    case CHANGE_LLC_GRAMMA:
+      state.listLanguages[state.selectedLanguage].grammar = action.payload;
+      return {
+        ...state
+      };
+
+    case MAKE_NEW_LANGUAGE_FROM_CHOMSKY:
+      let newGlc = _makeNewLanguage(action.payload.name);
+      newGlc.type = action.payload.type;
+      newGlc.grammar = action.payload.gramma;
+
+      let newListLanguage = [...state.listLanguages, newGlc];
+
+      return {
+        ...state,
+        listLanguages: newListLanguage
       };
 
     case "LOAD_STORAGE":

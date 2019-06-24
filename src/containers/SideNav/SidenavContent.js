@@ -146,11 +146,23 @@ class SidenavContent extends Component {
                 color="primary"
                 onClick={e => {
                   e.preventDefault();
-                  makeNewLanguage(newLanguageName);
+                  makeNewLanguage(newLanguageName, 1);
                   this.setState({ newLanguageName: "" });
                 }}
               >
-                <span className="nav-text"> Adicionar </span>
+                <span className="nav-text"> Adicionar GR </span>
+              </Button>
+              <Button
+                type="submit"
+                className="w-100 mt-1"
+                color="primary"
+                onClick={e => {
+                  e.preventDefault();
+                  makeNewLanguage(newLanguageName, 2);
+                  this.setState({ newLanguageName: "" });
+                }}
+              >
+                <span className="nav-text"> Adicionar GLC </span>
               </Button>
             </form>
           </li>
