@@ -117,9 +117,5 @@
     "style-loader": "^0.18.2",
     "webpack": "^3.5.6",
     "webpack-dev-server": "^2.7.1"
-  },
-  "engines": {
-    "node": "10.11.0",
-    "npm": "6.4.1"
   }
 }
